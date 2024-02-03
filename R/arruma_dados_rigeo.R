@@ -461,7 +461,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     selec <- estacoes_folhas_cb[, selecionadas]
     minerais <- select(estacoes_folhas_cb, "ANATASIO":"ZIRCAO")
 
-    estacoes_folhas_cb <- data.frame(selec, minerais)
+    estacoes_folhas_cb <- data.frame(selec, BASE, minerais)
 
     colnames(estacoes_folhas_cb)[3] <- "AREA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
@@ -479,7 +479,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     lista_pivo[[2]] <-
       tidyr::pivot_longer(
         estacoes_folhas_cb,
-        cols = 10:ncol(estacoes_folhas_cb),
+        cols = 11:ncol(estacoes_folhas_cb),
         names_to = "Analito",
         values_to = "Valor"
       )
@@ -558,7 +558,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     lista_pivo[[3]] <-
       tidyr::pivot_longer(
         estacoes_folhas_cb_gq,
-        cols = 10:ncol(estacoes_folhas_cb_gq),
+        cols = 11:ncol(estacoes_folhas_cb_gq),
         names_to = "Analito",
         values_to = "Valor"
       )
@@ -637,7 +637,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     lista_pivo[[4]] <-
       tidyr::pivot_longer(
         estacoes_folhas_r,
-        cols = 10:ncol(estacoes_folhas_r),
+        cols = 11:ncol(estacoes_folhas_r),
         names_to = "Analito",
         values_to = "Valor"
       )
@@ -716,7 +716,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     lista_pivo[[5]] <-
       tidyr::pivot_longer(
         estacoes_folhas_l,
-        cols = 10:ncol(estacoes_folhas_l),
+        cols = 11:ncol(estacoes_folhas_l),
         names_to = "Analito",
         values_to = "Valor"
       )
@@ -797,7 +797,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     lista_pivo[[6]] <-
       tidyr::pivot_longer(
         estacoes_folhas_m,
-        cols = 10:ncol(estacoes_folhas_m),
+        cols = 11:ncol(estacoes_folhas_m),
         names_to = "Analito",
         values_to = "Valor"
       )

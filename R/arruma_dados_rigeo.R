@@ -29,19 +29,35 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   coord_r <- 0
   coord_l <- 0
   coord_m <- 0
+  ## Campos para a tabela final
+  selecionadas <-
+    c(
+      "ID",
+      "NUM_LAB",
+      "layer",
+      "LONGITUDE",
+      "LATITUDE",
+      "NUM_CAMPO",
+      "PROJETO",
+      "CLASSE",
+      "Lab"
+    )
+
   ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra-----------
   for (i in 1:length(arquivos_rigeo)) {
     # Create temp files
     temp <- tempfile()
-    temp2 <- tempfile()
-    temp3 <- tempfile()
-    temp4 <- tempfile()
-    temp5 <- tempfile()
-    temp6 <- tempfile()
+    zip::unzip(arquivos_rigeo[i], exdir = temp)
+    campo <- sf::read_sf(temp)
+    coord <- sf::st_coordinates(campo)[, c(1, 2)]
+    colnames(coord) <- c("Longitude", "Latitude")
+    campo <- data.frame(coord, campo)
+
     x <- unzip(arquivos_rigeo[i], list = TRUE)
-
+    x_org <- x
     x$Name <- iconv(x$Name,  "IBM437",  "UTF-8")
-
+    from <- list.files(temp, full.names = TRUE)
+    file.rename(from, paste0(temp, "/", x$Name))
     x <- x %>%
       dplyr::filter(!(str_detect(Name, 'pdf')))
 
@@ -81,16 +97,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       filtered_df_bateia[!is.na(filtered_df_bateia)]
 
     if (length(filtered_df_bateia) != 0) {
-      concentrado_filtro <- unzip(arquivos_rigeo[i], filtered_df_bateia)
+      concentrado_filtro <- filtered_df_bateia
       if (!is.na(filtered_df_bateia)) {
         data_cb <-
-          readxl::read_excel(concentrado_filtro, col_types = "text")
+          readxl::read_excel(paste0(temp,"/",concentrado_filtro), col_types = "text")
         colnames(data_cb) <- tolower(colnames(data_cb))
-        unzip(zipfile = arquivos_rigeo[i], exdir = temp)
-        campo <- sf::read_sf(temp)
-        coord_cb <- sf::st_coordinates(campo)[, c(1, 2)]
-        colnames(coord_cb) <- c("Longitude", "Latitude")
-        campo <- data.frame(coord_cb, campo)
         data_cb_join <-
           left_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
         names(data_cb_join) <- toupper(names(data_cb_join))
@@ -122,7 +133,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     filtered_df_sedimento4 <-
       filter(x,
              grepl(
-               "Analise_Qu¡mica_Sedimento_de_Corrente",
+               "Analise_Química_Sedimento_de_Corrente",
                Name,
                ignore.case = TRUE
              ))[1, 1]
@@ -137,43 +148,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     filtered_df_sedimento <-
       filtered_df_sedimento[!is.na(filtered_df_sedimento)]
 
-    filtered_campo <- filter(x, grepl(".shp",
-                                      Name, ignore.case = TRUE))[1, 1]
-    filtered_campo2 <- filter(x, grepl(".cpg",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo3 <- filter(x, grepl(".dbf",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo4 <- filter(x, grepl(".prj",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo5 <- filter(x, grepl(".sbn",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo6 <- filter(x, grepl(".sbx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo7 <- filter(x, grepl(".shx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo <- c(
-      filtered_campo,
-      filtered_campo2,
-      filtered_campo3,
-      filtered_campo4,
-      filtered_campo5,
-      filtered_campo6,
-      filtered_campo7
-    )
 
     if (length(filtered_df_sedimento) != 0) {
-      sedimento_filtro <- unzip(arquivos_rigeo[i], filtered_df_sedimento)
+      sedimento_filtro <-  filtered_df_sedimento
       if (!is.na(filtered_df_sedimento)) {
-        data_sc <- readxl::read_excel(sedimento_filtro, col_types = "text")
+        data_sc <- readxl::read_excel(paste0(temp, "/",sedimento_filtro), col_types = "text")
         colnames(data_sc) <- tolower(colnames(data_sc))
-        unzip(zipfile = arquivos_rigeo[i],
-              filtered_campo,
-              exdir = temp2)
-        campo <- sf::read_sf(temp2)
-        coord_sc <- sf::st_coordinates(campo)[, c(1, 2)]
-        colnames(coord_sc) <- c("Longitude", "Latitude")
-        campo <- data.frame(coord_sc, campo)
-        data_sc_join <-
+         data_sc_join <-
           dplyr::inner_join(data_sc, campo, by = c("num_lab" = "Num_Lab"))
         names(data_sc_join) <- toupper(names(data_sc_join))
         data_sc_join <- as.data.frame(data_sc_join)
@@ -194,7 +175,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     filtered_df_bateia_gq3 <-
       filter(x,
              grepl(
-               "Analise_Qu¡mica_Concentrado_de_Bateia",
+               "Analise_Química_Concentrado_de_Bateia",
                Name,
                ignore.case = TRUE
              ))[1, 1]
@@ -206,18 +187,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       filtered_df_bateia_gq[!is.na(filtered_df_bateia_gq)]
 
     if (length(filtered_df_bateia_gq) != 0) {
-      concentrado_filtro_gq <-
-        unzip(arquivos_rigeo[i], filtered_df_bateia_gq)
+      concentrado_filtro_gq <- filtered_df_bateia_gq
       if (!is.na(filtered_df_bateia_gq)) {
         data_cb_gq <-
-          readxl::read_excel(concentrado_filtro_gq, col_types = "text")
-        unzip(zipfile = arquivos_rigeo[i],
-              filtered_campo,
-              exdir = temp3)
-        campo <- sf::read_sf(temp3)
-        coord_cb_gq <- sf::st_coordinates(campo)[, c(1, 2)]
-        colnames(coord_cb_gq) <- c("Longitude", "Latitude")
-        campo <- data.frame(coord_cb_gq, campo)
+          readxl::read_excel(paste0(temp, "/",concentrado_filtro_gq), col_types = "text")
         colnames(data_cb_gq)[6] <- "num_lab"
         data_cb_gq_join <- dplyr::inner_join(data_cb_gq, campo,
                                              by = c("num_lab" = "Num_Lab"))
@@ -235,7 +208,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo3 <- filter(x, grepl("Geoquimica_Solo",
                                          Name, ignore.case = TRUE))[1, 1]
-    filtered_df_solo4 <- filter(x, grepl("Analise_Qu¡mica_Solo",
+    filtered_df_solo4 <- filter(x, grepl("Analise_Química_Solo",
                                          Name, ignore.case = TRUE))[1, 1]
 
 
@@ -245,42 +218,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                           filtered_df_solo4)
     filtered_df_solo <- filtered_df_solo[!is.na(filtered_df_solo)]
 
-    filtered_campo <- filter(x, grepl(".shp",
-                                      Name, ignore.case = TRUE))[1, 1]
-    filtered_campo2 <- filter(x, grepl(".cpg",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo3 <- filter(x, grepl(".dbf",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo4 <- filter(x, grepl(".prj",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo5 <- filter(x, grepl(".sbn",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo6 <- filter(x, grepl(".sbx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo7 <- filter(x, grepl(".shx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo <- c(
-      filtered_campo,
-      filtered_campo2,
-      filtered_campo3,
-      filtered_campo4,
-      filtered_campo5,
-      filtered_campo6,
-      filtered_campo7
-    )
 
     if (length(filtered_df_solo) != 0) {
-      solo_filtro <- unzip(arquivos_rigeo[i], filtered_df_solo)
+      solo_filtro <- filtered_df_solo
       if (!is.na(filtered_df_solo)) {
-        data_l <- readxl::read_excel(solo_filtro, col_types = "text")
+        data_l <- readxl::read_excel(paste0(temp, "/",solo_filtro), col_types = "text")
         colnames(data_l) <- tolower(colnames(data_l))
-        unzip(zipfile = arquivos_rigeo[i],
-              filtered_campo,
-              exdir = temp4)
-        campo <- sf::read_sf(temp4)
-        coord_l <- sf::st_coordinates(campo)[, c(1, 2)]
-        colnames(coord_l) <- c("Longitude", "Latitude")
-        campo <- data.frame(coord_l, campo)
         data_l_join <-
           dplyr::inner_join(data_l, campo, by = c("num_lab" = "Num_Lab"))
         names(data_l_join) <- toupper(names(data_l_join))
@@ -296,7 +239,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha3 <- filter(x, grepl("Geoquimica_Rocha",
                                           Name, ignore.case = TRUE))[1, 1]
-    filtered_df_rocha4 <- filter(x, grepl("Analise_Qu¡mica_Rocha",
+    filtered_df_rocha4 <- filter(x, grepl("Analise_Química_Rocha",
                                           Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_rocha <- c(filtered_df_rocha,
@@ -306,43 +249,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     filtered_df_rocha <-
       filtered_df_rocha[!is.na(filtered_df_rocha)]
 
-    filtered_campo <- filter(x, grepl(".shp",
-                                      Name, ignore.case = TRUE))[1, 1]
-    filtered_campo2 <- filter(x, grepl(".cpg",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo3 <- filter(x, grepl(".dbf",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo4 <- filter(x, grepl(".prj",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo5 <- filter(x, grepl(".sbn",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo6 <- filter(x, grepl(".sbx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo7 <- filter(x, grepl(".shx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo <- c(
-      filtered_campo,
-      filtered_campo2,
-      filtered_campo3,
-      filtered_campo4,
-      filtered_campo5,
-      filtered_campo6,
-      filtered_campo7
-    )
-
     if (length(filtered_df_rocha) != 0) {
-      rocha_filtro <- unzip(arquivos_rigeo[i], filtered_df_rocha)
+      rocha_filtro <- filtered_df_rocha
       if (!is.na(filtered_df_rocha)) {
-        data_r <- readxl::read_excel(rocha_filtro, col_types = "text")
+        data_r <- readxl::read_excel(paste0(temp, "/", rocha_filtro), col_types = "text")
         colnames(data_r) <- tolower(colnames(data_r))
-        unzip(zipfile = arquivos_rigeo[i],
-              filtered_campo,
-              exdir = temp5)
-        campo <- sf::read_sf(temp5)
-        coord_r <- sf::st_coordinates(campo)[, c(1, 2)]
-        colnames(coord_r) <- c("Longitude", "Latitude")
-        campo <- data.frame(coord_r, campo)
-        data_r_join <-
+         data_r_join <-
           dplyr::inner_join(data_r, campo, by = c("num_lab" = "Num_Lab"))
         names(data_r_join) <- toupper(names(data_r_join))
         data_r_join <- as.data.frame(data_r_join)
@@ -361,7 +273,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                    Name, ignore.case = TRUE))[1, 1]
     filtered_df_minerio3 <-
       filter(x,
-             grepl("Analise_Qu¡mica_Mineral_Minerio",
+             grepl("Analise_Química_Mineral_Minerio",
                    Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_minerio <-
@@ -371,42 +283,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     filtered_df_minerio <-
       filtered_df_minerio[!is.na(filtered_df_minerio)]
 
-    filtered_campo <- filter(x, grepl(".shp",
-                                      Name, ignore.case = TRUE))[1, 1]
-    filtered_campo2 <- filter(x, grepl(".cpg",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo3 <- filter(x, grepl(".dbf",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo4 <- filter(x, grepl(".prj",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo5 <- filter(x, grepl(".sbn",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo6 <- filter(x, grepl(".sbx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo7 <- filter(x, grepl(".shx",
-                                       Name, ignore.case = TRUE))[1, 1]
-    filtered_campo <- c(
-      filtered_campo,
-      filtered_campo2,
-      filtered_campo3,
-      filtered_campo4,
-      filtered_campo5,
-      filtered_campo6,
-      filtered_campo7
-    )
 
     if (length(filtered_df_minerio) != 0) {
-      minerio_filtro <- unzip(arquivos_rigeo[i], filtered_df_minerio)
+      minerio_filtro <- filtered_df_minerio
       if (!is.na(filtered_df_minerio)) {
-        data_m <- readxl::read_excel(minerio_filtro, col_types = "text")
+        data_m <- readxl::read_excel(paste0(temp, "/", minerio_filtro), col_types = "text")
         colnames(data_m) <- tolower(colnames(data_m))
-        unzip(zipfile = arquivos_rigeo[i],
-              filtered_campo,
-              exdir = temp6)
-        campo <- sf::read_sf(temp6)
-        coord_m <- sf::st_coordinates(campo)[, c(1, 2)]
-        colnames(coord_m) <- c("Longitude", "Latitude")
-        campo <- data.frame(coord_m, campo)
         data_m_join <-
           dplyr::inner_join(data_m, campo, by = c("num_lab" = "Num_Lab"))
         names(data_m_join) <- toupper(names(data_m_join))
@@ -420,7 +302,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
   lista_pivo <- list()
   ## Arrumar dados de Sedimento de Corrente - Análises químicas-----------------
-  if (res_sc > 0) {
+  if (length(res_sc) > 0) {
     tables_sc <- do.call(plyr::rbind.fill, res_sc)
     tables_sc <-
       data.frame(lapply(tables_sc, function(x)
@@ -460,22 +342,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    estacoes_folhas_sc <- sf::st_join(spdf  , left = TRUE,
-                                      folhas_po["layer"])
+    estacoes_folhas_sc <- as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                      folhas_po["layer"]))
 
-    ## Seleciona campos para a tabela final
-    selecionadas <-
-      c(
-        "ID",
-        "NUM_LAB",
-        "layer",
-        "LONGITUDE",
-        "LATITUDE",
-        "NUM_CAMPO",
-        "PROJETO",
-        "CLASSE",
-        "Lab"
-      )
+elem <- select(estacoes_folhas_sc,contains(c("_PPM", "_PCT", "_PPB")))
+elem <- select(elem,!contains("COMPOS"))
+selec <- estacoes_folhas_sc[, selecionadas]
+estacoes_folhas_sc <- data.frame(selec, elem)
 
     colnames(estacoes_folhas_sc)[3] <- "AREA"
     colnames(estacoes_folhas_sc)[7] <- "PROJETO"
@@ -508,7 +381,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       )
   }
   ## Arrumar dados de Concentrado de Bateia - Mineralometria--------------------
-  if (res_cb > 0) {
+  if (length(res_cb) > 0) {
     tables_cb <- do.call(plyr::rbind.fill, res_cb)
     tables_cb <-
       data.frame(lapply(tables_cb, function(x)
@@ -579,24 +452,16 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    estacoes_folhas_cb <- sf::st_join(spdf  , left = TRUE,
-                                      folhas_po["layer"])
-    BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
-    selecionadas <-
-      c(
-        "ID",
-        "NUM_LAB",
-        "layer",
-        "LONGITUDE",
-        "LATITUDE",
-        "NUM_CAMPO",
-        "PROJETO",
-        "CLASSE",
-        "Lab"
-      )
+    estacoes_folhas_cb <- as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                      folhas_po["layer"]))
 
-    estacoes_folhas_cb <-
-      data.frame(estacoes_folhas_cb[, c(1:9)] , BASE, estacoes_folhas_cb[, 10:ncol(estacoes_folhas_cb)])
+
+    BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
+
+    selec <- estacoes_folhas_cb[, selecionadas]
+    minerais <- select(estacoes_folhas_cb, "ANATASIO":"ZIRCAO")
+
+    estacoes_folhas_cb <- data.frame(selec, minerais)
 
     colnames(estacoes_folhas_cb)[3] <- "AREA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
@@ -614,13 +479,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     lista_pivo[[2]] <-
       tidyr::pivot_longer(
         estacoes_folhas_cb,
-        cols = 11:ncol(estacoes_folhas_cb),
+        cols = 10:ncol(estacoes_folhas_cb),
         names_to = "Analito",
         values_to = "Valor"
       )
   }
   ## Arrumar dados de Concentrado de Bateia - Análises químicas-----------------
-  if (res_cb_gq > 0) {
+  if (length(res_cb_gq) > 0) {
     tables_cb_gq <- do.call(plyr::rbind.fill, res_cb_gq)
     tables_cb_gq <-
       data.frame(lapply(tables_cb_gq, function(x)
@@ -660,35 +525,24 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    estacoes_folhas_cb_gq <- sf::st_join(spdf  , left = TRUE,
-                                         folhas_po["layer"])
-    colnames(estacoes_folhas_cb_gq)
+    estacoes_folhas_cb_gq <- as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                         folhas_po["layer"]))
 
-    ## Seleciona campos para a tabela final
-    selecionadas <-
-      c(
-        "ID",
-        "NUM_LAB",
-        "layer",
-        "LONGITUDE",
-        "LATITUDE",
-        "NUM_CAMPO",
-        "PROJETO",
-        "CLASSE",
-        "Lab"
-      )
+    elem <- select(estacoes_folhas_cb_gq,contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem,!contains("COMPOS"))
+    selec <- estacoes_folhas_cb_gq[, selecionadas]
+    estacoes_folhas_cb_gq <- data.frame(selec, elem)
+
     colnames(estacoes_folhas_cb_gq)[3] <- "AREA"
     colnames(estacoes_folhas_cb_gq)[7] <- "PROJETO"
     colnames(estacoes_folhas_cb_gq)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb_gq)[4:5] <- c("LONG", "LAT")
-
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb_gq))
 
     ## Gera dataframe organizado
-    estacoes_folhas_cb_gq  <-
-      data.frame(estacoes_folhas_cb_gq [, 1:9], BASE,
-                 estacoes_folhas_cb_gq [, 10:ncol(estacoes_folhas_cb_gq)])
+    estacoes_folhas_cb_gq  <- data.frame(estacoes_folhas_cb_gq [, 1:9], BASE,
+                                      estacoes_folhas_cb_gq [, 10:ncol(estacoes_folhas_cb_gq)])
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -704,13 +558,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     lista_pivo[[3]] <-
       tidyr::pivot_longer(
         estacoes_folhas_cb_gq,
-        cols = 11:ncol(estacoes_folhas_cb_gq),
+        cols = 10:ncol(estacoes_folhas_cb_gq),
         names_to = "Analito",
         values_to = "Valor"
       )
   }
   ## Arrumar dados de Rocha - Análises químicas---------------------------------
-  if (res_r > 0) {
+  if (length(res_r) > 0) {
     tables_r <- do.call(plyr::rbind.fill, res_r)
     tables_r <-
       data.frame(lapply(tables_r, function(x)
@@ -751,34 +605,23 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
 
-    estacoes_folhas_r <- sf::st_join(spdf  , left = TRUE,
-                                     folhas_po["layer"])
-    colnames(estacoes_folhas_r)
-    ## Seleciona campos para a tabela final
-    selecionadas <-
-      c(
-        "ID",
-        "NUM_LAB",
-        "layer",
-        "LONGITUDE",
-        "LATITUDE",
-        "NUM_CAMPO",
-        "PROJETO",
-        "CLASSE",
-        "Lab"
-      )
+    estacoes_folhas_r <- as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                     folhas_po["layer"]))
+    elem <- select(estacoes_folhas_r,contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem,!contains("COMPOS"))
+    selec <- estacoes_folhas_r[, selecionadas]
+    estacoes_folhas_r <- data.frame(selec, elem)
 
     colnames(estacoes_folhas_r)[3] <- "AREA"
     colnames(estacoes_folhas_r)[7] <- "PROJETO"
     colnames(estacoes_folhas_r)[2] <- "N_LAB"
     colnames(estacoes_folhas_r)[4:5] <- c("LONG", "LAT")
-
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_r))
 
     ## Gera dataframe organizado
     estacoes_folhas_r  <- data.frame(estacoes_folhas_r [, 1:9], BASE,
-                                     estacoes_folhas_r [, 10:ncol(estacoes_folhas_r)])
+                                      estacoes_folhas_r [, 10:ncol(estacoes_folhas_r)])
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -791,16 +634,16 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       quote = TRUE
     )
     #Pivoteia e une as base
-    rlista_pivo[[4]] <-
+    lista_pivo[[4]] <-
       tidyr::pivot_longer(
         estacoes_folhas_r,
-        cols = 11:ncol(estacoes_folhas_r),
+        cols = 10:ncol(estacoes_folhas_r),
         names_to = "Analito",
         values_to = "Valor"
       )
   }
   ## Arrumar dados de Solo - Análises químicas----------------------------------
-  if (res_l > 0) {
+  if (length(res_l) > 0) {
     tables_l <- do.call(plyr::rbind.fill, res_l)
     tables_l <-
       data.frame(lapply(tables_l, function(x)
@@ -840,34 +683,24 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
 
-    estacoes_folhas_l <- sf::st_join(spdf  , left = TRUE,
-                                     folhas_po["layer"])
-    colnames(estacoes_folhas_l)
-    ## Seleciona campos para a tabela final
-    selecionadas <-
-      c(
-        "ID",
-        "NUM_LAB",
-        "layer",
-        "LONGITUDE",
-        "LATITUDE",
-        "NUM_CAMPO",
-        "PROJETO",
-        "CLASSE",
-        "Lab"
-      )
+    estacoes_folhas_l <- as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                     folhas_po["layer"]))
+    elem <- select(estacoes_folhas_l,contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem,!contains("COMPOS"))
+    selec <- estacoes_folhas_l[, selecionadas]
+    estacoes_folhas_l <- data.frame(selec, elem)
 
     colnames(estacoes_folhas_l)[3] <- "AREA"
     colnames(estacoes_folhas_l)[7] <- "PROJETO"
     colnames(estacoes_folhas_l)[2] <- "N_LAB"
     colnames(estacoes_folhas_l)[4:5] <- c("LONG", "LAT")
-
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_l))
 
     ## Gera dataframe organizado
     estacoes_folhas_l  <- data.frame(estacoes_folhas_l [, 1:9], BASE,
-                                     estacoes_folhas_l [, 10:ncol(estacoes_folhas_l)])
+                                      estacoes_folhas_l [, 10:ncol(estacoes_folhas_l)])
+
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -880,16 +713,16 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       quote = TRUE
     )
     #Pivoteia e une as bases
-    lista_pivo[4] <-
+    lista_pivo[[5]] <-
       tidyr::pivot_longer(
         estacoes_folhas_l,
-        cols = 11:ncol(estacoes_folhas_l),
+        cols = 10:ncol(estacoes_folhas_l),
         names_to = "Analito",
         values_to = "Valor"
       )
   }
   ## Arrumar dados de  Minerio - Análises químicas------------------------------
-  if (res_m > 0) {
+  if (length(res_m) > 0) {
     tables_m <- do.call(plyr::rbind.fill, res_m)
     tables_m <-
       data.frame(lapply(tables_m, function(x)
@@ -932,22 +765,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
     estacoes_folhas_m <- sf::st_join(spdf  , left = TRUE,
                                      folhas_po["layer"])
-    colnames(estacoes_folhas_m)
-
-    ## Seleciona campos para a tabela final
-    selecionadas <-
-      c(
-        "ID",
-        "NUM_LAB",
-        "layer",
-        "LONGITUDE",
-        "LATITUDE",
-        "NUM_CAMPO",
-        "PROJETO",
-        "CLASSE",
-        "Lab"
-      )
-
+    elem <- select(estacoes_folhas_m,contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem,!contains("COMPOS"))
+    selec <- estacoes_folhas_m[, selecionadas]
+    estacoes_folhas_m <- data.frame(selec, elem)
 
     colnames(estacoes_folhas_m)[3] <- "AREA"
     colnames(estacoes_folhas_m)[7] <- "PROJETO"
@@ -958,7 +779,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
     ## Gera dataframe organizado
     estacoes_folhas_m  <- data.frame(estacoes_folhas_m [, 1:9], BASE,
-                                     estacoes_folhas_m [, 10:ncol(estacoes_folhas_m)])
+                                      estacoes_folhas_m [, 10:ncol(estacoes_folhas_m)])
+
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -972,10 +794,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     #Pivoteia e une as base
 
-    lista_pivo[5] <-
+    lista_pivo[[6]] <-
       tidyr::pivot_longer(
         estacoes_folhas_m,
-        cols = 11:ncol(estacoes_folhas_m),
+        cols = 10:ncol(estacoes_folhas_m),
         names_to = "Analito",
         values_to = "Valor"
       )

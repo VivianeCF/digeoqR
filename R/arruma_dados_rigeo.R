@@ -10,7 +10,7 @@
 arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   #Ler arquivo das áreas---------------------------------------------------------
   folhas_po <- sf::st_read(folhas, quiet = TRUE)
-
+  colnames(folhas_po)[1] <- "layer"
   ## Definições dos diretórios---------------------------------------------------
   dir <- "inputs/projetos/"
   arquivos_rigeo <-
@@ -350,7 +350,7 @@ elem <- select(elem,!contains("COMPOS"))
 selec <- estacoes_folhas_sc[, selecionadas]
 estacoes_folhas_sc <- data.frame(selec, elem)
 
-    colnames(estacoes_folhas_sc)[3] <- "AREA"
+    colnames(estacoes_folhas_sc)[3] <- "FOLHA"
     colnames(estacoes_folhas_sc)[7] <- "PROJETO"
     colnames(estacoes_folhas_sc)[2] <- "N_LAB"
     colnames(estacoes_folhas_sc)[4:5] <- c("LONG", "LAT")
@@ -463,7 +463,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
 
     estacoes_folhas_cb <- data.frame(selec, BASE, minerais)
 
-    colnames(estacoes_folhas_cb)[3] <- "AREA"
+    colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
 
@@ -533,7 +533,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     selec <- estacoes_folhas_cb_gq[, selecionadas]
     estacoes_folhas_cb_gq <- data.frame(selec, elem)
 
-    colnames(estacoes_folhas_cb_gq)[3] <- "AREA"
+    colnames(estacoes_folhas_cb_gq)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb_gq)[7] <- "PROJETO"
     colnames(estacoes_folhas_cb_gq)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb_gq)[4:5] <- c("LONG", "LAT")
@@ -612,7 +612,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     selec <- estacoes_folhas_r[, selecionadas]
     estacoes_folhas_r <- data.frame(selec, elem)
 
-    colnames(estacoes_folhas_r)[3] <- "AREA"
+    colnames(estacoes_folhas_r)[3] <- "FOLHA"
     colnames(estacoes_folhas_r)[7] <- "PROJETO"
     colnames(estacoes_folhas_r)[2] <- "N_LAB"
     colnames(estacoes_folhas_r)[4:5] <- c("LONG", "LAT")
@@ -690,7 +690,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     selec <- estacoes_folhas_l[, selecionadas]
     estacoes_folhas_l <- data.frame(selec, elem)
 
-    colnames(estacoes_folhas_l)[3] <- "AREA"
+    colnames(estacoes_folhas_l)[3] <- "FOLHA"
     colnames(estacoes_folhas_l)[7] <- "PROJETO"
     colnames(estacoes_folhas_l)[2] <- "N_LAB"
     colnames(estacoes_folhas_l)[4:5] <- c("LONG", "LAT")
@@ -770,7 +770,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     selec <- estacoes_folhas_m[, selecionadas]
     estacoes_folhas_m <- data.frame(selec, elem)
 
-    colnames(estacoes_folhas_m)[3] <- "AREA"
+    colnames(estacoes_folhas_m)[3] <- "FOLHA"
     colnames(estacoes_folhas_m)[7] <- "PROJETO"
     colnames(estacoes_folhas_m)[2] <- "N_LAB"
     colnames(estacoes_folhas_m)[4:5] <- c("LONG", "LAT")

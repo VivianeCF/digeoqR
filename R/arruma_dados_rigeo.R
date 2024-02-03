@@ -1,6 +1,7 @@
 #' Recupera dados geoquímicos do Rigeo
 #'
-#' @param folhas Articulação das folhas
+#' @param folhas Articulação das folhas. Dica: gerar grid das folhas no QGIS com
+#' o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente
 #'
 #' @return
 #' @export

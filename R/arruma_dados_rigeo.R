@@ -9,15 +9,15 @@
 #' @examples
 #' #arruma_dados_rigeo()
 arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
-  #Ler arquivo das áreas---------------------------------------------------------
+  #Ler arquivo das áreas--------------------------------------------------------
   folhas_po <- sf::st_read(folhas, quiet = TRUE)
   colnames(folhas_po)[1] <- "layer"
-  ## Definições dos diretórios---------------------------------------------------
+  ## Definições dos diretórios--------------------------------------------------
   dir <- "inputs/projetos/"
   arquivos_rigeo <-
     list.files(dir, pattern = "\\.zip$", full.names = TRUE)
 
-  ## Criar variáveis--------------------------------------------------------------
+  ## Criar variáveis------------------------------------------------------------
   res_sc <- list()
   res_cb <- list()
   res_cb_gq <- list()
@@ -44,7 +44,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       "Lab"
     )
 
-  ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra-----------
+  ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra---------
   for (i in 1:length(arquivos_rigeo)) {
     # Create temp files
     temp <- tempfile()
@@ -101,7 +101,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       concentrado_filtro <- filtered_df_bateia
       if (!is.na(filtered_df_bateia)) {
         data_cb <-
-          readxl::read_excel(paste0(temp,"/",concentrado_filtro), col_types = "text")
+          readxl::read_excel(paste0(temp, "/", concentrado_filtro),
+                             col_types = "text")
         colnames(data_cb) <- tolower(colnames(data_cb))
         data_cb_join <-
           left_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
@@ -153,9 +154,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     if (length(filtered_df_sedimento) != 0) {
       sedimento_filtro <-  filtered_df_sedimento
       if (!is.na(filtered_df_sedimento)) {
-        data_sc <- readxl::read_excel(paste0(temp, "/",sedimento_filtro), col_types = "text")
+        data_sc <- readxl::read_excel(paste0(temp, "/", sedimento_filtro),
+                                      col_types = "text")
         colnames(data_sc) <- tolower(colnames(data_sc))
-         data_sc_join <-
+        data_sc_join <-
           dplyr::inner_join(data_sc, campo, by = c("num_lab" = "Num_Lab"))
         names(data_sc_join) <- toupper(names(data_sc_join))
         data_sc_join <- as.data.frame(data_sc_join)
@@ -191,7 +193,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       concentrado_filtro_gq <- filtered_df_bateia_gq
       if (!is.na(filtered_df_bateia_gq)) {
         data_cb_gq <-
-          readxl::read_excel(paste0(temp, "/",concentrado_filtro_gq), col_types = "text")
+          readxl::read_excel(paste0(temp, "/", concentrado_filtro_gq),
+                             col_types = "text")
         colnames(data_cb_gq)[6] <- "num_lab"
         data_cb_gq_join <- dplyr::inner_join(data_cb_gq, campo,
                                              by = c("num_lab" = "Num_Lab"))
@@ -223,7 +226,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     if (length(filtered_df_solo) != 0) {
       solo_filtro <- filtered_df_solo
       if (!is.na(filtered_df_solo)) {
-        data_l <- readxl::read_excel(paste0(temp, "/",solo_filtro), col_types = "text")
+        data_l <- readxl::read_excel(paste0(temp, "/", solo_filtro),
+                                     col_types = "text")
         colnames(data_l) <- tolower(colnames(data_l))
         data_l_join <-
           dplyr::inner_join(data_l, campo, by = c("num_lab" = "Num_Lab"))
@@ -253,9 +257,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     if (length(filtered_df_rocha) != 0) {
       rocha_filtro <- filtered_df_rocha
       if (!is.na(filtered_df_rocha)) {
-        data_r <- readxl::read_excel(paste0(temp, "/", rocha_filtro), col_types = "text")
+        data_r <- readxl::read_excel(paste0(temp, "/", rocha_filtro),
+                                     col_types = "text")
         colnames(data_r) <- tolower(colnames(data_r))
-         data_r_join <-
+        data_r_join <-
           dplyr::inner_join(data_r, campo, by = c("num_lab" = "Num_Lab"))
         names(data_r_join) <- toupper(names(data_r_join))
         data_r_join <- as.data.frame(data_r_join)
@@ -288,7 +293,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     if (length(filtered_df_minerio) != 0) {
       minerio_filtro <- filtered_df_minerio
       if (!is.na(filtered_df_minerio)) {
-        data_m <- readxl::read_excel(paste0(temp, "/", minerio_filtro), col_types = "text")
+        data_m <- readxl::read_excel(paste0(temp, "/", minerio_filtro),
+                                     col_types = "text")
         colnames(data_m) <- tolower(colnames(data_m))
         data_m_join <-
           dplyr::inner_join(data_m, campo, by = c("num_lab" = "Num_Lab"))
@@ -343,13 +349,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    estacoes_folhas_sc <- as.data.frame(sf::st_join(spdf  , left = TRUE,
-                                      folhas_po["layer"]))
+    estacoes_folhas_sc <-
+      as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                folhas_po["layer"]))
 
-elem <- select(estacoes_folhas_sc,contains(c("_PPM", "_PCT", "_PPB")))
-elem <- select(elem,!contains("COMPOS"))
-selec <- estacoes_folhas_sc[, selecionadas]
-estacoes_folhas_sc <- data.frame(selec, elem)
+    elem <-
+      select(estacoes_folhas_sc, contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem, !contains("COMPOS"))
+    selec <- estacoes_folhas_sc[, selecionadas]
+    estacoes_folhas_sc <- data.frame(selec, elem)
 
     colnames(estacoes_folhas_sc)[3] <- "FOLHA"
     colnames(estacoes_folhas_sc)[7] <- "PROJETO"
@@ -359,8 +367,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_sc))
 
     ## Gera dataframe organizado
-    estacoes_folhas_sc  <- data.frame(estacoes_folhas_sc [, 1:9], BASE,
-                                      estacoes_folhas_sc [, 10:ncol(estacoes_folhas_sc)])
+    estacoes_folhas_sc  <-
+      data.frame(estacoes_folhas_sc [, 1:9], BASE,
+                 estacoes_folhas_sc [, 10:ncol(estacoes_folhas_sc)])
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -411,7 +420,8 @@ estacoes_folhas_sc <- data.frame(selec, elem)
       stringr::str_replace(dfp$value, "75-100", "75 - 100 %")
     dfp$value <- stringr::str_replace(dfp$value, "5-25", "5 - 25 %")
     dfp$value <- stringr::str_replace(dfp$value, "1-5", "1 - 5 %")
-    dfp$value <- stringr::str_replace(dfp$value, "50-75", "50 - 75 %")
+    dfp$value <-
+      stringr::str_replace(dfp$value, "50-75", "50 - 75 %")
     dfp$value <- stringr::str_replace(dfp$value, "<5", "< 5 %")
     dfp$value <- stringr::str_replace(dfp$value, ">50", "> 50 %")
     dfp$value <- stringr::str_replace(dfp$value, ">75", "> 75 %")
@@ -453,8 +463,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    estacoes_folhas_cb <- as.data.frame(sf::st_join(spdf  , left = TRUE,
-                                      folhas_po["layer"]))
+    estacoes_folhas_cb <-
+      as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                folhas_po["layer"]))
 
 
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
@@ -526,11 +537,13 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    estacoes_folhas_cb_gq <- as.data.frame(sf::st_join(spdf  , left = TRUE,
-                                         folhas_po["layer"]))
+    estacoes_folhas_cb_gq <-
+      as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                folhas_po["layer"]))
 
-    elem <- select(estacoes_folhas_cb_gq,contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- select(elem,!contains("COMPOS"))
+    elem <-
+      select(estacoes_folhas_cb_gq, contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_cb_gq[, selecionadas]
     estacoes_folhas_cb_gq <- data.frame(selec, elem)
 
@@ -542,8 +555,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb_gq))
 
     ## Gera dataframe organizado
-    estacoes_folhas_cb_gq  <- data.frame(estacoes_folhas_cb_gq [, 1:9], BASE,
-                                      estacoes_folhas_cb_gq [, 10:ncol(estacoes_folhas_cb_gq)])
+    estacoes_folhas_cb_gq <-
+      data.frame(estacoes_folhas_cb_gq [, 1:9], BASE,
+                 estacoes_folhas_cb_gq [, 10:ncol(estacoes_folhas_cb_gq)])
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -587,8 +601,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     tables_r$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_r$LONGITUDE,
                       fixed = TRUE))
-    tables_r$LATITUDE <- as.numeric(gsub(",", ".", tables_r$LATITUDE,
-                                         fixed = TRUE))
+    tables_r$LATITUDE <-
+      as.numeric(gsub(",", ".", tables_r$LATITUDE,
+                      fixed = TRUE))
     tables_r[is.na(tables_r$LATITUDE), "LATITUDE"] <-
       tables_r[is.na(tables_r$LATITUDE), "LAT"]
     tables_r[is.na(tables_r$LONGITUDE), "LONGITUDE"] <-
@@ -606,10 +621,12 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
 
-    estacoes_folhas_r <- as.data.frame(sf::st_join(spdf  , left = TRUE,
-                                     folhas_po["layer"]))
-    elem <- select(estacoes_folhas_r,contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- select(elem,!contains("COMPOS"))
+    estacoes_folhas_r <-
+      as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                folhas_po["layer"]))
+    elem <-
+      select(estacoes_folhas_r, contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_r[, selecionadas]
     estacoes_folhas_r <- data.frame(selec, elem)
 
@@ -621,8 +638,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_r))
 
     ## Gera dataframe organizado
-    estacoes_folhas_r  <- data.frame(estacoes_folhas_r [, 1:9], BASE,
-                                      estacoes_folhas_r [, 10:ncol(estacoes_folhas_r)])
+    estacoes_folhas_r  <-
+      data.frame(estacoes_folhas_r [, 1:9], BASE,
+                 estacoes_folhas_r [, 10:ncol(estacoes_folhas_r)])
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -665,8 +683,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     tables_l$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_l$LONGITUDE,
                       fixed = TRUE))
-    tables_l$LATITUDE <- as.numeric(gsub(",", ".", tables_l$LATITUDE,
-                                         fixed = TRUE))
+    tables_l$LATITUDE <-
+      as.numeric(gsub(",", ".", tables_l$LATITUDE,
+                      fixed = TRUE))
     tables_l[is.na(tables_l$LATITUDE), "LATITUDE"] <-
       tables_l[is.na(tables_l$LATITUDE), "LAT"]
     tables_l[is.na(tables_l$LONGITUDE), "LONGITUDE"] <-
@@ -684,10 +703,12 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
 
-    estacoes_folhas_l <- as.data.frame(sf::st_join(spdf  , left = TRUE,
-                                     folhas_po["layer"]))
-    elem <- select(estacoes_folhas_l,contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- select(elem,!contains("COMPOS"))
+    estacoes_folhas_l <-
+      as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                folhas_po["layer"]))
+    elem <-
+      select(estacoes_folhas_l, contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_l[, selecionadas]
     estacoes_folhas_l <- data.frame(selec, elem)
 
@@ -699,9 +720,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_l))
 
     ## Gera dataframe organizado
-    estacoes_folhas_l  <- data.frame(estacoes_folhas_l [, 1:9], BASE,
-                                      estacoes_folhas_l [, 10:ncol(estacoes_folhas_l)])
-
+    estacoes_folhas_l  <-
+      data.frame(estacoes_folhas_l [, 1:9], BASE,
+                 estacoes_folhas_l [, 10:ncol(estacoes_folhas_l)])
 
     ## Salva arquivo final do Rigeo
     write.table(
@@ -744,8 +765,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     tables_m$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_m$LONGITUDE,
                       fixed = TRUE))
-    tables_m$LATITUDE <- as.numeric(gsub(",", ".", tables_m$LATITUDE,
-                                         fixed = TRUE))
+    tables_m$LATITUDE <-
+      as.numeric(gsub(",", ".", tables_m$LATITUDE,
+                      fixed = TRUE))
     tables_m[is.na(tables_m$LATITUDE), "LATITUDE"] <-
       tables_m[is.na(tables_m$LATITUDE), "LAT"]
     tables_m[is.na(tables_m$LONGITUDE), "LONGITUDE"] <-
@@ -766,8 +788,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
 
     estacoes_folhas_m <- sf::st_join(spdf  , left = TRUE,
                                      folhas_po["layer"])
-    elem <- select(estacoes_folhas_m,contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- select(elem,!contains("COMPOS"))
+    elem <-
+      select(estacoes_folhas_m, contains(c("_PPM", "_PCT", "_PPB")))
+    elem <- select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_m[, selecionadas]
     estacoes_folhas_m <- data.frame(selec, elem)
 
@@ -779,8 +802,9 @@ estacoes_folhas_sc <- data.frame(selec, elem)
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_m))
 
     ## Gera dataframe organizado
-    estacoes_folhas_m  <- data.frame(estacoes_folhas_m [, 1:9], BASE,
-                                      estacoes_folhas_m [, 10:ncol(estacoes_folhas_m)])
+    estacoes_folhas_m  <-
+      data.frame(estacoes_folhas_m [, 1:9], BASE,
+                 estacoes_folhas_m [, 10:ncol(estacoes_folhas_m)])
 
 
     ## Salva arquivo final do Rigeo
@@ -805,7 +829,7 @@ estacoes_folhas_sc <- data.frame(selec, elem)
   }
   ## Une as bases --------------------------------------------------------------
   unido <- do.call(plyr::rbind.fill, lista_pivo)
-  unido <- unido[!is.na(unido$Valor), ]
+  unido <- unido[!is.na(unido$Valor),]
 
   write.csv2(unido, "outputs/toda_base_integral_rigeo.csv", row.names = FALSE)
 }

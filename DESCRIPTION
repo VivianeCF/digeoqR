@@ -1,0 +1,21 @@
+Package: digeoqR
+Title: Ferramentas de trabalho para o geoquímico
+Version: 0.0.0.9000
+Authors@R: 
+    person("Viviane", "Carillo Ferrari", , "viviane.ferrari@sgb.gov.br", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2755-9181"))
+Description:
+    É um conjunto de ferramentas desenvolvidas para o planejamento e análise de dados geoquímicos.
+    Planeja estações de coleta.
+    Faz integração dos dados geoquímicos de campo e analítico.
+    Efetua análises estatísticas e geoespaciais.
+    Gera gráficos e mapas.
+License: use_proprietary_license()
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports: 
+    magrittr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

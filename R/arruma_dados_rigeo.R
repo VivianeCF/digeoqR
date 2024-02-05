@@ -16,7 +16,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   dir <- "inputs/projetos/"
   arquivos_rigeo <-
     list.files(dir, pattern = "\\.zip$", full.names = TRUE)
-  
+
   ## Criar variáveis------------------------------------------------------------
   res_sc <- list()
   res_cb <- list()
@@ -43,7 +43,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       "CLASSE",
       "Lab"
     )
-  
+
   ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra---------
   for (i in 1:length(arquivos_rigeo)) {
     # Create temp files
@@ -53,7 +53,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     coord <- sf::st_coordinates(campo)[, c(1, 2)]
     colnames(coord) <- c("Longitude", "Latitude")
     campo <- data.frame(coord, campo)
-    
+
     x <- unzip(arquivos_rigeo[i], list = TRUE)
     x_org <- x
     x$Name <- iconv(x$Name,  "IBM437",  "UTF-8")
@@ -61,7 +61,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     file.rename(from, paste0(temp, "/", x$Name))
     x <- x %>%
       dplyr::filter(!(stringr::str_detect(Name, 'pdf')))
-    
+
     filtered_df_bateia <-
       dplyr::filter(x,
                     grepl("Mineralometria Concentrado de Bateia",
@@ -96,7 +96,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     filtered_df_bateia <-
       filtered_df_bateia[!is.na(filtered_df_bateia)]
-    
+
     if (length(filtered_df_bateia) != 0) {
       concentrado_filtro <- filtered_df_bateia
       if (!is.na(filtered_df_bateia)) {
@@ -109,37 +109,37 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         names(data_cb_join) <- toupper(names(data_cb_join))
         names(data_cb_join) <-
           stringr::str_replace(names(data_cb_join), "_PCT", "")
-        
+
         data_cb_join <- as.data.frame(data_cb_join)
         colnames(data_cb_join) <-
           gsub("PIR..OXIDADA",
                "PIR.OXIDADA",
                colnames(data_cb_join))
-        
+
         res_cb[[i]] <- data_cb_join
       }
     }
-    
+
     filtered_df_sedimento <-
       dplyr::filter(x,
-                    grepl("Geoquimica Sedimento de Corrente",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica Sedimento de Corrente",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento2 <-
       dplyr::filter(x,
-                    grepl("Geoquimica de Sedimento de Corrente",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica de Sedimento de Corrente",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento3 <-
       dplyr::filter(x,
-                    grepl("Geoquimica_Sedimento_de_Corrente",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica_Sedimento_de_Corrente",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento4 <-
       dplyr::filter(x,
-                    grepl(
-                      "Analise_Química_Sedimento_de_Corrente",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
-    
+             grepl(
+               "Analise_Química_Sedimento_de_Corrente",
+               Name,
+               ignore.case = TRUE
+             ))[1, 1]
+
     filtered_df_sedimento <-
       c(
         filtered_df_sedimento,
@@ -149,8 +149,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       )
     filtered_df_sedimento <-
       filtered_df_sedimento[!is.na(filtered_df_sedimento)]
-    
-    
+
+
     if (length(filtered_df_sedimento) != 0) {
       sedimento_filtro <-  filtered_df_sedimento
       if (!is.na(filtered_df_sedimento)) {
@@ -166,29 +166,29 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         res_sc[[i]] <-  data_sc_join
       }
     }
-    
+
     filtered_df_bateia_gq <-
       dplyr::filter(x,
-                    grepl("Geoquimica Concentrado de Bateia",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica Concentrado de Bateia",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq2 <-
       dplyr::filter(x,
-                    grepl("Geoquimica_Concentrado_de_Bateia",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica_Concentrado_de_Bateia",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq3 <-
       dplyr::filter(x,
-                    grepl(
-                      "Analise_Química_Concentrado_de_Bateia",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
+             grepl(
+               "Analise_Química_Concentrado_de_Bateia",
+               Name,
+               ignore.case = TRUE
+             ))[1, 1]
     filtered_df_bateia_gq <-
       c(filtered_df_bateia_gq,
         filtered_df_bateia_gq2,
         filtered_df_bateia_gq3)
     filtered_df_bateia_gq <-
       filtered_df_bateia_gq[!is.na(filtered_df_bateia_gq)]
-    
+
     if (length(filtered_df_bateia_gq) != 0) {
       concentrado_filtro_gq <- filtered_df_bateia_gq
       if (!is.na(filtered_df_bateia_gq)) {
@@ -202,27 +202,27 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         names(data_cb_gq_join) <- toupper(names(data_cb_gq_join))
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
         res_cb_gq[[i]] <-  data_cb_gq_join
-        
+
       }
-      
+
     }
     filtered_df_solo <- dplyr::filter(x, grepl("Geoquimica Solo",
-                                               Name, ignore.case = TRUE))[1, 1]
+                                        Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo2 <- dplyr::filter(x, grepl("Geoquimica de Solo",
-                                                Name, ignore.case = TRUE))[1, 1]
+                                         Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo3 <- dplyr::filter(x, grepl("Geoquimica_Solo",
-                                                Name, ignore.case = TRUE))[1, 1]
+                                         Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo4 <- dplyr::filter(x, grepl("Analise_Química_Solo",
-                                                Name, ignore.case = TRUE))[1, 1]
-    
-    
+                                         Name, ignore.case = TRUE))[1, 1]
+
+
     filtered_df_solo <- c(filtered_df_solo,
                           filtered_df_solo2,
                           filtered_df_solo3,
                           filtered_df_solo4)
     filtered_df_solo <- filtered_df_solo[!is.na(filtered_df_solo)]
-    
-    
+
+
     if (length(filtered_df_solo) != 0) {
       solo_filtro <- filtered_df_solo
       if (!is.na(filtered_df_solo)) {
@@ -236,24 +236,24 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         res_l[[i]] <-  data_l_join
       }
     }
-    
-    
+
+
     filtered_df_rocha <- dplyr::filter(x, grepl("Geoquimica Rocha",
-                                                Name, ignore.case = TRUE))[1, 1]
+                                         Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha2 <- dplyr::filter(x, grepl("Geoquimica de Rocha",
-                                                 Name, ignore.case = TRUE))[1, 1]
+                                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha3 <- dplyr::filter(x, grepl("Geoquimica_Rocha",
-                                                 Name, ignore.case = TRUE))[1, 1]
+                                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha4 <- dplyr::filter(x, grepl("Analise_Química_Rocha",
-                                                 Name, ignore.case = TRUE))[1, 1]
-    
+                                          Name, ignore.case = TRUE))[1, 1]
+
     filtered_df_rocha <- c(filtered_df_rocha,
                            filtered_df_rocha2,
                            filtered_df_rocha3,
                            filtered_df_rocha4)
     filtered_df_rocha <-
       filtered_df_rocha[!is.na(filtered_df_rocha)]
-    
+
     if (length(filtered_df_rocha) != 0) {
       rocha_filtro <- filtered_df_rocha
       if (!is.na(filtered_df_rocha)) {
@@ -267,29 +267,29 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         res_r[[i]] <-  data_r_join
       }
     }
-    
-    
+
+
     filtered_df_minerio <-
       dplyr::filter(x,
-                    grepl("Geoquimica_Mineral_Minerio",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica_Mineral_Minerio",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_minerio2 <-
       dplyr::filter(x,
-                    grepl("Geoquimica de Mineral Minerio",
-                          Name, ignore.case = TRUE))[1, 1]
+             grepl("Geoquimica de Mineral Minerio",
+                   Name, ignore.case = TRUE))[1, 1]
     filtered_df_minerio3 <-
       dplyr::filter(x,
-                    grepl("Analise_Química_Mineral_Minerio",
-                          Name, ignore.case = TRUE))[1, 1]
-    
+             grepl("Analise_Química_Mineral_Minerio",
+                   Name, ignore.case = TRUE))[1, 1]
+
     filtered_df_minerio <-
       c(filtered_df_minerio,
         filtered_df_minerio2,
         filtered_df_minerio3)
     filtered_df_minerio <-
       filtered_df_minerio[!is.na(filtered_df_minerio)]
-    
-    
+
+
     if (length(filtered_df_minerio) != 0) {
       minerio_filtro <- filtered_df_minerio
       if (!is.na(filtered_df_minerio)) {
@@ -306,7 +306,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     print(arquivos_rigeo[i])
     print(i)
   }
-  
+
   lista_pivo <- list()
   ## Arrumar dados de Sedimento de Corrente - Análises químicas-----------------
   if (length(res_sc) > 0) {
@@ -317,15 +317,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
              fixed = TRUE)))
     write.csv2(tables_sc, "outputs/integrada_rigeo_sc.csv",
                row.names = FALSE)
-    
+
     #Organizar nomes dos campos para Sedimento de corrente
     tables_sc <- as.data.frame(tables_sc)
-    
+
     tables_sc <- tables_sc %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_sc))
     tables_sc <- data.frame(ID, tables_sc)
-    
+
     ## Prepara coordenadas
     tables_sc$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_sc$LONGITUDE,
@@ -352,25 +352,25 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     estacoes_folhas_sc <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
-    
+
     elem <-
       dplyr::select(estacoes_folhas_sc, contains(c("_PPM", "_PCT", "_PPB")))
     elem <- dplyr::select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_sc[, selecionadas]
     estacoes_folhas_sc <- data.frame(selec, elem)
-    
+
     colnames(estacoes_folhas_sc)[3] <- "FOLHA"
     colnames(estacoes_folhas_sc)[7] <- "PROJETO"
     colnames(estacoes_folhas_sc)[2] <- "N_LAB"
     colnames(estacoes_folhas_sc)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_sc))
-    
+
     ## Gera dataframe organizado
     estacoes_folhas_sc  <-
       data.frame(estacoes_folhas_sc [, 1:9], BASE,
                  estacoes_folhas_sc [, 10:ncol(estacoes_folhas_sc)])
-    
+
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_sc ,
@@ -400,7 +400,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     colnames(tables_cb)
     write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv",
                row.names = FALSE)
-    
+
     tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     dfp <- tidyr::pivot_longer(
@@ -409,11 +409,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       names_to = "Mineral",
       values_to = "value"
     )
-    
+
     dfp$value <- gsub(" ", "", dfp$value)
     dfp$value <- gsub("%", "", dfp$value)
     dfp$value <- gsub("%", "", dfp$value)
-    
+
     dfp$value <- stringr::str_replace(dfp$value, "5-50", "5 - 50 %")
     dfp$value <- stringr::str_replace(dfp$value, "<1", "< 1 %")
     dfp$value <-
@@ -426,7 +426,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     dfp$value <- stringr::str_replace(dfp$value, ">50", "> 50 %")
     dfp$value <- stringr::str_replace(dfp$value, ">75", "> 75 %")
     dfp$value <- stringr::str_replace(dfp$value, "\\.", ",")
-    
+
     unique(dfp$value)
     # Pivotar para minerais nas colunas
     dados_wilder <- dfp %>%
@@ -435,13 +435,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     names(dados_wilder)
     #unificar valores de minerais duplicados na base
     ## não tem
-    
+
     df_cb_tidy <- dados_wilder
     colnames(df_cb_tidy)
-    
+
     ID <- seq(1, nrow(df_cb_tidy))
     df_cb_tidy <- data.frame(ID, df_cb_tidy)
-    
+
     ## Prepara coordenadas
     df_cb_tidy$LONGITUDE <-
       as.numeric(gsub(",", ".", df_cb_tidy$LONGITUDE,
@@ -449,9 +449,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     df_cb_tidy$LATITUDE <-
       as.numeric(gsub(",", ".", df_cb_tidy$LATITUDE,
                       fixed = TRUE))
-    
+
     ## Extrai códigos das folhas das estações (wgs84)
-    
+
     crs_SIRGAS2000 <-
       "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
     xy <- df_cb_tidy[, c("LONGITUDE", "LATITUDE")]
@@ -466,19 +466,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     estacoes_folhas_cb <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
-    
-    
+
+
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
-    
+
     selec <- estacoes_folhas_cb[, selecionadas]
     minerais <- dplyr::select(estacoes_folhas_cb, "ANATASIO":"ZIRCAO")
-    
+
     estacoes_folhas_cb <- data.frame(selec, BASE, minerais)
-    
+
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
-    
+
     write.table(
       estacoes_folhas_cb ,
       "outputs/cb_tidy.csv",
@@ -507,13 +507,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                paste0("outputs/",
                       "integrada_rigeo_cb_gq.csv"),
                row.names = FALSE)
-    
+
     tables_cb_gq <- as.data.frame(tables_cb_gq)
     tables_cb_gq <- tables_cb_gq %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_cb_gq))
     tables_cb_gq <- data.frame(ID, tables_cb_gq)
-    
+
     ## Prepara coordenadas
     tables_cb_gq$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_cb_gq$LONGITUDE,
@@ -540,25 +540,25 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     estacoes_folhas_cb_gq <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
-    
+
     elem <-
       dplyr::select(estacoes_folhas_cb_gq, contains(c("_PPM", "_PCT", "_PPB")))
     elem <- dplyr::select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_cb_gq[, selecionadas]
     estacoes_folhas_cb_gq <- data.frame(selec, elem)
-    
+
     colnames(estacoes_folhas_cb_gq)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb_gq)[7] <- "PROJETO"
     colnames(estacoes_folhas_cb_gq)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb_gq)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb_gq))
-    
+
     ## Gera dataframe organizado
     estacoes_folhas_cb_gq <-
       data.frame(estacoes_folhas_cb_gq [, 1:9], BASE,
                  estacoes_folhas_cb_gq [, 10:ncol(estacoes_folhas_cb_gq)])
-    
+
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_cb_gq ,
@@ -589,14 +589,14 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                paste0("outputs/",
                       "integrada_rigeo_r.csv"),
                row.names = FALSE)
-    
+
     tables_r <- as.data.frame(tables_r)
-    
+
     tables_r <- tables_r %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_r))
     tables_r <- data.frame(ID, tables_r)
-    
+
     ## Prepara coordenadas
     tables_r$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_r$LONGITUDE,
@@ -620,7 +620,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    
+
     estacoes_folhas_r <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
@@ -629,19 +629,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     elem <- dplyr::select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_r[, selecionadas]
     estacoes_folhas_r <- data.frame(selec, elem)
-    
+
     colnames(estacoes_folhas_r)[3] <- "FOLHA"
     colnames(estacoes_folhas_r)[7] <- "PROJETO"
     colnames(estacoes_folhas_r)[2] <- "N_LAB"
     colnames(estacoes_folhas_r)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_r))
-    
+
     ## Gera dataframe organizado
     estacoes_folhas_r  <-
       data.frame(estacoes_folhas_r [, 1:9], BASE,
                  estacoes_folhas_r [, 10:ncol(estacoes_folhas_r)])
-    
+
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_r ,
@@ -672,13 +672,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                paste0("outputs/",
                       "integrada_rigeo_l.csv"),
                row.names = FALSE)
-    
+
     tables_l <- as.data.frame(tables_l)
     tables_l <- tables_l %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_l))
     tables_l <- data.frame(ID, tables_l)
-    
+
     ## Prepara coordenadas
     tables_l$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_l$LONGITUDE,
@@ -702,7 +702,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     )
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    
+
     estacoes_folhas_l <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
@@ -711,19 +711,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     elem <- dplyr::select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_l[, selecionadas]
     estacoes_folhas_l <- data.frame(selec, elem)
-    
+
     colnames(estacoes_folhas_l)[3] <- "FOLHA"
     colnames(estacoes_folhas_l)[7] <- "PROJETO"
     colnames(estacoes_folhas_l)[2] <- "N_LAB"
     colnames(estacoes_folhas_l)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_l))
-    
+
     ## Gera dataframe organizado
     estacoes_folhas_l  <-
       data.frame(estacoes_folhas_l [, 1:9], BASE,
                  estacoes_folhas_l [, 10:ncol(estacoes_folhas_l)])
-    
+
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_l ,
@@ -754,13 +754,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                paste0("outputs/",
                       "integrada_rigeo_m.csv"),
                row.names = FALSE)
-    
+
     tables_m <- as.data.frame(tables_m)
-    
+
     tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_m))
     tables_m <- data.frame(ID, tables_m)
-    
+
     ## Prepara coordenadas
     tables_m$LONGITUDE <-
       as.numeric(gsub(",", ".", tables_m$LONGITUDE,
@@ -785,7 +785,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     colnames(spdf)
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
-    
+
     estacoes_folhas_m <- sf::st_join(spdf  , left = TRUE,
                                      folhas_po["layer"])
     elem <-
@@ -793,20 +793,20 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     elem <- dplyr::select(elem, !contains("COMPOS"))
     selec <- estacoes_folhas_m[, selecionadas]
     estacoes_folhas_m <- data.frame(selec, elem)
-    
+
     colnames(estacoes_folhas_m)[3] <- "FOLHA"
     colnames(estacoes_folhas_m)[7] <- "PROJETO"
     colnames(estacoes_folhas_m)[2] <- "N_LAB"
     colnames(estacoes_folhas_m)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_m))
-    
+
     ## Gera dataframe organizado
     estacoes_folhas_m  <-
       data.frame(estacoes_folhas_m [, 1:9], BASE,
                  estacoes_folhas_m [, 10:ncol(estacoes_folhas_m)])
-    
-    
+
+
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_m ,
@@ -818,7 +818,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       quote = TRUE
     )
     #Pivoteia e une as base
-    
+
     lista_pivo[[6]] <-
       tidyr::pivot_longer(
         estacoes_folhas_m,
@@ -830,6 +830,6 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   ## Une as bases --------------------------------------------------------------
   unido <- do.call(plyr::rbind.fill, lista_pivo)
   unido <- unido[!is.na(unido$Valor),]
-  
+
   write.csv2(unido, "outputs/toda_base_integral_rigeo.csv", row.names = FALSE)
 }

@@ -410,6 +410,16 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb))
     colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb))
     colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb))
+
+    # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
+    minerais <- gsub("\u00c1", "A", minerais)
+    minerais <- gsub("\u00c3", "A", minerais)
+    minerais <- gsub("\u00c2", "A", minerais)
+    minerais <- gsub("\u00c9", "E", minerais)
+    minerais <- gsub("\u00ca", "E", minerais)
+    minerais <- gsub("\u00cd", "I", minerais)
+    minerais <- gsub("\u00d3", "O", minerais)
+
     write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv",
                row.names = FALSE)
 

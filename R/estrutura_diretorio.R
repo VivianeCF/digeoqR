@@ -19,21 +19,21 @@ estrutura_diretorio <- function() {
   dir.create(paste0('inputs/mineral/S'))
 
   # Dados Químicos
-  dir.create(paste0(path, 'inputs/quimica'))
-  dir.create(paste0(path, 'inputs/quimica/B'))
-  dir.create(paste0(path, 'inputs/quimica/L'))
-  dir.create(paste0(path, 'inputs/quimica/R'))
-  dir.create(paste0(path, 'inputs/quimica/S'))
+  dir.create(paste0('inputs/quimica'))
+  dir.create(paste0('inputs/quimica/B'))
+  dir.create(paste0('inputs/quimica/L'))
+  dir.create(paste0('inputs/quimica/R'))
+  dir.create(paste0('inputs/quimica/S'))
 
   # Dados de Campo
-  dir.create(paste0(path, 'inputs/campo'))
+  dir.create(paste0('inputs/campo'))
 
   # Dados de Projetos do Rgeo
-  dir.create(paste0(path, 'inputs/projetos'))
+  dir.create(paste0('inputs/projetos'))
 
   # Dados de Imagens (SRTM)
-  dir.create(paste0(path, 'inputs/imagens'))
+  dir.create(paste0('inputs/imagens'))
 
   # Dados Diversos
-  dir.create(paste0(path, 'inputs/diversos'))
+  dir.create(paste0('inputs/diversos'))
 }

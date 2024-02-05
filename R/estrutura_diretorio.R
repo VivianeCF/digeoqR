@@ -1,8 +1,6 @@
 
 #' Cria diretórios e subdiretórios para o processamento de dados
 #'
-#' @param path Caminho para o diretório do projeto.
-#'
 #' @return Cria a estrutura dos diretórios onde devem ser lidos os arquivos de
 #'   entrada e salvos os arquivos de saída
 #' @export

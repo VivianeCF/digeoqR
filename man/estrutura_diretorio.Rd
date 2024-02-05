@@ -4,10 +4,7 @@
 \alias{estrutura_diretorio}
 \title{Cria diretórios e subdiretórios para o processamento de dados}
 \usage{
-estrutura_diretorio(path = "projeto/")
-}
-\arguments{
-\item{path}{Caminho para o diretório do projeto.}
+estrutura_diretorio()
 }
 \value{
 Cria a estrutura dos diretórios onde devem ser lidos os arquivos de

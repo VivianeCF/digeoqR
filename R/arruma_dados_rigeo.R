@@ -16,7 +16,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   dir <- "inputs/projetos/"
   arquivos_rigeo <-
     list.files(dir, pattern = "\\.zip$", full.names = TRUE)
-
+  info <- c("projeto_amostragem","projeto_publicacao","classe","centro_custo","num_campo",
+  "num_Lab","data_visita","Laboratório","abertura"," leitura","job")
   ## Criar variáveis------------------------------------------------------------
   res_sc <- list()
   res_cb <- list()
@@ -103,6 +104,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         data_cb <-
           readxl::read_excel(paste0(temp, "/", concentrado_filtro),
                              col_types = "text")
+        minerais <- colnames(data_cb)[!(colnames(data_cb) %in% info)]
         colnames(data_cb) <- tolower(colnames(data_cb))
         data_cb_join <-
           dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
@@ -397,15 +399,26 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       data.frame(lapply(tables_cb, function(x)
         gsub(".", ",", x,
              fixed = TRUE)))
-    colnames(tables_cb)
+
+    # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
+    colnames(tables_cb) <- gsub("\u00c1", "A", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00c3", "A", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00c2", "A", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00c9", "E", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb))
     write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv",
                row.names = FALSE)
 
     tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
+
+
+
     dfp <- tidyr::pivot_longer(
       data = tables_cb,
-      cols = "ANATASIO":"ZIRCAO",
+      cols =  min_ini:min_fin,
       names_to = "Mineral",
       values_to = "value"
     )

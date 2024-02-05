@@ -29,11 +29,11 @@ estrutura_diretorio <- function() {
   dir.create('inputs/campo')
 
   # Dados de Projetos do Rgeo
-  dir.create(paste0('inputs/projetos'))
+  dir.create('inputs/projetos')
 
   # Dados de Imagens (SRTM)
-  dir.create(paste0('inputs/imagens'))
+  dir.create('inputs/imagens')
 
   # Dados Diversos
-  dir.create(paste0('inputs/diversos'))
+  dir.create('inputs/diversos')
 }

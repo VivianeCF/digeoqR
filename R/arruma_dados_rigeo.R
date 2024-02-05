@@ -31,6 +31,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   coord_r <- 0
   coord_l <- 0
   coord_m <- 0
+  min <- list()
   ## Campos para a tabela final
   selecionadas <-
     c(
@@ -105,9 +106,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
           readxl::read_excel(paste0(temp, "/", concentrado_filtro),
                              col_types = "text")
         colnames(data_cb) <- tolower(colnames(data_cb))
-        minerais <- toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
-        minerais <- stringr::str_replace(minerais, "_PCT", "")
-
+        colnames(data_cb) <-
+          gsub("pir..oxidada",
+               "pir.oxidada",
+               colnames(data_cb))
         data_cb_join <-
           dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
         names(data_cb_join) <- toupper(names(data_cb_join))
@@ -115,10 +117,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
           stringr::str_replace(names(data_cb_join), "_PCT", "")
 
         data_cb_join <- as.data.frame(data_cb_join)
-        colnames(data_cb_join) <-
-          gsub("PIR..OXIDADA",
-               "PIR.OXIDADA",
-               colnames(data_cb_join))
+
+        m <- toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
+        min[[i]] <- stringr::str_replace(m, "_PCT", "")
 
         res_cb[[i]] <- data_cb_join
       }
@@ -410,6 +411,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb))
     colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb))
     colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("-", ".", colnames(tables_cb))
+
+    minerais <- c(min[[1]], min[[2]], min[[3]])
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     minerais <- gsub("\u00c1", "A", minerais)
@@ -419,6 +423,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     minerais <- gsub("\u00ca", "E", minerais)
     minerais <- gsub("\u00cd", "I", minerais)
     minerais <- gsub("\u00d3", "O", minerais)
+    minerais <- gsub("-", ".", minerais)
+
+        minerais <- sort(unique(minerais))
 
     write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv",
                row.names = FALSE)
@@ -430,7 +437,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
     dfp <- tidyr::pivot_longer(
       data = tables_cb,
-      cols =  minerais,
+      cols =  minerais[1]:minerais[length(minerais)],
       names_to = "Mineral",
       values_to = "value"
     )

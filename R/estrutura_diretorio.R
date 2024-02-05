@@ -9,17 +9,16 @@
 #'
 #' @examples
 #'
-estrutura_diretorio <- function(path = "projeto/") {
+estrutura_diretorio <- function() {
   # Diretório de entrada de dados
-  dir.create(path)
-  dir.create(paste0(path, 'inputs'))
-  dir.create(paste0(path, 'outputs'))
+  dir.create(paste0('inputs'))
+  dir.create(paste0('outputs'))
   # Dados mineralométricos
-  dir.create(paste0(path, 'inputs/mineral'))
-  dir.create(paste0(path, 'inputs/mineral/B'))
-  dir.create(paste0(path, 'inputs/mineral/L'))
-  dir.create(paste0(path, 'inputs/mineral/R'))
-  dir.create(paste0(path, 'inputs/mineral/S'))
+  dir.create(paste0('inputs/mineral'))
+  dir.create(paste0('inputs/mineral/B'))
+  dir.create(paste0('inputs/mineral/L'))
+  dir.create(paste0('inputs/mineral/R'))
+  dir.create(paste0('inputs/mineral/S'))
 
   # Dados Químicos
   dir.create(paste0(path, 'inputs/quimica'))

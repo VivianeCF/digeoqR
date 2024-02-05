@@ -104,7 +104,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         data_cb <-
           readxl::read_excel(paste0(temp, "/", concentrado_filtro),
                              col_types = "text")
-        minerais <- colnames(data_cb)[!(colnames(data_cb) %in% info)]
+        minerais <- toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
+        minerais <- stringr::str_replace(minerais, "_PCT", "")
         colnames(data_cb) <- tolower(colnames(data_cb))
         data_cb_join <-
           dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
@@ -418,7 +419,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
     dfp <- tidyr::pivot_longer(
       data = tables_cb,
-      cols =  min_ini:min_fin,
+      cols =  minerais,
       names_to = "Mineral",
       values_to = "value"
     )

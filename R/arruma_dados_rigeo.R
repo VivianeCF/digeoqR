@@ -496,9 +496,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
 
     selec <- estacoes_folhas_cb[, selecionadas]
-    minerais <- dplyr::select(estacoes_folhas_cb, "ANATASIO":"ZIRCAO")
+    df_minerais <- dplyr::select(estacoes_folhas_cb, minerais)
 
-    estacoes_folhas_cb <- data.frame(selec, BASE, minerais)
+    estacoes_folhas_cb <- data.frame(selec, BASE, df_minerais)
 
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
@@ -516,7 +516,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     lista_pivo[[2]] <-
       tidyr::pivot_longer(
         estacoes_folhas_cb,
-        cols = 11:ncol(estacoes_folhas_cb),
+        cols = minerais,
         names_to = "Analito",
         values_to = "Valor"
       )

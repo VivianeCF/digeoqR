@@ -16,8 +16,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   dir <- "inputs/projetos/"
   arquivos_rigeo <-
     list.files(dir, pattern = "\\.zip$", full.names = TRUE)
-  info <- c("projeto_amostragem","projeto_publicacao","classe","centro_custo","num_campo",
-  "num_Lab","data_visita","Laboratório","abertura"," leitura","job")
+  info <- tolower(c("projeto_amostragem","projeto_publicacao","classe","centro_custo","num_campo",
+  "num_Lab","data_visita","Laboratório","abertura","leitura","job"))
   ## Criar variáveis------------------------------------------------------------
   res_sc <- list()
   res_cb <- list()
@@ -104,9 +104,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
         data_cb <-
           readxl::read_excel(paste0(temp, "/", concentrado_filtro),
                              col_types = "text")
+        colnames(data_cb) <- tolower(colnames(data_cb))
         minerais <- toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
         minerais <- stringr::str_replace(minerais, "_PCT", "")
-        colnames(data_cb) <- tolower(colnames(data_cb))
+
         data_cb_join <-
           dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
         names(data_cb_join) <- toupper(names(data_cb_join))

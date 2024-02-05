@@ -9,24 +9,24 @@
 #'
 estrutura_diretorio <- function() {
   # Diretório de entrada de dados
-  dir.create(paste0('inputs'))
-  dir.create(paste0('outputs'))
+  dir.create('inputs')
+  dir.create('outputs')
   # Dados mineralométricos
-  dir.create(paste0('inputs/mineral'))
-  dir.create(paste0('inputs/mineral/B'))
-  dir.create(paste0('inputs/mineral/L'))
-  dir.create(paste0('inputs/mineral/R'))
-  dir.create(paste0('inputs/mineral/S'))
+  dir.create('inputs/mineral')
+  dir.create('inputs/mineral/B')
+  dir.create('inputs/mineral/L')
+  dir.create('inputs/mineral/R')
+  dir.create('inputs/mineral/S')
 
   # Dados Químicos
-  dir.create(paste0('inputs/quimica'))
-  dir.create(paste0('inputs/quimica/B'))
-  dir.create(paste0('inputs/quimica/L'))
-  dir.create(paste0('inputs/quimica/R'))
-  dir.create(paste0('inputs/quimica/S'))
+  dir.create('inputs/quimica')
+  dir.create('inputs/quimica/B')
+  dir.create('inputs/quimica/L')
+  dir.create('inputs/quimica/R')
+  dir.create('inputs/quimica/S')
 
   # Dados de Campo
-  dir.create(paste0('inputs/campo'))
+  dir.create('inputs/campo')
 
   # Dados de Projetos do Rgeo
   dir.create(paste0('inputs/projetos'))

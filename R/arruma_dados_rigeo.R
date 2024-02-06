@@ -32,6 +32,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   coord_l <- 0
   coord_m <- 0
   min <- list()
+  lista_pivo <- list()
   ## Campos para a tabela final
   selecionadas <-
     c(
@@ -56,13 +57,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     colnames(coord) <- c("Longitude", "Latitude")
     campo <- data.frame(coord, campo)
 
+
     x <- unzip(arquivos_rigeo[i], list = TRUE)
+    x <- x %>%
+      dplyr::filter((stringr::str_detect(Name, 'xlsx')))
     x_org <- x
     x$Name <- iconv(x$Name,  "IBM437",  "UTF-8")
-    from <- list.files(temp, full.names = TRUE)
+    from <- list.files(temp, full.names = TRUE, pattern = "xlsx")
     file.rename(from, paste0(temp, "/", x$Name))
-    x <- x %>%
-      dplyr::filter(!(stringr::str_detect(Name, 'pdf')))
+
 
     filtered_df_bateia <-
       dplyr::filter(x,
@@ -106,20 +109,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
           readxl::read_excel(paste0(temp, "/", concentrado_filtro),
                              col_types = "text")
         colnames(data_cb) <- tolower(colnames(data_cb))
-        colnames(data_cb) <-
-          gsub("pir..oxidada",
-               "pir.oxidada",
-               colnames(data_cb))
+        # colnames(data_cb) <-
+        #   gsub("pir..oxidada",
+        #        "pir.oxidada",
+        #        colnames(data_cb))
         data_cb_join <-
-          dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab"))
+         as.data.frame( dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab")))
         names(data_cb_join) <- toupper(names(data_cb_join))
         names(data_cb_join) <-
           stringr::str_replace(names(data_cb_join), "_PCT", "")
 
-        data_cb_join <- as.data.frame(data_cb_join)
-
+        data_cb_join <- data.frame(data_cb_join)
         m <- toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
-        min[[i]] <- stringr::str_replace(m, "_PCT", "")
+        min[[i]] <- data.frame(mineral=stringr::str_replace(m, "_PCT", ""))
 
         res_cb[[i]] <- data_cb_join
       }
@@ -312,7 +314,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     print(i)
   }
 
-  lista_pivo <- list()
+
   ## Arrumar dados de Sedimento de Corrente - Análises químicas-----------------
   if (length(res_sc) > 0) {
     tables_sc <- do.call(plyr::rbind.fill, res_sc)
@@ -386,6 +388,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       dec = ".",
       quote = TRUE
     )
+    colnames(estacoes_folhas_sc)
     #Pivoteia e une as bases
     lista_pivo[[1]] <-
       tidyr::pivot_longer(
@@ -397,47 +400,67 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   }
   ## Arrumar dados de Concentrado de Bateia - Mineralometria--------------------
   if (length(res_cb) > 0) {
+
+    # res_cb <- Filter(Negate(is.null), res_cb) # filters out all the null values from the list
     tables_cb <- do.call(plyr::rbind.fill, res_cb)
-    tables_cb <-
-      data.frame(lapply(tables_cb, function(x)
-        gsub(".", ",", x,
-             fixed = TRUE)))
+    minerais <- do.call(rbind, min)
+    minerais <- sort(unique(minerais$mineral))
+    # colnames(tables_cb)
+    # table(tables_cb$'PIR.OXIDADA...31')
+
+    # Remove columns using select()
+    # tables_cb <- tables_cb %>% dplyr::select(- DATA_VISITA)
+
+
+    # tables_cb <-
+    #   data.frame(lapply(tables_cb, function(x)
+    #     gsub(".", ",", x,
+    #          fixed = TRUE)))
+    tables_cb <- tables_cb %>% dplyr::select(-'PIR.OXIDADA...31')
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
-    colnames(tables_cb) <- gsub("\u00c1", "A", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("\u00c3", "A", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("\u00c2", "A", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("\u00c9", "E", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb))
-    colnames(tables_cb) <- gsub("-", ".", colnames(tables_cb))
+    colnames(tables_cb) <- gsub("\u00c1", "A", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("\u00c3", "A", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("\u00c2", "A", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("\u00c9", "E", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("PIR.OXIDADA...32", "PIR.OXIDADA", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("-", "_", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub(".", "_", colnames(tables_cb), fixed = TRUE)
 
-    minerais <- c(min[[1]], min[[2]], min[[3]])
+
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
-    minerais <- gsub("\u00c1", "A", minerais)
-    minerais <- gsub("\u00c3", "A", minerais)
-    minerais <- gsub("\u00c2", "A", minerais)
-    minerais <- gsub("\u00c9", "E", minerais)
-    minerais <- gsub("\u00ca", "E", minerais)
-    minerais <- gsub("\u00cd", "I", minerais)
-    minerais <- gsub("\u00d3", "O", minerais)
-    minerais <- gsub("-", ".", minerais)
+    minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
+    minerais <- gsub("\u00c3", "A", minerais, fixed = TRUE)
+    minerais <- gsub("\u00c2", "A", minerais, fixed = TRUE)
+    minerais <- gsub("\u00c9", "E", minerais, fixed = TRUE)
+    minerais <- gsub("\u00ca", "E", minerais, fixed = TRUE)
+    minerais <- gsub("\u00cd", "I", minerais, fixed = TRUE)
+    minerais <- gsub("\u00d3", "O", minerais, fixed = TRUE)
+    minerais <- gsub("...31", "", minerais, fixed = TRUE)
+    minerais <- gsub("...32", "", minerais, fixed = TRUE)
+    minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
+    minerais <- gsub("-", "_", minerais, fixed = TRUE)
+    minerais <- gsub(".", "_", minerais, fixed = TRUE)
+    minerais <- unique(minerais)
+    # info
 
-        minerais <- sort(unique(minerais))
+    tables_cb <- tables_cb[, c(toupper(info[-8]),c("LONGITUDE", "LATITUDE"), minerais)]
 
-    write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv",
-               row.names = FALSE)
-
-    tables_cb <- tables_cb %>%
+        tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
+# colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)
+    write.table(tables_cb, "outputs/integrada_rigeo_cb.csv", dec = ",", sep = ";")
 
 
+    colnames(tables_cb)
     dfp <- tidyr::pivot_longer(
       data = tables_cb,
-      cols =  minerais[1]:minerais[length(minerais)],
+      cols =  minerais,
       names_to = "Mineral",
       values_to = "value"
     )
@@ -498,15 +521,14 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     estacoes_folhas_cb <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
-
+selecionadas
 
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
+estacoes_folhas_cb <-  data.frame(BASE, estacoes_folhas_cb)
+colnames(estacoes_folhas_cb)[3] <- "PROJETO"
 
-    selec <- estacoes_folhas_cb[, selecionadas]
-    df_minerais <- dplyr::select(estacoes_folhas_cb, minerais)
 
-    estacoes_folhas_cb <- data.frame(selec, BASE, df_minerais)
-
+estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, minerais)]
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
@@ -788,8 +810,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
                row.names = FALSE)
 
     tables_m <- as.data.frame(tables_m)
-
-    tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
+colnames(tables_m)
+tables_m <- tables_m %>%
+  tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_m))
     tables_m <- data.frame(ID, tables_m)
 
@@ -818,8 +841,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
 
-    estacoes_folhas_m <- sf::st_join(spdf  , left = TRUE,
-                                     folhas_po["layer"])
+    estacoes_folhas_m <- as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                     folhas_po["layer"]))
     elem <-
       dplyr::select(estacoes_folhas_m, contains(c("_PPM", "_PCT", "_PPB")))
     elem <- dplyr::select(elem, !contains("COMPOS"))

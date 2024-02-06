@@ -446,6 +446,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     minerais <- gsub("-", "_", minerais, fixed = TRUE)
     minerais <- gsub(".", "_", minerais, fixed = TRUE)
     minerais <- unique(minerais)
+    minerais <- minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL"))]
     # info
 
     tables_cb <- tables_cb[, c(toupper(info[-8]),c("LONGITUDE", "LATITUDE"), minerais)]
@@ -454,7 +455,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
 # colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)
-    write.table(tables_cb, "outputs/integrada_rigeo_cb.csv", dec = ",", sep = ";")
+    write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv", row.names = FALSE)
 
 
     colnames(tables_cb)

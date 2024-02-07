@@ -49,6 +49,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
   ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra---------
   for (i in 1:length(arquivos_rigeo)) {
+
+    ind_dup <- 0
+    observacao <- 0
+    observacao2 <- 0
     # Create temp files
     temp <- tempfile()
     zip::unzip(arquivos_rigeo[i], exdir = temp)
@@ -106,13 +110,31 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
       concentrado_filtro <- filtered_df_bateia
       if (!is.na(filtered_df_bateia)) {
         data_cb <-
-          readxl::read_excel(paste0(temp, "/", concentrado_filtro),
-                             col_types = "text")
+          readxl::read_xlsx(paste0(temp, "/", concentrado_filtro),
+                             col_types = "text", .name_repair = "minimal")
         colnames(data_cb) <- tolower(colnames(data_cb))
-        # colnames(data_cb) <-
-        #   gsub("pir..oxidada",
-        #        "pir.oxidada",
-        #        colnames(data_cb))
+        duplicado <- colnames(data_cb)[duplicated(colnames(data_cb))]
+        if(length(duplicado)>0){
+          ind_dup <- grep(duplicado, colnames(data_cb))
+          }
+
+        if(length(ind_dup) == 2){
+        df1 <- data_cb[, ind_dup[1]]
+        df2 <- data_cb[, ind_dup[2]]
+        df <- dplyr::coalesce(df1,df2)
+        data_cb <- data.frame(data_cb[, c(-ind_dup[1], -ind_dup[2])], df)
+        colnames(data_cb)
+        }
+
+        observacao <- grep("observacao", colnames(data_cb), ignore.case = TRUE)
+        observacao2 <- grep("observação", colnames(data_cb), ignore.case = TRUE)
+
+        if(length(observacao)>0){
+          data_cb <- data_cb[, -observacao]
+        }
+        if(length(observacao2)>0){
+          data_cb <- data_cb[, -observacao2]
+        }
         data_cb_join <-
          as.data.frame( dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab")))
         names(data_cb_join) <- toupper(names(data_cb_join))
@@ -401,22 +423,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
   ## Arrumar dados de Concentrado de Bateia - Mineralometria--------------------
   if (length(res_cb) > 0) {
 
-    # res_cb <- Filter(Negate(is.null), res_cb) # filters out all the null values from the list
     tables_cb <- do.call(plyr::rbind.fill, res_cb)
     minerais <- do.call(rbind, min)
     minerais <- sort(unique(minerais$mineral))
-    # colnames(tables_cb)
-    # table(tables_cb$'PIR.OXIDADA...31')
-
-    # Remove columns using select()
-    # tables_cb <- tables_cb %>% dplyr::select(- DATA_VISITA)
-
-
-    # tables_cb <-
-    #   data.frame(lapply(tables_cb, function(x)
-    #     gsub(".", ",", x,
-    #          fixed = TRUE)))
-    tables_cb <- tables_cb %>% dplyr::select(-'PIR.OXIDADA...31')
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     colnames(tables_cb) <- gsub("\u00c1", "A", colnames(tables_cb), fixed = TRUE)
@@ -426,11 +435,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
     colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("PIR.OXIDADA...32", "PIR.OXIDADA", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub("-", "_", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub(".", "_", colnames(tables_cb), fixed = TRUE)
-
-
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
@@ -451,7 +457,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
 
     tables_cb <- tables_cb[, c(toupper(info[-8]),c("LONGITUDE", "LATITUDE"), minerais)]
 
-        tables_cb <- tables_cb %>%
+    tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
 # colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)

@@ -10,6 +10,8 @@
 #' solo, geofísica, geomorfologia, etc)
 #' @param legenda Rótulos das unidades da feição
 #' @param estacoes Estações de coleta
+#' @param dir_campo Diretório dos dados espaciais e legenda
+#' @param dir_out Diretório de saída onde serão gravados as planilhas .csv
 #'
 #' @return
 #' Bacias
@@ -17,7 +19,9 @@
 #'
 #' @examples
 #' #intersecta_bacias()
-intersecta_bacias <- function(limite = "carta_100M",
+intersecta_bacias <- function(dir_campo = "inputs/campo/",
+                              dir_out = "outputs/",
+                              limite = "carta_100M",
                               bacias = "bacias_area",
                               feicao = "geologia",
                               legenda = "legenda",
@@ -30,15 +34,15 @@ intersecta_bacias <- function(limite = "carta_100M",
   # require(sf)
 
   options(encoding = "latin1")
-
-  area <- sf::read_sf(paste0("inputs/campo/", limite, ".shp"))
+  out <- list()
+  area <- sf::read_sf(paste0(dir_campo, limite, ".shp"))
   centroide <-
     sf::st_coordinates(suppressWarnings({
       sf::st_centroid(area)
     }))
   zone <- as.numeric(floor((centroide[, 1] + 180) / 6) + 1)
   ## import data
-  spy_grid <- sf::read_sf(paste0("inputs/campo/", bacias, ".shp"))
+  spy_grid <- sf::read_sf(paste0(dir_campo, bacias, ".shp"))
   # sf::st_crs(spy_grid) <-
   spy_grid <- sf::st_transform(spy_grid,
                                paste0(
@@ -50,7 +54,7 @@ intersecta_bacias <- function(limite = "carta_100M",
   spy_grid$Area_bacia <-
     round(sf::st_area(spy_grid, byid = TRUE) / 1000000, 3)
   # spy_grid@data <- spy_grid@data[,1:8]
-  spy_poly = sf::read_sf(paste0("inputs/campo/", feicao, ".shp"))
+  spy_poly = sf::read_sf(paste0(dir_campo, feicao, ".shp"))
   spy_poly <- sf::st_transform(spy_poly,
                                paste0(
                                  "+proj=utm +zone=",
@@ -58,9 +62,9 @@ intersecta_bacias <- function(limite = "carta_100M",
                                  " +south +datum=WGS84 +units=m +no_defs"
                                ))
 
-  codlito <- read.csv2(paste0("inputs/campo/", legenda, ".csv"))
+  codlito <- read.csv2(paste0(dir_campo, legenda, ".csv"))
 
-  mydata <- sf::read_sf(paste0("inputs/campo/", estacoes, ".shp"))
+  mydata <- sf::read_sf(paste0(dir_campo, estacoes, ".shp"))
 
   spy_grid <-
     dplyr::left_join(spy_grid , data.frame(mydata), by = "VALUE")
@@ -106,10 +110,11 @@ intersecta_bacias <- function(limite = "carta_100M",
 
   write.csv2(
     df[, select_campos],
-    "outputs/lito_bacia_crop.csv",
+    paste0(dir_out,"lito_bacia_crop.csv"),
     row.names = FALSE,
     fileEncoding = "latin1"
   )
+  out[[1]] <- df[, select_campos]
   sf::st_agr(spy_poly) = "constant"
 
   #spy_poly <- shapefile("lito_ls")
@@ -194,15 +199,17 @@ intersecta_bacias <- function(limite = "carta_100M",
   dc$Area_bacia <- as.numeric(dc$Area_bacia)
   write.csv2(
     dc[, select_campos2],
-    "outputs/mylitho_completa.csv",
+    paste0(dir_out, "mylitho_completa.csv"),
     row.names = FALSE,
     fileEncoding = "latin1"
   )
-
+ out[[2]] <- dc[, select_campos2]
   mylitho <- dc[, c("VALUE", "Area_bacia", "Geo_Reg")]
   mylitho$Area_bacia <- as.numeric(mylitho$Area_bacia)
   write.csv2(mylitho,
-             "outputs/mylitho.csv",
+             paste0(dir_out,"mylitho.csv"),
              row.names = FALSE,
              fileEncoding = "latin1")
+  out[[3]] <- mylitho
+  return(out)
 }

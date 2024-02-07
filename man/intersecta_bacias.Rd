@@ -5,6 +5,8 @@
 \title{Intersecta polígonos das bacias com outra feição}
 \usage{
 intersecta_bacias(
+  dir_campo = "inputs/campo/",
+  dir_out = "outputs/",
   limite = "carta_100M",
   bacias = "bacias_area",
   feicao = "geologia",
@@ -13,6 +15,10 @@ intersecta_bacias(
 )
 }
 \arguments{
+\item{dir_campo}{Diretório dos dados espaciais e legenda}
+
+\item{dir_out}{Diretório de saída onde serão gravados as planilhas .csv}
+
 \item{limite}{Limite da área do projeto}
 
 \item{bacias}{bacias obtidas a partir da função gera_bacias}

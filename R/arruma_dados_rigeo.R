@@ -2,18 +2,19 @@
 #'
 #' @param folhas Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 #' o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente
+#' @param dir diretório dos arquivos zip baixados do Rigeo
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #' #arruma_dados_rigeo()
-arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp") {
+arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs/projetos/") {
   #Ler arquivo das áreas--------------------------------------------------------
   folhas_po <- sf::st_read(folhas, quiet = TRUE)
   colnames(folhas_po)[1] <- "layer"
+
   ## Definições dos diretórios--------------------------------------------------
-  dir <- "inputs/projetos/"
   arquivos_rigeo <-
     list.files(dir, pattern = "\\.zip$", full.names = TRUE)
   info <- tolower(c("projeto_amostragem","projeto_publicacao","classe","centro_custo","num_campo",

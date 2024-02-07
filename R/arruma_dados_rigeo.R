@@ -9,7 +9,8 @@
 #'
 #' @examples
 #' #arruma_dados_rigeo()
-arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs/projetos/") {
+arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
+                               dir = "inputs/projetos/") {
   #Ler arquivo das áreas--------------------------------------------------------
   folhas_po <- sf::st_read(folhas, quiet = TRUE)
   colnames(folhas_po)[1] <- "layer"
@@ -17,8 +18,22 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
   ## Definições dos diretórios--------------------------------------------------
   arquivos_rigeo <-
     list.files(dir, pattern = "\\.zip$", full.names = TRUE)
-  info <- tolower(c("projeto_amostragem","projeto_publicacao","classe","centro_custo","num_campo",
-  "num_Lab","data_visita","Laboratório","abertura","leitura","job"))
+  info <-
+    tolower(
+      c(
+        "projeto_amostragem",
+        "projeto_publicacao",
+        "classe",
+        "centro_custo",
+        "num_campo",
+        "num_Lab",
+        "data_visita",
+        "Laboratório",
+        "abertura",
+        "leitura",
+        "job"
+      )
+    )
   ## Criar variáveis------------------------------------------------------------
   res_sc <- list()
   res_cb <- list()
@@ -50,7 +65,6 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
   ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra---------
   for (i in 1:length(arquivos_rigeo)) {
-
     ind_dup <- 0
     observacao <- 0
     observacao2 <- 0
@@ -111,40 +125,49 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
       concentrado_filtro <- filtered_df_bateia
       if (!is.na(filtered_df_bateia)) {
         data_cb <-
-          readxl::read_xlsx(paste0(temp, "/", concentrado_filtro),
-                             col_types = "text", .name_repair = "minimal")
+          readxl::read_xlsx(
+            paste0(temp, "/", concentrado_filtro),
+            col_types = "text",
+            .name_repair = "minimal"
+          )
         colnames(data_cb) <- tolower(colnames(data_cb))
-        duplicado <- colnames(data_cb)[duplicated(colnames(data_cb))]
-        if(length(duplicado)>0){
+        duplicado <-
+          colnames(data_cb)[duplicated(colnames(data_cb))]
+        if (length(duplicado) > 0) {
           ind_dup <- grep(duplicado, colnames(data_cb))
-          }
-
-        if(length(ind_dup) == 2){
-        df1 <- data_cb[, ind_dup[1]]
-        df2 <- data_cb[, ind_dup[2]]
-        df <- dplyr::coalesce(df1,df2)
-        data_cb <- data.frame(data_cb[, c(-ind_dup[1], -ind_dup[2])], df)
-        colnames(data_cb)
         }
 
-        observacao <- grep("observacao", colnames(data_cb), ignore.case = TRUE)
-        observacao2 <- grep("observação", colnames(data_cb), ignore.case = TRUE)
-
-        if(length(observacao)>0){
-          data_cb <- data_cb[, -observacao]
+        if (length(ind_dup) == 2) {
+          df1 <- data_cb[, ind_dup[1]]
+          df2 <- data_cb[, ind_dup[2]]
+          df <- dplyr::coalesce(df1, df2)
+          data_cb <-
+            data.frame(data_cb[, c(-ind_dup[1],-ind_dup[2])], df)
+          colnames(data_cb)
         }
-        if(length(observacao2)>0){
-          data_cb <- data_cb[, -observacao2]
+
+        observacao <-
+          grep("observacao", colnames(data_cb), ignore.case = TRUE)
+        observacao2 <-
+          grep("observação", colnames(data_cb), ignore.case = TRUE)
+
+        if (length(observacao) > 0) {
+          data_cb <- data_cb[,-observacao]
+        }
+        if (length(observacao2) > 0) {
+          data_cb <- data_cb[,-observacao2]
         }
         data_cb_join <-
-         as.data.frame( dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab")))
+          as.data.frame(dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab")))
         names(data_cb_join) <- toupper(names(data_cb_join))
         names(data_cb_join) <-
           stringr::str_replace(names(data_cb_join), "_PCT", "")
 
         data_cb_join <- data.frame(data_cb_join)
-        m <- toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
-        min[[i]] <- data.frame(mineral=stringr::str_replace(m, "_PCT", ""))
+        m <-
+          toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
+        min[[i]] <-
+          data.frame(mineral = stringr::str_replace(m, "_PCT", ""))
 
         res_cb[[i]] <- data_cb_join
       }
@@ -152,23 +175,23 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
     filtered_df_sedimento <-
       dplyr::filter(x,
-             grepl("Geoquimica Sedimento de Corrente",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica Sedimento de Corrente",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento2 <-
       dplyr::filter(x,
-             grepl("Geoquimica de Sedimento de Corrente",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica de Sedimento de Corrente",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento3 <-
       dplyr::filter(x,
-             grepl("Geoquimica_Sedimento_de_Corrente",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica_Sedimento_de_Corrente",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento4 <-
       dplyr::filter(x,
-             grepl(
-               "Analise_Química_Sedimento_de_Corrente",
-               Name,
-               ignore.case = TRUE
-             ))[1, 1]
+                    grepl(
+                      "Analise_Química_Sedimento_de_Corrente",
+                      Name,
+                      ignore.case = TRUE
+                    ))[1, 1]
 
     filtered_df_sedimento <-
       c(
@@ -199,19 +222,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
     filtered_df_bateia_gq <-
       dplyr::filter(x,
-             grepl("Geoquimica Concentrado de Bateia",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica Concentrado de Bateia",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq2 <-
       dplyr::filter(x,
-             grepl("Geoquimica_Concentrado_de_Bateia",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica_Concentrado_de_Bateia",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq3 <-
       dplyr::filter(x,
-             grepl(
-               "Analise_Química_Concentrado_de_Bateia",
-               Name,
-               ignore.case = TRUE
-             ))[1, 1]
+                    grepl(
+                      "Analise_Química_Concentrado_de_Bateia",
+                      Name,
+                      ignore.case = TRUE
+                    ))[1, 1]
     filtered_df_bateia_gq <-
       c(filtered_df_bateia_gq,
         filtered_df_bateia_gq2,
@@ -237,13 +260,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
     }
     filtered_df_solo <- dplyr::filter(x, grepl("Geoquimica Solo",
-                                        Name, ignore.case = TRUE))[1, 1]
-    filtered_df_solo2 <- dplyr::filter(x, grepl("Geoquimica de Solo",
-                                         Name, ignore.case = TRUE))[1, 1]
+                                               Name, ignore.case = TRUE))[1, 1]
+    filtered_df_solo2 <-
+      dplyr::filter(x, grepl("Geoquimica de Solo",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo3 <- dplyr::filter(x, grepl("Geoquimica_Solo",
-                                         Name, ignore.case = TRUE))[1, 1]
-    filtered_df_solo4 <- dplyr::filter(x, grepl("Analise_Química_Solo",
-                                         Name, ignore.case = TRUE))[1, 1]
+                                                Name, ignore.case = TRUE))[1, 1]
+    filtered_df_solo4 <-
+      dplyr::filter(x, grepl("Analise_Química_Solo",
+                             Name, ignore.case = TRUE))[1, 1]
 
 
     filtered_df_solo <- c(filtered_df_solo,
@@ -269,13 +294,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
 
     filtered_df_rocha <- dplyr::filter(x, grepl("Geoquimica Rocha",
-                                         Name, ignore.case = TRUE))[1, 1]
-    filtered_df_rocha2 <- dplyr::filter(x, grepl("Geoquimica de Rocha",
-                                          Name, ignore.case = TRUE))[1, 1]
+                                                Name, ignore.case = TRUE))[1, 1]
+    filtered_df_rocha2 <-
+      dplyr::filter(x, grepl("Geoquimica de Rocha",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha3 <- dplyr::filter(x, grepl("Geoquimica_Rocha",
-                                          Name, ignore.case = TRUE))[1, 1]
-    filtered_df_rocha4 <- dplyr::filter(x, grepl("Analise_Química_Rocha",
-                                          Name, ignore.case = TRUE))[1, 1]
+                                                 Name, ignore.case = TRUE))[1, 1]
+    filtered_df_rocha4 <-
+      dplyr::filter(x, grepl("Analise_Química_Rocha",
+                             Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_rocha <- c(filtered_df_rocha,
                            filtered_df_rocha2,
@@ -301,16 +328,16 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
     filtered_df_minerio <-
       dplyr::filter(x,
-             grepl("Geoquimica_Mineral_Minerio",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica_Mineral_Minerio",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_minerio2 <-
       dplyr::filter(x,
-             grepl("Geoquimica de Mineral Minerio",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Geoquimica de Mineral Minerio",
+                          Name, ignore.case = TRUE))[1, 1]
     filtered_df_minerio3 <-
       dplyr::filter(x,
-             grepl("Analise_Química_Mineral_Minerio",
-                   Name, ignore.case = TRUE))[1, 1]
+                    grepl("Analise_Química_Mineral_Minerio",
+                          Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_minerio <-
       c(filtered_df_minerio,
@@ -385,7 +412,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
 
     elem <-
       dplyr::select(estacoes_folhas_sc, contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- dplyr::select(elem, !contains("COMPOS"))
+    elem <- dplyr::select(elem,!contains("COMPOS"))
     selec <- estacoes_folhas_sc[, selecionadas]
     estacoes_folhas_sc <- data.frame(selec, elem)
 
@@ -423,21 +450,29 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
   }
   ## Arrumar dados de Concentrado de Bateia - Mineralometria--------------------
   if (length(res_cb) > 0) {
-
     tables_cb <- do.call(plyr::rbind.fill, res_cb)
     minerais <- do.call(rbind, min)
     minerais <- sort(unique(minerais$mineral))
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
-    colnames(tables_cb) <- gsub("\u00c1", "A", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("\u00c3", "A", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("\u00c2", "A", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("\u00c9", "E", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("\u00ca", "E", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("\u00cd", "I", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("\u00d3", "O", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub("-", "_", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <- gsub(".", "_", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00c1", "A", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00c3", "A", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00c2", "A", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00c9", "E", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00ca", "E", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00cd", "I", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("\u00d3", "O", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("-", "_", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub(".", "_", colnames(tables_cb), fixed = TRUE)
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
@@ -453,15 +488,17 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
     minerais <- gsub("-", "_", minerais, fixed = TRUE)
     minerais <- gsub(".", "_", minerais, fixed = TRUE)
     minerais <- unique(minerais)
-    minerais <- minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL"))]
+    minerais <-
+      minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL"))]
     # info
 
-    tables_cb <- tables_cb[, c(toupper(info[-8]),c("LONGITUDE", "LATITUDE"), minerais)]
+    tables_cb <-
+      tables_cb[, c(toupper(info[-8]), c("LONGITUDE", "LATITUDE"), minerais)]
 
     tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
-# colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)
+    # colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)
     write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv", row.names = FALSE)
 
 
@@ -529,14 +566,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp", dir = "inputs
     estacoes_folhas_cb <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
-selecionadas
+    selecionadas
 
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
-estacoes_folhas_cb <-  data.frame(BASE, estacoes_folhas_cb)
-colnames(estacoes_folhas_cb)[3] <- "PROJETO"
+    estacoes_folhas_cb <-  data.frame(BASE, estacoes_folhas_cb)
+    colnames(estacoes_folhas_cb)[3] <- "PROJETO"
 
 
-estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, minerais)]
+    estacoes_folhas_cb <-
+      estacoes_folhas_cb[, c(selecionadas, minerais)]
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
@@ -605,7 +643,7 @@ estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, minerais)]
 
     elem <-
       dplyr::select(estacoes_folhas_cb_gq, contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- dplyr::select(elem, !contains("COMPOS"))
+    elem <- dplyr::select(elem,!contains("COMPOS"))
     selec <- estacoes_folhas_cb_gq[, selecionadas]
     estacoes_folhas_cb_gq <- data.frame(selec, elem)
 
@@ -688,7 +726,7 @@ estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, minerais)]
                                 folhas_po["layer"]))
     elem <-
       dplyr::select(estacoes_folhas_r, contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- dplyr::select(elem, !contains("COMPOS"))
+    elem <- dplyr::select(elem,!contains("COMPOS"))
     selec <- estacoes_folhas_r[, selecionadas]
     estacoes_folhas_r <- data.frame(selec, elem)
 
@@ -770,7 +808,7 @@ estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, minerais)]
                                 folhas_po["layer"]))
     elem <-
       dplyr::select(estacoes_folhas_l, contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- dplyr::select(elem, !contains("COMPOS"))
+    elem <- dplyr::select(elem,!contains("COMPOS"))
     selec <- estacoes_folhas_l[, selecionadas]
     estacoes_folhas_l <- data.frame(selec, elem)
 
@@ -818,9 +856,9 @@ estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, minerais)]
                row.names = FALSE)
 
     tables_m <- as.data.frame(tables_m)
-colnames(tables_m)
-tables_m <- tables_m %>%
-  tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
+    colnames(tables_m)
+    tables_m <- tables_m %>%
+      tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
     ID <- seq(1:nrow(tables_m))
     tables_m <- data.frame(ID, tables_m)
 
@@ -849,11 +887,12 @@ tables_m <- tables_m %>%
     spdf <- sf::st_transform(spdf, crs = crs_SIRGAS2000)
     folhas_po <- sf::st_transform(folhas_po, crs = crs_SIRGAS2000)
 
-    estacoes_folhas_m <- as.data.frame(sf::st_join(spdf  , left = TRUE,
-                                     folhas_po["layer"]))
+    estacoes_folhas_m <-
+      as.data.frame(sf::st_join(spdf  , left = TRUE,
+                                folhas_po["layer"]))
     elem <-
       dplyr::select(estacoes_folhas_m, contains(c("_PPM", "_PCT", "_PPB")))
-    elem <- dplyr::select(elem, !contains("COMPOS"))
+    elem <- dplyr::select(elem,!contains("COMPOS"))
     selec <- estacoes_folhas_m[, selecionadas]
     estacoes_folhas_m <- data.frame(selec, elem)
 
@@ -892,7 +931,7 @@ tables_m <- tables_m %>%
   }
   ## Une as bases --------------------------------------------------------------
   unido <- do.call(plyr::rbind.fill, lista_pivo)
-  unido <- unido[!is.na(unido$Valor),]
+  unido <- unido[!is.na(unido$Valor), ]
 
   write.csv2(unido, "outputs/toda_base_integral_rigeo.csv", row.names = FALSE)
 }

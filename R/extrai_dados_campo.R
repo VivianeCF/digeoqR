@@ -4,11 +4,9 @@
 #' e os nomes de campo e laboratório. Esta função só está implementada para o
 #' tipo_base = 1 (FCAMPO)
 #'
-
-#' @param nome_base Nome da base de dados de campo
-#'
 #' @param tipo_base Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
 #' @param dir_base Diretório da base de dados de campo
+#' @param base_campo Nome da base de dados de campo
 #'
 #' @return
 #' Retorna uma tabela com os dados de campo
@@ -16,13 +14,13 @@
 #'
 #' @examples
 #'
-extrai_dados_campo <- function(tipo_base, dir_base,  nome_base) {
+extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
   if (tipo_base == 1) {
     con <-
       RODBC::odbcDriverConnect(
         paste(
           "DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}",
-          paste0("DBQ=", dir_base, nome_base),
+          paste0("DBQ=", dir_base, base_campo),
           "Trusted_Connection=Yes" ,
           sep = ";"
         )

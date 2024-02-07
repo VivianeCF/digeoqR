@@ -2,50 +2,59 @@
 % Please edit documentation in R/gera_estacoes.R
 \name{gera_estacoes}
 \alias{gera_estacoes}
-\title{Gera estações nas confluências dos rios}
+\title{Gera estaÃ§Ãµes nas confluÃªncias dos rios}
 \usage{
 gera_estacoes(
-  limite = "inputs/campo/carta_100M.shp",
-  area_urbana = "inputs/campo/area_urbana.shp",
-  estacoes = "outputs/estacoes_geradas.shp",
-  srtm = "inputs/imagens/srtm.tif",
+  dir_campo = "inputs/campo/",
+  dir_dem = "inputs/imagens/",
+  dir_out = "outputs/",
+  limite = "carta_100M.shp",
+  area_urbana = "area_urbana.shp",
+  estacoes = "estacoes_geradas.shp",
+  srtm = "srtm.tif",
   EPSG = 4326,
-  rios = "inputs/campo/rios_ibge.shp",
-  massa_dagua = "inputs/campo/massa_dagua.shp",
+  rios = "rios_ibge.shp",
+  massa_dagua = "massa_dagua.shp",
   threshold = 250,
   min_length = 0.02,
   max_ordem = 4
 )
 }
 \arguments{
-\item{limite}{nome do arquivo da área do projeto}
+\item{dir_campo}{DiretÃ³rio dos dados espaciais}
 
-\item{area_urbana}{nome do arquivo da área urbana}
+\item{dir_dem}{DiretÃ³rio da imagem tif srtm}
 
-\item{estacoes}{Estações geradas a partir da drenagem modelada}
+\item{dir_out}{DiretÃ³rio de saÃ­da}
 
-\item{srtm}{DEM da área}
+\item{limite}{nome do arquivo da Ã¡rea do projeto}
+
+\item{area_urbana}{nome do arquivo da Ã¡rea urbana}
+
+\item{estacoes}{EstaÃ§Ãµes geradas a partir da drenagem modelada}
+
+\item{srtm}{DEM da Ã¡rea}
 
 \item{EPSG}{Sistema de coordenadas}
 
 \item{rios}{nome do arquivo os rios}
 
-\item{massa_dagua}{nome do arquivo da massa d'água}
+\item{massa_dagua}{nome do arquivo da massa d'Ã¡gua}
 
-\item{threshold}{Valor de corte da área das bacias modeladas}
+\item{threshold}{Valor de corte da Ã¡rea das bacias modeladas}
 
-\item{min_length}{Comprimento mínimo do curso do rio}
+\item{min_length}{Comprimento mÃ­nimo do curso do rio}
 
-\item{max_ordem}{Ordem Strhaler máxima para a validaçãon da estação}
+\item{max_ordem}{Ordem Strhaler mÃ¡xima para a validaÃ§Ã£on da estaÃ§Ã£o}
 }
 \value{
 Imagem (.png) do mapa de planejamento preliminar.
-Arquivo da shape (shp) das estações.
+Arquivo da shape (shp) das estaÃ§Ãµes.
 }
 \description{
 Desenvolvido para automatizar o processo de escolha do locais de amostragem
-que devem ser a 100 m acima dos pontos de confluência dos rios. Também são
-excluídos locais nas áreas urbanas e de massa d'água. Todos os arquivos devem
+que devem ser a 100 m acima dos pontos de confluÃªncia dos rios. TambÃ©m sÃ£o
+excluÃ­dos locais nas Ã¡reas urbanas e de massa d'Ã¡gua. Todos os arquivos devem
 ser no formato shapefile.
 }
 \examples{

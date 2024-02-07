@@ -12,11 +12,11 @@ prepara_dem(
 )
 }
 \arguments{
-\item{limite}{Limite da área do srtm}
+\item{limite}{Limite da Ã¡rea do srtm}
 
-\item{EPSG}{Projeçao usada}
+\item{EPSG}{ProjeÃ§ao usada}
 
-\item{z}{Nível de zoom para recuperar o SRTM}
+\item{z}{NÃ­vel de zoom para recuperar o SRTM}
 
 \item{cellsize}{}
 }

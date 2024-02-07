@@ -2,7 +2,7 @@
 % Please edit documentation in R/arruma_dados_rigeo.R
 \name{arruma_dados_rigeo}
 \alias{arruma_dados_rigeo}
-\title{Recupera dados geoquímicos do Rigeo}
+\title{Recupera dados geoquÃ­micos do Rigeo}
 \usage{
 arruma_dados_rigeo(
   folhas = "inputs/campo/folhas.shp",
@@ -10,13 +10,13 @@ arruma_dados_rigeo(
 )
 }
 \arguments{
-\item{folhas}{Articulação das folhas. Dica: gerar grid das folhas no QGIS com
+\item{folhas}{ArticulaÃ§Ã£o das folhas. Dica: gerar grid das folhas no QGIS com
 o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
 
-\item{dir}{diretório dos arquivos zip baixados do Rigeo}
+\item{dir}{diretÃ³rio dos arquivos zip baixados do Rigeo}
 }
 \description{
-Recupera dados geoquímicos do Rigeo
+Recupera dados geoquÃ­micos do Rigeo
 }
 \examples{
 #arruma_dados_rigeo()

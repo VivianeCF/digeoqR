@@ -4,11 +4,13 @@
 \alias{le_boletim_quimica}
 \title{Lê boletins de análises químicas}
 \usage{
-le_boletim_quimica(tipo = 2)
+le_boletim_quimica(classe_am, dir_bol)
 }
 \arguments{
-\item{tipo}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
+\item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo, 5 = água}
+
+\item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/quimica/R/"}
 }
 \value{
 Retorna uma lista com todos os dados do boletim: resultados

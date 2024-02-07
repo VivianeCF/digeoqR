@@ -2,8 +2,10 @@
 #'
 #' Esta função lê os boletins csv e extrai as informações na forma de tabelas
 #' que são gravadas no diretório de saída.
-#' @param tipo Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
+#'
+#' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 #'   corrente, 3 = rocha, 4 = solo, 5 = água
+#' @param dir_bol Diretório dos boletins analíticos ex: "inputs/quimica/R/"
 #'
 #' @return Retorna uma lista com todos os dados do boletim: resultados
 #'   analíticos, condições analíticas, QA/QC, requisição das análises e
@@ -11,7 +13,7 @@
 #' @export
 #' @examples
 #' # le_boletim_quimica()
-le_boletim_quimica <- function(tipo = 2) {
+le_boletim_quimica <- function(classe_am, dir_bol) {
   # library(tidyverse)
   # require(rgr)
   options(OutDec = ",")
@@ -32,16 +34,11 @@ le_boletim_quimica <- function(tipo = 2) {
       "ROCHA",
 
       "\u00c1GUA")
-  df_classes <- data.frame(classes, cod_classes, nome_bol)
-
-
 
   ## Gera o camionho para os arquivos
   ## Entrada
-  path <-
-    paste0("inputs/quimica/", df_classes[df_classes$nome_bol == nome_bol[tipo],
-                                         "cod_classes"], "/")
-  list_bol <- paste0(path, list.files(path, pattern = "*.csv"))
+
+  list_bol <- paste0(dir_bol, list.files(dir_bol, pattern = "*.csv"))
 
   ## Cria listas com cada informação do boletim
   datalist = list()
@@ -51,7 +48,7 @@ le_boletim_quimica <- function(tipo = 2) {
   datalist5 = list()
   out <- list()
   ## Condição para leitura do boletim
-  if (nome_bol[tipo] == "ROCHA") {
+  if (nome_bol[classe_am] == "ROCHA") {
     ini = 6
   } else {
     ini = 12
@@ -61,7 +58,7 @@ le_boletim_quimica <- function(tipo = 2) {
   ## Ler cada boletim do diretório e extrair as informações
   for (i in 1:length(list_bol)) {
     df_tudo = read.csv2(
-      list_bol <- paste0(path, list.files(path, pattern = "*.csv"))[i],
+      list_bol <- paste0(dir_bol, list.files(dir_bol, pattern = "*.csv"))[i],
       header = F,
       as.is = T,
       fill = TRUE,
@@ -91,7 +88,7 @@ le_boletim_quimica <- function(tipo = 2) {
     boletim <- df_tudo[16:r, c(1:3, 5, ini:n)]
 
     ## Condição para extrai condições de preparação
-    if (nome_bol[tipo] != "ROCHA") {
+    if (nome_bol[classe_am] != "ROCHA") {
       fracao <- t(df_tudo[12, 6:11])
       metodo_prep <- t(df_tudo[11, 6:11])
       unidades_prep <- t(df_tudo[13, 6:11])
@@ -222,7 +219,7 @@ le_boletim_quimica <- function(tipo = 2) {
 
   # Tirar registros de branco de preparação
   df_sc <-
-    df[df$classe_am == nome_bol[tipo] & df$N_LAB != "BRANCO_PREP",]
+    df[df$classe_am == nome_bol[classe_am] & df$N_LAB != "BRANCO_PREP",]
 
 
   ## Retira linhas sem N_LAB
@@ -333,11 +330,11 @@ le_boletim_quimica <- function(tipo = 2) {
 
   df_sc_05ld <- rgr::ltdl.fix.df(df_sc_transf)
 
-  if (nome_bol[tipo] != "ROCHA") {
+  if (nome_bol[classe_am] != "ROCHA") {
     tp = do.call(plyr::rbind.fill, datalist4)
     dfp <- do.call(plyr::rbind.fill, datalist5)
     df_peneira <-
-      dfp[dfp$classe_am == nome_bol[tipo] &
+      dfp[dfp$classe_am == nome_bol[classe_am] &
             dfp$N_LAB != "BRANCO_PREP" &
             dfp$cod_am == "SMP", ]
     out[[9]] <- df_peneira # Pesos da preparação
@@ -388,7 +385,7 @@ le_boletim_quimica <- function(tipo = 2) {
   # out[[11]] <- df_sc_transf # planilha com sinais -
 
   # ### Substitui valores <LD por 0.5LD e > LD pelo valor de LD
-  # write.table(QAQC_transf, paste0(path2, tolower(tipo),"_qaqc_prep.csv"),
+  # write.table(QAQC_transf, paste0(path2, tolower(classe_am),"_qaqc_prep.csv"),
   #             sep=";", dec="," , row.names = FALSE,  quote = FALSE,
   #             fileEncoding = "latin1" )
 

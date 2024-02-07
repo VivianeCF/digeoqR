@@ -1,7 +1,8 @@
 #' Lê boletins de análises mineralométricas
 #'
-#' @param tipo Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
+#' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 #'   corrente, 3 = rocha, 4 = solo
+#' @param dir_bol Diretório dos boletins analíticos ex: "inputs/mineral/B/"
 #'
 #' @return Retorna uma lista com todos os dados do boletim: resultados
 #'   analíticos, condições analíticas, requisição das análises, preparação das
@@ -10,7 +11,7 @@
 #'
 #' @examples
 #' #le_boletim_mineral()
-le_boletim_mineral <- function(tipo = 1) {
+le_boletim_mineral <- function(classe_am, dir_bol) {
   #Ler Dados na planilha csv
   #as planilhas da GEOSOL vem com formato numérico com decimal . e separador ;
   #substitui no editor-MS antes . por , e  salva csv separados por virguala
@@ -30,19 +31,9 @@ le_boletim_mineral <- function(tipo = 1) {
   nome_bol <-
     c("CONCENTRADO DE BATEIA", "SEDIMENTO CORRENTE", "ROCHA",
       "SOLO")
-  df_classes <- data.frame(classes, cod_classes, nome_bol)
-
-  ## Escolha a classe de amostra
-  # tipo <- "CONCENTRADO DE BATEIA"
-
-  ## Gera o caminho para os arquivos
-  ## Entrada
-  path <-
-    paste0("inputs/mineral/", df_classes[df_classes$nome_bol == nome_bol[tipo],
-                                         "cod_classes"], "/")
 
   ## Lista dos arquivos xls no diretório
-  list_bol <- paste0(path, list.files(path, pattern = "*.xls"))
+  list_bol <- paste0(dir_bol, list.files(dir_bol, pattern = "*.xls"))
   datalist = list()
   datalist2 = list()
   datalist3 = list()

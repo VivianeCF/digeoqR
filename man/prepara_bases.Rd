@@ -4,15 +4,26 @@
 \alias{prepara_bases}
 \title{Prepara a base de dados para o processamento dos dados geoquímicos}
 \usage{
-prepara_bases(analise, tipo, fcampo = "fcampo")
+prepara_bases(
+  dir_bol,
+  classe_am,
+  analise,
+  dir_base,
+  tipo_base,
+  nome_base = "fcampo"
+)
 }
 \arguments{
+\item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/qumica/R/"}
+
+\item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
+corrente, 3 = rocha, 4 = solo, 5 = água}
+
 \item{analise}{Selecione o tipo de análise: 1 = mineral ou 2 = química}
 
-\item{tipo}{Selecione a classe da amostra: 1 = concentrado de bateia, 2 =
-"sedimento de corrente", 3 = solo, 4 = rocha, 5 = água}
+\item{tipo_base}{tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
 
-\item{fcampo}{Nome do arquivo acess mdb com dados de campo.}
+\item{nome_base}{nome da base de dados de campo}
 }
 \value{
 Retorna a lista com as bases de dados em diferentes formatos
@@ -26,5 +37,6 @@ layout modelo nos diretórios inputs/mineral ou inputs/quimica, conforme o
 exemplo.
 }
 \examples{
-#prepara_bases(analise = 2, tipo = 2)
+#prepara_bases(dir_bol = "inputs/quimica/R/",classe_am = 4,analise = 2,
+dir_base = "inputs/campo/", tipo_base = 1, nome_base = "fcampo" )
 }

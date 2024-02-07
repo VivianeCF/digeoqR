@@ -4,12 +4,14 @@
 \alias{extrai_dados_campo}
 \title{Extrai dados de campo do banco de dados}
 \usage{
-extrai_dados_campo(tipo_base = 1, nome = "fcampo")
+extrai_dados_campo(tipo_base, dir_base, nome_base)
 }
 \arguments{
-\item{tipo_base}{tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
+\item{tipo_base}{Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
 
-\item{nome}{nome do arquivo da base de dados}
+\item{dir_base}{Diretório da base de dados de campo}
+
+\item{nome_base}{Nome da base de dados de campo}
 }
 \value{
 Retorna uma tabela com os dados de campo
@@ -17,9 +19,5 @@ Retorna uma tabela com os dados de campo
 \description{
 Uma base de dados é preparada com as informações da localização das amostras
 e os nomes de campo e laboratório. Esta função só está implementada para o
-tipo_base = 1
-}
-\details{
-Arquivo com os dados de campo proveniente de bases de dados: 1 = FCAMPO, 2 =
-SURVEY123, 3 = QFIELD).
+tipo_base = 1 (FCAMPO)
 }

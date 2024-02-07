@@ -16,6 +16,9 @@
 #' @param threshold Valor de corte da área das bacias modeladas
 #' @param min_length Comprimento mínimo do curso do rio
 #' @param max_ordem Ordem Strhaler máxima para a validaçãon da estação
+#' @param dir_campo Diretório dos dados espaciais
+#' @param dir_dem Diretório da imagem tif srtm
+#' @param dir_out Diretório de saída
 #'
 #'@return Imagem (.png) do mapa de planejamento preliminar.
 #'Arquivo da shape (shp) das estações.
@@ -25,24 +28,26 @@
 #' #gera_estacoes()
 #'
 gera_estacoes <-
-  function(limite = "inputs/campo/carta_100M.shp",
-           area_urbana = "inputs/campo/area_urbana.shp",
-           estacoes = "outputs/estacoes_geradas.shp",
-           srtm = "inputs/imagens/srtm.tif",
+  function(dir_campo = "inputs/campo/", dir_dem = "inputs/imagens/",
+           dir_out = "outputs/",
+           limite = "carta_100M.shp",
+           area_urbana = "area_urbana.shp",
+           estacoes = "estacoes_geradas.shp",
+           srtm = "srtm.tif",
            EPSG = 4326,
-           rios = "inputs/campo/rios_ibge.shp",
-           massa_dagua = "inputs/campo/massa_dagua.shp",
+           rios = "rios_ibge.shp",
+           massa_dagua = "massa_dagua.shp",
            threshold = 250,
            min_length = 0.02,
            max_ordem = 4)
   {
     ### GERA DRENAGENS--------------------------------------------------------------
-
+    base = paste0(dir_dem, srtm)
     wbt_wd <- tempdir(check = TRUE)
     options("rgdal_show_exportToProj4_warnings" = "none")
     whitebox::wbt_rasterize_streams(
-      rios,
-      base = srtm,
+      paste0(dir_campo, rios),
+      base = base,
       output = "network_topage.tif",
       nodata = 0,
       wd = wbt_wd
@@ -57,7 +62,7 @@ gera_estacoes <-
       delete_layer = TRUE,
       quiet = TRUE
     )
-    network_topage <- sf::read_sf(rios)
+    network_topage <- sf::read_sf(paste0(dir_campo, rios))
     sf::write_sf(
       network_topage,
       file.path(wbt_wd, "network_topage.shp"),
@@ -65,7 +70,7 @@ gera_estacoes <-
       quiet = TRUE
     )
     whitebox::wbt_burn_streams_at_roads(
-      dem = srtm,
+      dem = base,
       streams = "network_topage.shp",
       roads = "roads.shp",
       output = "dem_100m_burn.tif",
@@ -144,13 +149,13 @@ gera_estacoes <-
     ## Lê shape dos rios
     ## Gera ESTAÇÕES ---------------------------------------------------------------
     ## Lê limite da area do projeto
-    area <- sf::read_sf(limite)
+    area <- sf::read_sf(paste0(dir_campo, limite))
 
     ## Lê massa d'água
-    massa_dagua <- sf::read_sf(massa_dagua)
+    massa_dagua <- sf::read_sf(paste0(dir_campo,massa_dagua))
 
     ## Lê área urbana
-    area_urbana <- sf::read_sf(area_urbana)
+    area_urbana <- sf::read_sf(paste0(dir_campo,area_urbana))
 
     out <- list()
     ## Encontrar vértices das junções
@@ -196,7 +201,7 @@ gera_estacoes <-
     ## Remover sobreposição buffer dos rios
     linhas <- stream_model  %>% sf::st_transform(4326)
     outlet <- joins_area  %>% sf::st_transform(4326)
-    sf_use_s2(FALSE)
+    sf::sf_use_s2(FALSE)
     res_ls <-
       suppressWarnings({
         suppressMessages({
@@ -269,6 +274,6 @@ gera_estacoes <-
     dev.off()
     # ## Salvar dados espaciais gerados ----------------------------------------
     sf::write_sf(pontos_area,
-                 paste0(estacoes),
+                 paste0(dir_out, estacoes),
                  overwrite = TRUE)
   }

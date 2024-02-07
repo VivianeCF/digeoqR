@@ -4,11 +4,16 @@
 \alias{arruma_dados_rigeo}
 \title{Recupera dados geoquímicos do Rigeo}
 \usage{
-arruma_dados_rigeo(folhas = "inputs/campo/folhas.shp")
+arruma_dados_rigeo(
+  folhas = "inputs/campo/folhas.shp",
+  dir = "inputs/projetos/"
+)
 }
 \arguments{
 \item{folhas}{Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
+
+\item{dir}{diretório dos arquivos zip baixados do Rigeo}
 }
 \description{
 Recupera dados geoquímicos do Rigeo

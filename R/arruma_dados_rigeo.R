@@ -2,22 +2,24 @@
 #'
 #' @param folhas Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 #' o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente
-#' @param dir diretório dos arquivos zip baixados do Rigeo
-#'
+#' @param dir_in Diretório onde estão os arqivos zip de protos do DGM
+#' @param dir_out Diretório para gravação das planilhas de dados
+
 #' @return
 #' @export
 #'
 #' @examples
 #' #arruma_dados_rigeo()
 arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
-                               dir = "inputs/projetos/") {
+                               dir_in = "inputs/projetos/",
+                               dir_out = "outputs/" ) {
   #Ler arquivo das áreas--------------------------------------------------------
   folhas_po <- sf::st_read(folhas, quiet = TRUE)
   colnames(folhas_po)[1] <- "layer"
 
   ## Definições dos diretórios--------------------------------------------------
   arquivos_rigeo <-
-    list.files(dir, pattern = "\\.zip$", full.names = TRUE)
+    list.files(dir_in, pattern = "\\.zip$", full.names = TRUE)
   info <-
     tolower(
       c(
@@ -372,7 +374,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       data.frame(lapply(tables_sc, function(x)
         gsub(".", ",", x,
              fixed = TRUE)))
-    write.csv2(tables_sc, "outputs/integrada_rigeo_sc.csv",
+    write.csv2(tables_sc, paste0(dir_out, "integrada_rigeo_sc.csv"),
                row.names = FALSE)
 
     #Organizar nomes dos campos para Sedimento de corrente
@@ -431,7 +433,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_sc ,
-      "outputs/sc_tidy.csv",
+      paste0(dir_out, "sc_tidy.csv"),
       row.names = FALSE,
       na = "",
       sep = ";",
@@ -499,7 +501,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
     # colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)
-    write.csv2(tables_cb, "outputs/integrada_rigeo_cb.csv", row.names = FALSE)
+    write.csv2(tables_cb, paste0(dir_out, "integrada_rigeo_cb.csv"), row.names = FALSE)
 
 
     colnames(tables_cb)
@@ -581,7 +583,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     write.table(
       estacoes_folhas_cb ,
-      "outputs/cb_tidy.csv",
+      paste0(dir_out, "cb_tidy.csv"),
       row.names = FALSE,
       na = "",
       dec = ",",
@@ -604,7 +606,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         gsub(".", ",", x,
              fixed = TRUE)))
     write.csv2(tables_cb_gq,
-               paste0("outputs/",
+               paste0(dir_out,
                       "integrada_rigeo_cb_gq.csv"),
                row.names = FALSE)
 
@@ -662,7 +664,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_cb_gq ,
-      "outputs/cb_gq_tidy.csv",
+      paste0(dir_out, "cb_gq_tidy.csv"),
       row.names = FALSE,
       na = "",
       sep = ";",
@@ -686,7 +688,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         gsub(".", ",", x,
              fixed = TRUE)))
     write.csv2(tables_r,
-               paste0("outputs/",
+               paste0(dir_out,
                       "integrada_rigeo_r.csv"),
                row.names = FALSE)
 
@@ -745,7 +747,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_r ,
-      "outputs/r_tidy.csv",
+      paste0(dir_out, "r_tidy.csv"),
       row.names = FALSE,
       na = "",
       sep = ";",
@@ -769,7 +771,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         gsub(".", ",", x,
              fixed = TRUE)))
     write.csv2(tables_l,
-               paste0("outputs/",
+               paste0(dir_out,
                       "integrada_rigeo_l.csv"),
                row.names = FALSE)
 
@@ -827,7 +829,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_l ,
-      "outputs/l_tidy.csv",
+      paste0(dir_out, "l_tidy.csv"),
       row.names = FALSE,
       na = "",
       sep = ";",
@@ -851,7 +853,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         gsub(".", ",", x,
              fixed = TRUE)))
     write.csv2(tables_m,
-               paste0("outputs/",
+               paste0(dir_out,
                       "integrada_rigeo_m.csv"),
                row.names = FALSE)
 
@@ -912,7 +914,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     ## Salva arquivo final do Rigeo
     write.table(
       estacoes_folhas_m ,
-      "outputs/m_tidy.csv",
+      paste0(dir_out, "m_tidy.csv"),
       row.names = FALSE,
       na = "",
       sep = ";",
@@ -933,5 +935,5 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   unido <- do.call(plyr::rbind.fill, lista_pivo)
   unido <- unido[!is.na(unido$Valor), ]
 
-  write.csv2(unido, "outputs/toda_base_integral_rigeo.csv", row.names = FALSE)
+  write.csv2(unido, paste0(dir_out, "toda_base_integral_rigeo.csv"), row.names = FALSE)
 }

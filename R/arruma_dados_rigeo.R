@@ -182,30 +182,25 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     filtered_df_sedimento <-
       dplyr::filter(x,
-                    grepl("Geoquimica Sedimento de Corrente",
+                    grepl("Sedimento de Corrente",
                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento2 <-
       dplyr::filter(x,
-                    grepl("Geoquimica de Sedimento de Corrente",
+                    grepl("Sedimento_de_Corrente",
                           Name, ignore.case = TRUE))[1, 1]
+
     filtered_df_sedimento3 <-
       dplyr::filter(x,
-                    grepl("Geoquimica_Sedimento_de_Corrente",
-                          Name, ignore.case = TRUE))[1, 1]
-    filtered_df_sedimento4 <-
-      dplyr::filter(x,
                     grepl(
-                      "Analise_Química_Sedimento_de_Corrente",
+                      "Resultados Analíticos",
                       Name,
                       ignore.case = TRUE
                     ))[1, 1]
-
     filtered_df_sedimento <-
       c(
         filtered_df_sedimento,
         filtered_df_sedimento2,
-        filtered_df_sedimento3,
-        filtered_df_sedimento4
+        filtered_df_sedimento3
       )
     filtered_df_sedimento <-
       filtered_df_sedimento[!is.na(filtered_df_sedimento)]
@@ -234,23 +229,31 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     filtered_df_bateia_gq <-
       dplyr::filter(x,
-                    grepl("Geoquimica Concentrado de Bateia",
+                    grepl("mica Concentrado de Bateia",
                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq2 <-
       dplyr::filter(x,
-                    grepl("Geoquimica_Concentrado_de_Bateia",
+                    grepl("mica de Concentrado de Bateia",
                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq3 <-
       dplyr::filter(x,
                     grepl(
-                      "Analise_Química_Concentrado_de_Bateia",
+                      "mica_Concentrado_de_Bateia",
+                      Name,
+                      ignore.case = TRUE
+                    ))[1, 1]
+    filtered_df_bateia_gq4 <-
+      dplyr::filter(x,
+                    grepl(
+                      "mica_de_Concentrado_de_Bateia",
                       Name,
                       ignore.case = TRUE
                     ))[1, 1]
     filtered_df_bateia_gq <-
       c(filtered_df_bateia_gq,
         filtered_df_bateia_gq2,
-        filtered_df_bateia_gq3)
+        filtered_df_bateia_gq3,
+        filtered_df_bateia_gq4)
     filtered_df_bateia_gq <-
       filtered_df_bateia_gq[!is.na(filtered_df_bateia_gq)]
 
@@ -318,15 +321,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     }
 
 
-    filtered_df_rocha <- dplyr::filter(x, grepl("Geoquimica Rocha",
+    filtered_df_rocha <- dplyr::filter(x, grepl("mica Rocha",
                                                 Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha2 <-
-      dplyr::filter(x, grepl("Geoquimica de Rocha",
+      dplyr::filter(x, grepl("mica de Rocha",
                              Name, ignore.case = TRUE))[1, 1]
-    filtered_df_rocha3 <- dplyr::filter(x, grepl("Geoquimica_Rocha",
+    filtered_df_rocha3 <- dplyr::filter(x, grepl("mica_Rocha",
                                                  Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha4 <-
-      dplyr::filter(x, grepl("Analise_Química_Rocha",
+      dplyr::filter(x, grepl("mica_de_Rocha",
                              Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_rocha <- c(filtered_df_rocha,
@@ -359,21 +362,28 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     filtered_df_minerio <-
       dplyr::filter(x,
-                    grepl("Geoquimica_Mineral_Minerio",
+                    grepl("mica_Mineral",
                           Name, ignore.case = TRUE))[1, 1]
+
     filtered_df_minerio2 <-
       dplyr::filter(x,
-                    grepl("Geoquimica de Mineral Minerio",
+                    grepl("mica Mineral",
                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_minerio3 <-
       dplyr::filter(x,
-                    grepl("Analise_Química_Mineral_Minerio",
+                    grepl("mica_de_Mineral",
                           Name, ignore.case = TRUE))[1, 1]
+    filtered_df_minerio4 <-
+      dplyr::filter(x,
+                    grepl("mica de Mineral",
+                          Name, ignore.case = TRUE))[1, 1]
+
 
     filtered_df_minerio <-
       c(filtered_df_minerio,
         filtered_df_minerio2,
-        filtered_df_minerio3)
+        filtered_df_minerio3,
+        filtered_df_minerio4)
     filtered_df_minerio <-
       filtered_df_minerio[!is.na(filtered_df_minerio)]
 

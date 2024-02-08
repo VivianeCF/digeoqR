@@ -90,36 +90,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     filtered_df_bateia <-
       dplyr::filter(x,
-                    grepl("Mineralometria Concentrado de Bateia",
+                    grepl("Mineralometria",
                           Name, ignore.case = TRUE),
                     fixed = TRUE)[1, 1]
-    filtered_df_bateia2 <-
-      dplyr::filter(x,
-                    grepl(
-                      "Mineralometria_Concentrado_de_Bateia",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
-    filtered_df_bateia3 <-
-      dplyr::filter(x,
-                    grepl(
-                      "Mineralometria de Concentrado de Bateia",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
-    filtered_df_bateia4 <-
-      dplyr::filter(x,
-                    grepl(
-                      "Mineralometria_de_Concentrado_de_Bateia",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
-    filtered_df_bateia <- c(
-      filtered_df_bateia,
-      filtered_df_bateia2,
-      filtered_df_bateia3,
-      filtered_df_bateia4
-    )
+
     filtered_df_bateia <-
       filtered_df_bateia[!is.na(filtered_df_bateia)]
 

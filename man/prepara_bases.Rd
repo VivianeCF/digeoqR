@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepara_bases.R
 \name{prepara_bases}
 \alias{prepara_bases}
-\title{Prepara a base de dados para o processamento dos dados geoquÃ­micos}
+\title{Prepara a base de dados para o processamento dos dados geoquímicos}
 \usage{
 prepara_bases(
   dir_bol,
@@ -14,12 +14,12 @@ prepara_bases(
 )
 }
 \arguments{
-\item{dir_bol}{DiretÃ³rio dos boletins analÃ­ticos ex: "inputs/qumica/R/"}
+\item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/qumica/R/"}
 
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
+corrente, 3 = rocha, 4 = solo, 5 = água}
 
-\item{analise}{Selecione o tipo de anÃ¡lise: 1 = mineral ou 2 = quÃ­mica}
+\item{analise}{Selecione o tipo de análise: 1 = mineral ou 2 = química}
 
 \item{tipo_base}{tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
 
@@ -27,13 +27,13 @@ corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
 }
 \value{
 Retorna a lista com as bases de dados em diferentes formatos
-transformados ou brutos, pivotados ou nÃ£o.
+transformados ou brutos, pivotados ou não.
 }
 \description{
-Recupera e une os dados dos boletins analÃ­ticos e os dados de campo da base de
-dados fcampo. Os dados precisam estar nos diretÃ³rios gerados pela funÃ§Ã£o
-estrutura_diretorio. Os boletins analÃ­ticos devem estar no formato .csv com
-layout modelo nos diretÃ³rios inputs/mineral ou inputs/quimica, conforme o
+Recupera e une os dados dos boletins analíticos e os dados de campo da base de
+dados fcampo. Os dados precisam estar nos diretórios gerados pela função
+estrutura_diretorio. Os boletins analíticos devem estar no formato .csv com
+layout modelo nos diretórios inputs/mineral ou inputs/quimica, conforme o
 exemplo.
 }
 \examples{

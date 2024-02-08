@@ -2,7 +2,7 @@
 % Please edit documentation in R/gera_estacoes.R
 \name{gera_estacoes}
 \alias{gera_estacoes}
-\title{Gera estaÃ§Ãµes nas confluÃªncias dos rios}
+\title{Gera estações nas confluências dos rios}
 \usage{
 gera_estacoes(
   dir_campo = "inputs/campo/",
@@ -21,40 +21,40 @@ gera_estacoes(
 )
 }
 \arguments{
-\item{dir_campo}{DiretÃ³rio dos dados espaciais}
+\item{dir_campo}{Diretório dos dados espaciais}
 
-\item{dir_dem}{DiretÃ³rio da imagem tif srtm}
+\item{dir_dem}{Diretório da imagem tif srtm}
 
-\item{dir_out}{DiretÃ³rio de saÃ­da}
+\item{dir_out}{Diretório de saída}
 
-\item{limite}{nome do arquivo da Ã¡rea do projeto}
+\item{limite}{nome do arquivo da área do projeto}
 
-\item{area_urbana}{nome do arquivo da Ã¡rea urbana}
+\item{area_urbana}{nome do arquivo da área urbana}
 
-\item{estacoes}{EstaÃ§Ãµes geradas a partir da drenagem modelada}
+\item{estacoes}{Estações geradas a partir da drenagem modelada}
 
-\item{srtm}{DEM da Ã¡rea}
+\item{srtm}{DEM da área}
 
 \item{EPSG}{Sistema de coordenadas}
 
 \item{rios}{nome do arquivo os rios}
 
-\item{massa_dagua}{nome do arquivo da massa d'Ã¡gua}
+\item{massa_dagua}{nome do arquivo da massa d'água}
 
-\item{threshold}{Valor de corte da Ã¡rea das bacias modeladas}
+\item{threshold}{Valor de corte da área das bacias modeladas}
 
-\item{min_length}{Comprimento mÃ­nimo do curso do rio}
+\item{min_length}{Comprimento mínimo do curso do rio}
 
-\item{max_ordem}{Ordem Strhaler mÃ¡xima para a validaÃ§Ã£on da estaÃ§Ã£o}
+\item{max_ordem}{Ordem Strhaler máxima para a validaçãon da estação}
 }
 \value{
 Imagem (.png) do mapa de planejamento preliminar.
-Arquivo da shape (shp) das estaÃ§Ãµes.
+Arquivo da shape (shp) das estações.
 }
 \description{
 Desenvolvido para automatizar o processo de escolha do locais de amostragem
-que devem ser a 100 m acima dos pontos de confluÃªncia dos rios. TambÃ©m sÃ£o
-excluÃ­dos locais nas Ã¡reas urbanas e de massa d'Ã¡gua. Todos os arquivos devem
+que devem ser a 100 m acima dos pontos de confluência dos rios. Também são
+excluídos locais nas áreas urbanas e de massa d'água. Todos os arquivos devem
 ser no formato shapefile.
 }
 \examples{

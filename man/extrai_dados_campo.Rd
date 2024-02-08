@@ -9,7 +9,7 @@ extrai_dados_campo(tipo_base, dir_base, base_campo)
 \arguments{
 \item{tipo_base}{Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
 
-\item{dir_base}{DiretÃ³rio da base de dados de campo}
+\item{dir_base}{Diretório da base de dados de campo}
 
 \item{base_campo}{Nome da base de dados de campo}
 }
@@ -17,7 +17,7 @@ extrai_dados_campo(tipo_base, dir_base, base_campo)
 Retorna uma tabela com os dados de campo
 }
 \description{
-Uma base de dados Ã© preparada com as informaÃ§Ãµes da localizaÃ§Ã£o das amostras
-e os nomes de campo e laboratÃ³rio. Esta funÃ§Ã£o sÃ³ estÃ¡ implementada para o
+Uma base de dados é preparada com as informações da localização das amostras
+e os nomes de campo e laboratório. Esta função só está implementada para o
 tipo_base = 1 (FCAMPO)
 }

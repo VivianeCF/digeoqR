@@ -2,21 +2,24 @@
 % Please edit documentation in R/arruma_dados_rigeo.R
 \name{arruma_dados_rigeo}
 \alias{arruma_dados_rigeo}
-\title{Recupera dados geoquÃ­micos do Rigeo}
+\title{Recupera dados geoquímicos do Rigeo}
 \usage{
 arruma_dados_rigeo(
   folhas = "inputs/campo/folhas.shp",
-  dir = "inputs/projetos/"
+  dir_in = "inputs/projetos/",
+  dir_out = "outputs/"
 )
 }
 \arguments{
-\item{folhas}{ArticulaÃ§Ã£o das folhas. Dica: gerar grid das folhas no QGIS com
+\item{folhas}{Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
 
-\item{dir}{diretÃ³rio dos arquivos zip baixados do Rigeo}
+\item{dir_in}{Diretório onde estão os arqivos zip de protos do DGM}
+
+\item{dir_out}{Diretório para gravação das planilhas de dados}
 }
 \description{
-Recupera dados geoquÃ­micos do Rigeo
+Recupera dados geoquímicos do Rigeo
 }
 \examples{
 #arruma_dados_rigeo()

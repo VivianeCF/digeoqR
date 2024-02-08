@@ -475,6 +475,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       gsub("-", "_", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <-
       gsub(".", "_", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <-
+      gsub("__", "_", colnames(tables_cb), fixed = TRUE)
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
@@ -484,11 +486,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     minerais <- gsub("\u00ca", "E", minerais, fixed = TRUE)
     minerais <- gsub("\u00cd", "I", minerais, fixed = TRUE)
     minerais <- gsub("\u00d3", "O", minerais, fixed = TRUE)
-    minerais <- gsub("...31", "", minerais, fixed = TRUE)
-    minerais <- gsub("...32", "", minerais, fixed = TRUE)
     minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
     minerais <- gsub("-", "_", minerais, fixed = TRUE)
     minerais <- gsub(".", "_", minerais, fixed = TRUE)
+    minerais <- gsub("_<", "_", minerais, fixed = TRUE)
+    minerais <- gsub("__", "_", minerais, fixed = TRUE)
+    minerais <- gsub(",", "_", minerais, fixed = TRUE)
     minerais <- unique(minerais)
     minerais <-
       minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL"))]

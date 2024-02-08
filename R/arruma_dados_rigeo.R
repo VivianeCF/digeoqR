@@ -170,6 +170,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
           toupper(colnames(data_cb)[!(colnames(data_cb) %in% info)])
         min[[i]] <-
           data.frame(mineral = stringr::str_replace(m, "_PCT", ""))
+        colnames(data_cb_join) <-
+          gsub("DTVISITA", "DATA_VISITA", colnames(data_cb_join))
+
+        data_cb_join$DATA_VISITA <-
+          as.Date(as.character(data_cb_join$DATA_VISITA), "%d/%m/%Y")
 
         res_cb[[i]] <- data_cb_join
       }
@@ -218,6 +223,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         data_sc_join <- as.data.frame(data_sc_join)
         colnames(data_sc_join) <-
           gsub("SC._PPM", "SC_PPM", colnames(data_sc_join))
+  colnames(data_sc_join) <-
+          gsub("DTVISITA", "DATA_VISITA", colnames(data_sc_join))
+
+        data_sc_join$DATA_VISITA <-
+          as.Date(as.character(data_sc_join$DATA_VISITA), "%d/%m/%Y")
         res_sc[[i]] <-  data_sc_join
       }
     }
@@ -256,6 +266,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
         names(data_cb_gq_join) <- toupper(names(data_cb_gq_join))
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
+        colnames(data_cb_gq_join) <-
+          gsub("DTVISITA", "DATA_VISITA", colnames(data_cb_gq_join))
+
+        data_cb_gq_join$DATA_VISITA <-
+          as.Date(as.character(data_cb_gq_join$DATA_VISITA), "%d/%m/%Y")
+
         res_cb_gq[[i]] <-  data_cb_gq_join
 
       }
@@ -290,6 +306,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
           dplyr::inner_join(data_l, campo, by = c("num_lab" = "Num_Lab"))
         names(data_l_join) <- toupper(names(data_l_join))
         data_l_join <- as.data.frame(data_l_join)
+        colnames(data_l_join) <-
+          gsub("DTVISITA", "DATA_VISITA", colnames(data_l_join))
+
+        data_l_join$DATA_VISITA <-
+          as.Date(as.character(data_l_join$DATA_VISITA), "%d/%m/%Y")
+
+
         res_l[[i]] <-  data_l_join
       }
     }
@@ -323,6 +346,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
           dplyr::inner_join(data_r, campo, by = c("num_lab" = "Num_Lab"))
         names(data_r_join) <- toupper(names(data_r_join))
         data_r_join <- as.data.frame(data_r_join)
+        colnames(data_r_join) <-
+          gsub("DTVISITA", "DATA_VISITA", colnames(data_r_join))
+
+        data_r_join$DATA_VISITA <-
+          as.Date(as.character(data_r_join$DATA_VISITA), "%d/%m/%Y")
+
         res_r[[i]] <-  data_r_join
       }
     }
@@ -359,6 +388,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
           dplyr::inner_join(data_m, campo, by = c("num_lab" = "Num_Lab"))
         names(data_m_join) <- toupper(names(data_m_join))
         data_m_join <- as.data.frame(data_m_join)
+        colnames(data_m_join) <-
+          gsub("DTVISITA", "DATA_VISITA", colnames(data_m_join))
+
+        data_m_join$DATA_VISITA <-
+          as.Date(as.character(data_m_join$DATA_VISITA), "%d/%m/%Y")
+
         res_m[[i]] <-  data_m_join
       }
     }
@@ -473,10 +508,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       gsub("\u00d3", "O", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <-
       gsub("-", "_", colnames(tables_cb), fixed = TRUE)
-    colnames(tables_cb) <-
+     colnames(tables_cb) <-
       gsub(".", "_", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <-
       gsub("__", "_", colnames(tables_cb), fixed = TRUE)
+    colnames(tables_cb) <- gsub("COL_TAN_", "COL_TAN", colnames(tables_cb),
+                                fixed = TRUE)
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
@@ -486,12 +523,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     minerais <- gsub("\u00ca", "E", minerais, fixed = TRUE)
     minerais <- gsub("\u00cd", "I", minerais, fixed = TRUE)
     minerais <- gsub("\u00d3", "O", minerais, fixed = TRUE)
-    minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
     minerais <- gsub("-", "_", minerais, fixed = TRUE)
     minerais <- gsub(".", "_", minerais, fixed = TRUE)
     minerais <- gsub("_<", "_", minerais, fixed = TRUE)
     minerais <- gsub("__", "_", minerais, fixed = TRUE)
     minerais <- gsub(",", "_", minerais, fixed = TRUE)
+    minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
     minerais <- unique(minerais)
     minerais <-
       minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL"))]
@@ -593,9 +630,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       sep = ";"
     )
     #Pivoteia e une as base
-    lista_pivo[[2]] <-
+    lista_pivo[[2]] <- estacoes_folhas_cb %>%
       tidyr::pivot_longer(
-        estacoes_folhas_cb,
         cols = minerais,
         names_to = "Analito",
         values_to = "Valor"

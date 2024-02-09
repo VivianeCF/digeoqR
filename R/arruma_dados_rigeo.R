@@ -137,8 +137,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
           data_cb <- data_cb[,-observacao2]
         }
 
-        data_cb_join <-
-          as.data.frame(dplyr::inner_join(data_cb, campo, by = "num_lab"))
+        data_cb_join <- dplyr::inner_join(
+          campo,
+          dplyr::select(data_cb, -any_of(names(campo)), num_lab),
+          by ="num_lab"
+        )
 
         names(data_cb_join) <- toupper(names(data_cb_join))
         names(data_cb_join) <-
@@ -199,8 +202,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         data_sc <- readxl::read_excel(paste0(temp, "/", sedimento_filtro),
                                       col_types = "text")
         colnames(data_sc) <- tolower(colnames(data_sc))
-        data_sc_join <-
-          dplyr::inner_join(data_sc, campo, by = "num_lab")
+
+        data_sc_join <- dplyr::inner_join(
+          campo,
+          dplyr::select(data_sc, -any_of(names(campo)), num_lab),
+          by ="num_lab"
+        )
+
         names(data_sc_join) <- toupper(names(data_sc_join))
         data_sc_join <- as.data.frame(data_sc_join)
         colnames(data_sc_join) <-
@@ -251,8 +259,13 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
           readxl::read_excel(paste0(temp, "/", concentrado_filtro_gq),
                              col_types = "text")
         colnames(data_cb_gq)[6] <- "num_lab"
-        data_cb_gq_join <- dplyr::inner_join(data_cb_gq, campo,
-                                             by = "num_lab")
+
+        data_cb_gq_join <- dplyr::inner_join(
+          campo,
+          dplyr::select(data_cb_gq, -any_of(names(campo)), num_lab),
+          by ="num_lab"
+        )
+
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
         names(data_cb_gq_join) <- toupper(names(data_cb_gq_join))
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
@@ -296,8 +309,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         data_l <- readxl::read_excel(paste0(temp, "/", solo_filtro),
                                      col_types = "text")
         colnames(data_l) <- tolower(colnames(data_l))
-        data_l_join <-
-          dplyr::inner_join(data_l, campo, by = "num_lab")
+        data_l_join <- dplyr::inner_join(
+          campo,
+          dplyr::select(data_l, -any_of(names(campo)), num_lab),
+          by ="num_lab"
+        )
         names(data_l_join) <- toupper(names(data_l_join))
         data_l_join <- as.data.frame(data_l_join)
         colnames(data_l_join) <-
@@ -339,8 +355,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         data_r <- readxl::read_excel(paste0(temp, "/", rocha_filtro),
                                      col_types = "text")
         colnames(data_r) <- tolower(colnames(data_r))
-        data_r_join <-
-          dplyr::inner_join(data_r, campo, by = "num_lab")
+        data_r_join <- dplyr::inner_join(
+          campo,
+          dplyr::select(data_r, -any_of(names(campo)), num_lab),
+          by ="num_lab"
+        )
         names(data_r_join) <- toupper(names(data_r_join))
         data_r_join <- as.data.frame(data_r_join)
         colnames(data_r_join) <-
@@ -388,8 +407,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         data_m <- readxl::read_excel(paste0(temp, "/", minerio_filtro),
                                      col_types = "text")
         colnames(data_m) <- tolower(colnames(data_m))
-        data_m_join <-
-          dplyr::inner_join(data_m, campo, by = "num_lab")
+        data_m_join <- dplyr::inner_join(
+          campo,
+          dplyr::select(data_m, -any_of(names(campo)), num_lab),
+          by ="num_lab"
+        )
         names(data_m_join) <- toupper(names(data_m_join))
         data_m_join <- as.data.frame(data_m_join)
         colnames(data_m_join) <-
@@ -526,6 +548,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       gsub("__", "_", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub("COL_TAN_", "COL_TAN", colnames(tables_cb),
                                 fixed = TRUE)
+    colnames(tables_cb) <- gsub("CENTRO_CUS", "CENTRO_CUSTO", colnames(tables_cb),
+                                fixed = TRUE)
 
     # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
@@ -543,11 +567,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
     minerais <- unique(minerais)
     minerais <-
-      minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL"))]
+      minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL", "P_TOTAL_G"))]
     # info
 
     tables_cb <-
-      tables_cb[, c(toupper(info[-8]), c("LONGITUDE", "LATITUDE"), minerais)]
+      tables_cb[, c(toupper(intersect(toupper(info), colnames(tables_cb))), c("LONGITUDE", "LATITUDE"), minerais)]
 
     tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)

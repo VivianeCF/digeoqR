@@ -74,17 +74,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     temp <- tempfile()
     zip::unzip(arquivos_rigeo[i], exdir = temp)
     campo <- sf::read_sf(temp)
+
     coord <- sf::st_coordinates(campo)[, c(1, 2)]
     colnames(coord) <- c("Longitude", "Latitude")
     campo <- data.frame(coord, campo)
-
+    colnames(campo) <- tolower(colnames(campo))
 
     x <- unzip(arquivos_rigeo[i], list = TRUE)
     x <- x %>%
       dplyr::filter((stringr::str_detect(Name, 'xlsx')))
+    x <-  x[order(x$Name),]
     x_org <- x
     x$Name <- iconv(x$Name,  "IBM437",  "UTF-8")
-    from <- list.files(temp, full.names = TRUE, pattern = "xlsx")
+    from <- sort(list.files(temp, full.names = TRUE, pattern = "xlsx"))
     file.rename(from, paste0(temp, "/", x$Name))
 
 
@@ -133,8 +135,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         if (length(observacao2) > 0) {
           data_cb <- data_cb[,-observacao2]
         }
+
         data_cb_join <-
-          as.data.frame(dplyr::inner_join(data_cb, campo, by = c("num_lab" = "Num_Lab")))
+          as.data.frame(dplyr::inner_join(data_cb, campo, by = "num_lab"))
+
         names(data_cb_join) <- toupper(names(data_cb_join))
         names(data_cb_join) <-
           stringr::str_replace(names(data_cb_join), "_PCT", "")
@@ -153,7 +157,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         res_cb[[i]] <- data_cb_join
       }
     }
-
+# Sedimento
     filtered_df_sedimento <-
       dplyr::filter(x,
                     grepl("Sedimento de Corrente",
@@ -170,11 +174,19 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                       Name,
                       ignore.case = TRUE
                     ))[1, 1]
+    filtered_df_sedimento4 <-
+      dplyr::filter(x,
+                    grepl(
+                      "Geoq_Sed",
+                      Name,
+                      ignore.case = TRUE
+                    ))[1, 1]
     filtered_df_sedimento <-
       c(
         filtered_df_sedimento,
         filtered_df_sedimento2,
-        filtered_df_sedimento3
+        filtered_df_sedimento3,
+        filtered_df_sedimento4
       )
     filtered_df_sedimento <-
       filtered_df_sedimento[!is.na(filtered_df_sedimento)]
@@ -187,7 +199,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                                       col_types = "text")
         colnames(data_sc) <- tolower(colnames(data_sc))
         data_sc_join <-
-          dplyr::inner_join(data_sc, campo, by = c("num_lab" = "Num_Lab"))
+          dplyr::inner_join(data_sc, campo, by = "num_lab")
         names(data_sc_join) <- toupper(names(data_sc_join))
         data_sc_join <- as.data.frame(data_sc_join)
         colnames(data_sc_join) <-
@@ -200,7 +212,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         res_sc[[i]] <-  data_sc_join
       }
     }
-
+# Bateia Química
     filtered_df_bateia_gq <-
       dplyr::filter(x,
                     grepl("mica Concentrado de Bateia",
@@ -239,7 +251,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                              col_types = "text")
         colnames(data_cb_gq)[6] <- "num_lab"
         data_cb_gq_join <- dplyr::inner_join(data_cb_gq, campo,
-                                             by = c("num_lab" = "Num_Lab"))
+                                             by = "num_lab")
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
         names(data_cb_gq_join) <- toupper(names(data_cb_gq_join))
         data_cb_gq_join <- as.data.frame(data_cb_gq_join)
@@ -252,7 +264,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         res_cb_gq[[i]] <-  data_cb_gq_join
 
       }
-
+# Solo
     }
     filtered_df_solo <- dplyr::filter(x, grepl("Geoquimica Solo",
                                                Name, ignore.case = TRUE))[1, 1]
@@ -265,11 +277,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       dplyr::filter(x, grepl("Analise_Química_Solo",
                              Name, ignore.case = TRUE))[1, 1]
 
+    filtered_df_solo5 <-
+      dplyr::filter(x, grepl("Geoq_Solo",
+                             Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_solo <- c(filtered_df_solo,
                           filtered_df_solo2,
                           filtered_df_solo3,
-                          filtered_df_solo4)
+                          filtered_df_solo4,
+                          filtered_df_solo5)
     filtered_df_solo <- filtered_df_solo[!is.na(filtered_df_solo)]
 
 
@@ -280,7 +296,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                                      col_types = "text")
         colnames(data_l) <- tolower(colnames(data_l))
         data_l_join <-
-          dplyr::inner_join(data_l, campo, by = c("num_lab" = "Num_Lab"))
+          dplyr::inner_join(data_l, campo, by = "num_lab")
         names(data_l_join) <- toupper(names(data_l_join))
         data_l_join <- as.data.frame(data_l_join)
         colnames(data_l_join) <-
@@ -294,7 +310,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       }
     }
 
-
+# Rocha
     filtered_df_rocha <- dplyr::filter(x, grepl("mica Rocha",
                                                 Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha2 <-
@@ -305,11 +321,14 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     filtered_df_rocha4 <-
       dplyr::filter(x, grepl("mica_de_Rocha",
                              Name, ignore.case = TRUE))[1, 1]
-
+    filtered_df_rocha5 <-
+      dplyr::filter(x, grepl("Geoq_Rocha",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha <- c(filtered_df_rocha,
                            filtered_df_rocha2,
                            filtered_df_rocha3,
-                           filtered_df_rocha4)
+                           filtered_df_rocha4,
+                           filtered_df_rocha5)
     filtered_df_rocha <-
       filtered_df_rocha[!is.na(filtered_df_rocha)]
 
@@ -320,7 +339,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                                      col_types = "text")
         colnames(data_r) <- tolower(colnames(data_r))
         data_r_join <-
-          dplyr::inner_join(data_r, campo, by = c("num_lab" = "Num_Lab"))
+          dplyr::inner_join(data_r, campo, by = "num_lab")
         names(data_r_join) <- toupper(names(data_r_join))
         data_r_join <- as.data.frame(data_r_join)
         colnames(data_r_join) <-
@@ -333,7 +352,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       }
     }
 
-
+# Minério
     filtered_df_minerio <-
       dplyr::filter(x,
                     grepl("mica_Mineral",
@@ -369,7 +388,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                                      col_types = "text")
         colnames(data_m) <- tolower(colnames(data_m))
         data_m_join <-
-          dplyr::inner_join(data_m, campo, by = c("num_lab" = "Num_Lab"))
+          dplyr::inner_join(data_m, campo, by = "num_lab")
         names(data_m_join) <- toupper(names(data_m_join))
         data_m_join <- as.data.frame(data_m_join)
         colnames(data_m_join) <-
@@ -389,6 +408,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   ## Arrumar dados de Sedimento de Corrente - Análises químicas-----------------
   if (length(res_sc) > 0) {
     tables_sc <- do.call(plyr::rbind.fill, res_sc)
+    tables_sc[is.na(tables_sc$PROJETO), "PROJETO"] <-
+      tables_sc[is.na(tables_sc$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_sc[is.na(tables_sc$PROJETO), "PROJETO"] <-
+      tables_sc[is.na(tables_sc$PROJETO), "PROJETO_PUBLICACAO"]
     tables_sc <-
       data.frame(lapply(tables_sc, function(x)
         gsub(".", ",", x,
@@ -472,6 +495,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   ## Arrumar dados de Concentrado de Bateia - Mineralometria--------------------
   if (length(res_cb) > 0) {
     tables_cb <- do.call(plyr::rbind.fill, res_cb)
+    tables_cb[is.na(tables_cb$PROJETO), "PROJETO"] <-
+      tables_cb[is.na(tables_cb$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_cb[is.na(tables_cb$PROJETO), "PROJETO"] <-
+      tables_cb[is.na(tables_cb$PROJETO), "PROJETO_PUBLICACAO"]
     minerais <- do.call(rbind, min)
     minerais <- sort(unique(minerais$mineral))
 
@@ -624,7 +651,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   ## Arrumar dados de Concentrado de Bateia - Análises químicas-----------------
   if (length(res_cb_gq) > 0) {
     tables_cb_gq <- do.call(plyr::rbind.fill, res_cb_gq)
-    tables_cb_gq <-
+    tables_cb_gq[is.na(tables_cb_gq$PROJETO), "PROJETO"] <-
+      tables_cb_gq[is.na(tables_cb_gq$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_cb_gq[is.na(tables_cb_gq$PROJETO), "PROJETO"] <-
+      tables_cb_gq[is.na(tables_cb_gq$PROJETO), "PROJETO_PUBLICACAO"]
+
+        tables_cb_gq <-
       data.frame(lapply(tables_cb_gq, function(x)
         gsub(".", ",", x,
              fixed = TRUE)))
@@ -706,6 +738,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   ## Arrumar dados de Rocha - Análises químicas---------------------------------
   if (length(res_r) > 0) {
     tables_r <- do.call(plyr::rbind.fill, res_r)
+    tables_r[is.na(tables_r$PROJETO), "PROJETO"] <-
+      tables_r[is.na(tables_r$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_r[is.na(tables_r$PROJETO), "PROJETO"] <-
+      tables_r[is.na(tables_r$PROJETO), "PROJETO_PUBLICACAO"]
+
     tables_r <-
       data.frame(lapply(tables_r, function(x)
         gsub(".", ",", x,
@@ -789,6 +826,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   ## Arrumar dados de Solo - Análises químicas----------------------------------
   if (length(res_l) > 0) {
     tables_l <- do.call(plyr::rbind.fill, res_l)
+    tables_l[is.na(tables_l$PROJETO), "PROJETO"] <-
+      tables_l[is.na(tables_l$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_l[is.na(tables_l$PROJETO), "PROJETO"] <-
+      tables_l[is.na(tables_l$PROJETO), "PROJETO_PUBLICACAO"]
     tables_l <-
       data.frame(lapply(tables_l, function(x)
         gsub(".", ",", x,
@@ -871,6 +912,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   ## Arrumar dados de  Minerio - Análises químicas------------------------------
   if (length(res_m) > 0) {
     tables_m <- do.call(plyr::rbind.fill, res_m)
+    tables_m[is.na(tables_m$PROJETO), "PROJETO"] <-
+      tables_m[is.na(tables_m$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_m[is.na(tables_m$PROJETO), "PROJETO"] <-
+      tables_m[is.na(tables_m$PROJETO), "PROJETO_PUBLICACAO"]
     tables_m <-
       data.frame(lapply(tables_m, function(x)
         gsub(".", ",", x,

@@ -5,7 +5,7 @@
 #' no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca
 #' num diretório temporário e depois salva arquivos csv para cada classe e para
 #' todas as classes. É preciso ter o cuidado de só colocar para rodar arquivos
-#' semelhantes aos do modelo. Arquivos excel devem xlsx as mascaras das tabelas
+#' semelhantes aos do modelo. Arquivos excel devem xlsx as máscaras das tabelas
 #' de atributos devem ser padronizadas.
 #' @param folhas Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 #' o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente

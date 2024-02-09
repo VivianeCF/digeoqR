@@ -20,11 +20,11 @@
 arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                                dir_in = "inputs/projetos/",
                                dir_out = "outputs/" ) {
-  #Ler arquivo das áreas--------------------------------------------------------
+# Ler arquivo das áreas--------------------------------------------------------
   folhas_po <- sf::st_read(folhas, quiet = TRUE)
   colnames(folhas_po)[1] <- "layer"
 
-  ## Definições dos diretórios--------------------------------------------------
+# Definições dos diretórios--------------------------------------------------
   arquivos_rigeo <-
     list.files(dir_in, pattern = "\\.zip$", full.names = TRUE)
   info <-
@@ -43,7 +43,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         "job"
       )
     )
-  ## Criar variáveis------------------------------------------------------------
+# Criar variáveis---------------------------------------------------------------
   res_sc <- list()
   res_cb <- list()
   res_cb_gq <- list()
@@ -72,7 +72,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       "Lab"
     )
 
-  ## Ler arquivos Zip e gerar listas de dados de cada classe de amostra---------
+# Ler arquivos Zip e gerar listas de dados de cada classe de amostra------------
   for (i in 1:length(arquivos_rigeo)) {
     ind_dup <- 0
     observacao <- 0
@@ -96,8 +96,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     x <-  x[order(x$Name),]
     from <- sort(list.files(temp, full.names = TRUE, pattern = "xlsx"))
     file.rename(from, paste0(temp, "/", x$Name))
-
-
+# Filtros-----------------------------------------------------------------------
+## Bateia-----------------------------------------------------------------------
     filtered_df_bateia <-
       dplyr::filter(x,
                     grepl("Mineralometria",
@@ -168,7 +168,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         res_cb[[i]] <- data_cb_join
       }
     }
-# Sedimento
+## Sedimento-------------------------------------------------------------------
     filtered_df_sedimento <-
       dplyr::filter(x,
                     grepl("Sedimento de Corrente",
@@ -228,7 +228,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         res_sc[[i]] <-  data_sc_join
       }
     }
-# Bateia Química
+
+## Bateia Química--------------------------------------------------------------
     filtered_df_bateia_gq <-
       dplyr::filter(x,
                     grepl("mica Concentrado de Bateia",
@@ -285,8 +286,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         res_cb_gq[[i]] <-  data_cb_gq_join
 
       }
-# Solo
     }
+## Solo --------------------------------------------------------------------
+
     filtered_df_solo <- dplyr::filter(x, grepl("Geoquimica Solo",
                                                Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo2 <-
@@ -334,7 +336,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       }
     }
 
-# Rocha
+## Rocha ----------------------------------------------------------------------
     filtered_df_rocha <- dplyr::filter(x, grepl("mica Rocha",
                                                 Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha2 <-
@@ -379,7 +381,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       }
     }
 
-# Minério
+## Minério --------------------------------------------------------------------
     filtered_df_minerio <-
       dplyr::filter(x,
                     grepl("mica_Mineral",
@@ -433,19 +435,22 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     print(arquivos_rigeo[i])
     print(i)
   }
-
-
-  ## Arrumar dados de Sedimento de Corrente - Análises químicas-----------------
+# Arruma os dados de cada classe de amostra-------------------------------------
+ ## Sedimento de Corrente - Análises químicas-----------------------------------
   if (length(res_sc) > 0) {
+    # Tranforma a lista de dados da classe em uma única tabela
     tables_sc <- do.call(plyr::rbind.fill, res_sc)
+
+    # Garante que o campo projeto tenha todos os nomes
     tables_sc[is.na(tables_sc$PROJETO), "PROJETO"] <-
-      tables_sc[is.na(tables_sc$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_sc[is.na(tables_sc$PROJETO), "PROJETO_AMOSTRAGEM"]
     tables_sc[is.na(tables_sc$PROJETO), "PROJETO"] <-
       tables_sc[is.na(tables_sc$PROJETO), "PROJETO_PUBLICACAO"]
     tables_sc <-
       data.frame(lapply(tables_sc, function(x)
         gsub(".", ",", x,
              fixed = TRUE)))
+    # Grava
     write.csv2(tables_sc, paste0(dir_out, "integrada_rigeo_sc.csv"),
                row.names = FALSE)
 
@@ -468,6 +473,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       tables_sc[is.na(tables_sc$LATITUDE), "LAT"]
     tables_sc[is.na(tables_sc$LONGITUDE), "LONGITUDE"] <-
       tables_sc[is.na(tables_sc$LONGITUDE), "LONG"]
+
     ## Extrai códigos das folhas das estações (wgs84)
     crs_SIRGAS2000 <-
       "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
@@ -484,6 +490,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
 
+    # Recupera os nomes dos elementos da tabela e padroniza tabela
     elem <-
       dplyr::select(estacoes_folhas_sc, contains(c("_PPM", "_PCT", "_PPB")))
     elem <- dplyr::select(elem,!contains("COMPOS"))
@@ -494,7 +501,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     colnames(estacoes_folhas_sc)[7] <- "PROJETO"
     colnames(estacoes_folhas_sc)[2] <- "N_LAB"
     colnames(estacoes_folhas_sc)[4:5] <- c("LONG", "LAT")
-    ## Cria Base
+    ## Cria campo Base com nome da fonte de dados
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_sc))
 
     ## Gera dataframe organizado
@@ -524,15 +531,22 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
   }
   ## Arrumar dados de Concentrado de Bateia - Mineralometria--------------------
   if (length(res_cb) > 0) {
+    # Tranforma a lista de dados da classe em uma única tabela
     tables_cb <- do.call(plyr::rbind.fill, res_cb)
+
+    # Garante que o campo projeto tenha todos os nomes
     tables_cb[is.na(tables_cb$PROJETO), "PROJETO"] <-
-      tables_cb[is.na(tables_cb$PROJETO), "PROJETO_AMOSTRAGEM"]
+    tables_cb[is.na(tables_cb$PROJETO), "PROJETO_AMOSTRAGEM"]
     tables_cb[is.na(tables_cb$PROJETO), "PROJETO"] <-
       tables_cb[is.na(tables_cb$PROJETO), "PROJETO_PUBLICACAO"]
+
+    # Recupera os nomes dos minerais da tabela
     minerais <- do.call(rbind, min)
     minerais <- sort(unique(minerais$mineral))
 
-    # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
+    # Padroniza os nomes dos campos
+    # Isso pode não ser necessário se a fonte dos dados for padronizada
+    ## Nomes dos campos das tabelas
     colnames(tables_cb) <-
       gsub("\u00c1", "A", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <-
@@ -557,8 +571,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                                 fixed = TRUE)
     colnames(tables_cb) <- gsub("CENTRO_CUS", "CENTRO_CUSTO", colnames(tables_cb),
                                 fixed = TRUE)
-
-    # Isso pode não ser necessário se adotarmos nomenclatura mineral padronizada
+    # nomes dos minerais
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
     minerais <- gsub("\u00c3", "A", minerais, fixed = TRUE)
     minerais <- gsub("\u00c2", "A", minerais, fixed = TRUE)
@@ -573,21 +586,25 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     minerais <- gsub(",", "_", minerais, fixed = TRUE)
     minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
     minerais <- unique(minerais)
+
+    # Retira campos que não são minerais
     minerais <-
       minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL", "P_TOTAL_G"))]
-    # info
 
+    # Padroniza e Organiza a tabela de dados da classe
     tables_cb <-
-      tables_cb[, c(toupper(intersect(toupper(info), colnames(tables_cb))), c("LONGITUDE", "LATITUDE"), minerais)]
+      tables_cb[, c(toupper(intersect(toupper(info), colnames(tables_cb))),
+                    c("LONGITUDE", "LATITUDE"), minerais)]
 
+    # Cria varável Lab unindo LEITURA e ABERTURA
     tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
-    # colnames(tables_cb) <- gsub(".", "_",colnames(tables_cb), fixed = TRUE)
-    write.csv2(tables_cb, paste0(dir_out, "integrada_rigeo_cb.csv"), row.names = FALSE)
+    # Grava arquivo com todas as amostras da classe
+    write.csv2(tables_cb, paste0(dir_out, "integrada_rigeo_cb.csv"),
+               row.names = FALSE)
 
-
-    colnames(tables_cb)
+    # Remodela os dados para ficar com campos Mineral e value
     dfp <- tidyr::pivot_longer(
       data = tables_cb,
       cols =  minerais,
@@ -595,6 +612,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       values_to = "value"
     )
 
+    # Padroniza o campo de valores
     dfp$value <- gsub(" ", "", dfp$value)
     dfp$value <- gsub("%", "", dfp$value)
     dfp$value <- gsub("%", "", dfp$value)
@@ -612,18 +630,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     dfp$value <- stringr::str_replace(dfp$value, ">75", "> 75 %")
     dfp$value <- stringr::str_replace(dfp$value, "\\.", ",")
 
-    unique(dfp$value)
-    # Pivotar para minerais nas colunas
-    dados_wilder <- dfp %>%
+    # Remodela para dados dos minerais ficar nas colunas
+    df_cb_tidy <- dfp %>%
       tidyr::pivot_wider(names_from = Mineral,
                          values_from = value)
-    names(dados_wilder)
-    #unificar valores de minerais duplicados na base
-    ## não tem
 
-    df_cb_tidy <- dados_wilder
-    colnames(df_cb_tidy)
-
+    # Cria uma chave única para cada amostra
     ID <- seq(1, nrow(df_cb_tidy))
     df_cb_tidy <- data.frame(ID, df_cb_tidy)
 
@@ -636,7 +648,6 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                       fixed = TRUE))
 
     ## Extrai códigos das folhas das estações (wgs84)
-
     crs_SIRGAS2000 <-
       "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
     xy <- df_cb_tidy[, c("LONGITUDE", "LATITUDE")]
@@ -651,19 +662,21 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     estacoes_folhas_cb <-
       as.data.frame(sf::st_join(spdf  , left = TRUE,
                                 folhas_po["layer"]))
-    selecionadas
-
+    # Cria um campo para a fonte dos dados = BASE
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
     estacoes_folhas_cb <-  data.frame(BASE, estacoes_folhas_cb)
+
+    # Renomeia coluna com nomes dos projetos
     colnames(estacoes_folhas_cb)[3] <- "PROJETO"
 
-
+    # Padroniza a planilha de dados
     estacoes_folhas_cb <-
       estacoes_folhas_cb[, c(selecionadas, minerais)]
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
 
+    # Grava o arquivo csv com os dados da classe no diretório escolhido
     write.table(
       estacoes_folhas_cb ,
       paste0(dir_out, "cb_tidy.csv"),
@@ -672,7 +685,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       dec = ",",
       sep = ";"
     )
-    #Pivoteia e une as base
+    #Remodela os dados para ter os campos Analito e Valor
     lista_pivo[[2]] <- estacoes_folhas_cb %>%
       tidyr::pivot_longer(
         cols = minerais,
@@ -680,7 +693,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         values_to = "Valor"
       )
   }
-  ## Arrumar dados de Concentrado de Bateia - Análises químicas-----------------
+  ## Concentrado de Bateia - Análises químicas----------------------------------
   if (length(res_cb_gq) > 0) {
     tables_cb_gq <- do.call(plyr::rbind.fill, res_cb_gq)
     tables_cb_gq[is.na(tables_cb_gq$PROJETO), "PROJETO"] <-
@@ -767,7 +780,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         values_to = "Valor"
       )
   }
-  ## Arrumar dados de Rocha - Análises químicas---------------------------------
+  ## Rocha - Análises químicas--------------------------------------------------
   if (length(res_r) > 0) {
     tables_r <- do.call(plyr::rbind.fill, res_r)
     tables_r[is.na(tables_r$PROJETO), "PROJETO"] <-
@@ -855,7 +868,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         values_to = "Valor"
       )
   }
-  ## Arrumar dados de Solo - Análises químicas----------------------------------
+  ## Solo - Análises químicas---------------------------------------------------
   if (length(res_l) > 0) {
     tables_l <- do.call(plyr::rbind.fill, res_l)
     tables_l[is.na(tables_l$PROJETO), "PROJETO"] <-
@@ -941,7 +954,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         values_to = "Valor"
       )
   }
-  ## Arrumar dados de  Minerio - Análises químicas------------------------------
+  ## Minerio - Análises químicas------------------------------------------------
   if (length(res_m) > 0) {
     tables_m <- do.call(plyr::rbind.fill, res_m)
     tables_m[is.na(tables_m$PROJETO), "PROJETO"] <-
@@ -1031,9 +1044,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         values_to = "Valor"
       )
   }
-  ## Une as bases --------------------------------------------------------------
+  # Une as bases ---------------------------------------------------------------
   unido <- do.call(plyr::rbind.fill, lista_pivo)
   unido <- unido[!is.na(unido$Valor), ]
 
-  write.csv2(unido, paste0(dir_out, "toda_base_integral_rigeo.csv"), row.names = FALSE)
+  write.csv2(unido, paste0(dir_out, "toda_base_integral_rigeo.csv"),
+             row.names = FALSE)
 }

@@ -83,9 +83,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     x <- unzip(arquivos_rigeo[i], list = TRUE)
     x <- x %>%
       dplyr::filter((stringr::str_detect(Name, 'xlsx')))
-    x <-  x[order(x$Name),]
+
     x_org <- x
     x$Name <- iconv(x$Name,  "IBM437",  "UTF-8")
+    x <-  x[order(x$Name),]
     from <- sort(list.files(temp, full.names = TRUE, pattern = "xlsx"))
     file.rename(from, paste0(temp, "/", x$Name))
 

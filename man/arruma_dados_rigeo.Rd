@@ -20,12 +20,12 @@ o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
 }
 \description{
 Prepara os dados disponibilizados pelo SGB-CPRM. Estes dados
-estão em parte na área de download do GOSGB e em parte no link dos projetos
+estão em parte na área de download do GEOSGB e em parte no link dos projetos
 no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca
 num diretório temporário e depois salva arquivos csv para cada classe e para
 todas as classes. É preciso ter o cuidado de só colocar para rodar arquivos
-semelhantes aos do modelo. Arquivos excel devem xlsx as mascaras das tabelas
-de atributos devem ser padronizadas.
+semelhantes aos do modelo. Arquivos excel devem xlsx e as máscaras das
+tabelas de atributos devem ser padronizadas.
 }
 \examples{
 #arruma_dados_rigeo()

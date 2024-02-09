@@ -1,12 +1,12 @@
 #' Recupera dados geoquímicos do Rigeo
 #'
 #' Prepara os dados disponibilizados pelo SGB-CPRM. Estes dados
-#' estão em parte na área de download do GOSGB e em parte no link dos projetos
+#' estão em parte na área de download do GEOSGB e em parte no link dos projetos
 #' no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca
 #' num diretório temporário e depois salva arquivos csv para cada classe e para
 #' todas as classes. É preciso ter o cuidado de só colocar para rodar arquivos
-#' semelhantes aos do modelo. Arquivos excel devem xlsx as máscaras das tabelas
-#' de atributos devem ser padronizadas.
+#' semelhantes aos do modelo. Arquivos excel devem xlsx e as máscaras das
+#' tabelas de atributos devem ser padronizadas.
 #' @param folhas Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 #' o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente
 #' @param dir_in Diretório onde estão os arqivos zip de protos do DGM
@@ -1044,10 +1044,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
         values_to = "Valor"
       )
   }
-  # Une as bases ---------------------------------------------------------------
+  # Une e grava todas bases da lista -------------------------------------------
   unido <- do.call(plyr::rbind.fill, lista_pivo)
   unido <- unido[!is.na(unido$Valor), ]
-
+  # Grava a base integrada com todas classes e projetos
   write.csv2(unido, paste0(dir_out, "toda_base_integral_rigeo.csv"),
              row.names = FALSE)
 }

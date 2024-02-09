@@ -2,14 +2,7 @@
 % Please edit documentation in R/arruma_dados_rigeo.R
 \name{arruma_dados_rigeo}
 \alias{arruma_dados_rigeo}
-\title{Recupera dados geoquímicos do Rigeo
-Prepara os dados disponibilizados pelo SGB-CPRM. Estes dados
-estão em parte na área de download do GOSGB e em parte no link dos projetos
-no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca
-num diretório temporário e depois salva arquivos csv para cada classe e para
-todas as classes. É preciso ter o cuidado de só colocar para rodar arquivos
-semelhantes aos do modelo. Arquivos excel devem xlsx as mascaras das tabelas
-de atributos devem ser padronizadas.}
+\title{Recupera dados geoquímicos do Rigeo}
 \usage{
 arruma_dados_rigeo(
   folhas = "inputs/campo/folhas.shp",
@@ -26,7 +19,6 @@ o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
 \item{dir_out}{Diretório para gravação das planilhas de dados}
 }
 \description{
-Recupera dados geoquímicos do Rigeo
 Prepara os dados disponibilizados pelo SGB-CPRM. Estes dados
 estão em parte na área de download do GOSGB e em parte no link dos projetos
 no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca

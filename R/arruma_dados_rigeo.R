@@ -1,4 +1,5 @@
 #' Recupera dados geoquímicos do Rigeo
+#'
 #' Prepara os dados disponibilizados pelo SGB-CPRM. Estes dados
 #' estão em parte na área de download do GOSGB e em parte no link dos projetos
 #' no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca

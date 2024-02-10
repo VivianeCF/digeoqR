@@ -73,8 +73,7 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
     # Une os dados de campo às amostras
     df_base <-
       dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))
-    out <- data.frame()
-    out <- df_base
+
   }
 # Base de dados do QFIELD
     if(tipo_base == 3){
@@ -88,10 +87,45 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
       df_base <-
         dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))
 
-      out <- data.frame()
-      out <- df_base
-
   }
+  if(tipo_base %in% 2:3){
+    lista_osq <- list()
+    lista_osm <- list()
+    dir_os <- "inputs/os/"
+    os <- list.files(dir_os)
+    os_mineral <- os[stringr::str_detect(os, "mineral")]
+    os_quimica <- os[stringr::str_detect(os, "quimica")]
+    for(i in 1:length(os_quimica)){
+      lista_osq[[i]] <- readxl::read_xlsx(paste0(dir_os, os_quimica[i]),
+                                         sheet = "Dados Amostras")
+    }
+    for(i in 1:length(os_mineral)){
+      lista_osm[[i]] <- readxl::read_xlsx(paste0(dir_os, os_mineral[i]),
+                                         sheet = "Dados Amostras")
+    }
+    os <- do.call(dplyr::bind_rows,lista_osq)
+    ncampo <- os[!is.na(os$...4),4]
+    nlab <- os[!is.na(os$...7),7]
+    df <- data.frame(ncampo, nlab)
+    df <- drop_na(df)
+    df <- df[df$...4 != "Número de Campo", ]
+    colnames(df) <- c("NUM_CAMPO", "NUM_LAB")
+    df_base1 <-
+      dplyr::inner_join(df_base, df, by = c("cd_numero_campo"= "NUM_CAMPO"))
 
+    os <- do.call(dplyr::bind_rows,lista_osm)
+    ncampo <- os[!is.na(os$...4),3]
+    nlab <- os[!is.na(os$...7),4]
+    df <- data.frame(ncampo, nlab)
+    df <- drop_na(df)
+    df <- df[df$...3 != "Número de Campo", ]
+    colnames(df) <- c("NUM_CAMPO", "NUM_LAB")
+    df_base2 <-
+      dplyr::inner_join(df_base, df, by = c("cd_numero_campo"= "NUM_CAMPO"))
+    df_base <- data.frame(rbind(df_base1, df_base2))
+    df_base <-  df_base[, -ncol(df_base)]
+    out <- data.frame()
+    out <- df_base
+}
   return(out)
 }

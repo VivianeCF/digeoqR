@@ -7,6 +7,7 @@
 #' @param tipo_base Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
 #' @param dir_base Diretório da base de dados de campo
 #' @param base_campo Nome da base de dados de campo
+#' @param dir_os Diretório das OS(ordens de serviço)
 #'
 #' @return
 #' Retorna uma tabela com os dados de campo
@@ -14,7 +15,7 @@
 #'
 #' @examples
 #'
-extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
+extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
 # Base de dados do fcampo (mdb) ------------------------------------------------
     if (tipo_base == 1) {
     con <-

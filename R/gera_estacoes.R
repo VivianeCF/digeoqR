@@ -212,7 +212,7 @@ gera_estacoes <-
     ## Remove área de sobreposição do buffer dos rios - suprime alertas
     linhas <- stream_model  %>% sf::st_transform(4326)
     outlet <- joins_area  %>% sf::st_transform(4326)
-    sf::sf_use_s2(FALSE)
+    suppressMessages({sf::sf_use_s2(FALSE)})
     res_ls <-
       suppressWarnings({
         suppressMessages({

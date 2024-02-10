@@ -10,15 +10,15 @@
 #'@param limite nome do arquivo da área do projeto
 #'@param massa_dagua nome do arquivo da massa d'água
 #'@param area_urbana nome do arquivo da área urbana
-#' @param estacoes Estações geradas a partir da drenagem modelada
-#' @param srtm DEM da área
-#' @param EPSG Sistema de coordenadas
-#' @param threshold Valor de corte da área das bacias modeladas
-#' @param min_length Comprimento mínimo do curso do rio
-#' @param max_ordem Ordem Strhaler máxima para a validaçãon da estação
-#' @param dir_campo Diretório dos dados espaciais
-#' @param dir_dem Diretório da imagem tif srtm
-#' @param dir_out Diretório de saída
+#'@param estacoes Estações geradas a partir da drenagem modelada
+#'@param srtm DEM da área
+#'@param EPSG Sistema de coordenadas
+#'@param threshold Valor de corte da área das bacias modeladas
+#'@param min_length Comprimento mínimo do curso do rio
+#'@param max_ordem Ordem Strhaler máxima para a validaçãon da estação
+#'@param dir_shp Diretório dos dados espaciais
+#'@param dir_dem Diretório da imagem tif srtm
+#'@param dir_out Diretório de saída
 #'
 #'@return Imagem (.png) do mapa de planejamento preliminar.
 #'Arquivo da shape (shp) das estações.
@@ -28,7 +28,7 @@
 #' #gera_estacoes()
 #'
 gera_estacoes <-
-  function(dir_campo = "inputs/campo/", dir_dem = "inputs/imagens/",
+  function(dir_shp = "inputs/campo/", dir_dem = "inputs/imagens/",
            dir_out = "outputs/",
            limite = "carta_100M.shp",
            area_urbana = "area_urbana.shp",
@@ -46,23 +46,23 @@ gera_estacoes <-
     wbt_wd <- tempdir(check = TRUE)
     options("rgdal_show_exportToProj4_warnings" = "none")
     whitebox::wbt_rasterize_streams(
-      paste0(dir_campo, rios),
+      paste0(dir_shp, rios),
       base = base,
       output = "network_topage.tif",
       nodata = 0,
       wd = wbt_wd
     )
 
-    # Burn this river network on the DEM
-    # We will neglect the effect of the road embankments at this DEM resolution of 100m
-    # by creating an empty shapefile for roads
+    # Queime a rede fluvial no DEM
+    # Vamos negligenciar o efeito dos aterros rodoviários no DEM de 30m
+    # criando um shapefile vazio para as estradas
     sf::write_sf(
       sf::st_sfc(sf::st_multilinestring(), crs = 4326),
       file.path(wbt_wd, "roads.shp"),
       delete_layer = TRUE,
       quiet = TRUE
     )
-    network_topage <- sf::read_sf(paste0(dir_campo, rios))
+    network_topage <- sf::read_sf(paste0(dir_shp, rios))
     sf::write_sf(
       network_topage,
       file.path(wbt_wd, "network_topage.shp"),
@@ -76,52 +76,55 @@ gera_estacoes <-
       output = "dem_100m_burn.tif",
       wd = wbt_wd
     )
-    # Remove the depressions on the DEM
+    # Remove as depressões no DEM
     whitebox::wbt_fill_depressions(dem = "dem_100m_burn.tif",
                                    output = "dem_fill.tif",
                                    wd = wbt_wd)
 
-    # Flow direction raster
+    # Atribui nome ao arquivo ponteiro d8
+    output_d8_pntr <- "d8.tif"
+
+    # Raster de direção do fluxo
     whitebox::wbt_d8_pointer(dem = "dem_fill.tif",
-                             output = "d8.tif",
+                             output =  output_d8_pntr,
                              wd = wbt_wd)
 
-    # Compute flow accumulation
+    # Computa o acúmulo de fluxo
     whitebox::wbt_d8_flow_accumulation(
-      input = "d8.tif",
+      input =  output_d8_pntr,
       pntr = TRUE,
       output = "facc.tif",
       wd = wbt_wd
     )
 
-    # Extract a stream network (threshold = 1 km2) consistent with flow direction
+    # Extrai uma rede de fluxo (limite = número de células) consistente
+    # com a direção do fluxo
     whitebox::wbt_extract_streams(
       flow_accum =  "facc.tif",
       threshold = threshold,
-      # 100 cells for 1 km2
+      # 100 células = 1 km2
       output = "network_1km2.tif",
       zero_background = TRUE,
       wd = wbt_wd
     )
 
+    # Remove pequenos trechos da rede fluvial
     whitebox::wbt_remove_short_streams(
-      d8_pntr = "d8.tif",
+      d8_pntr =  output_d8_pntr,
       streams = "network_1km2.tif",
       output = "network_d8.tif",
       min_length = min_length,
       wd = wbt_wd
     )
 
-    output_d8_pntr <- "d8.tif"
-    #
+    # Converte a rede fluvial de raster para vetor
     whitebox::wbt_raster_streams_to_vector("network_d8.tif",
-                                           "d8.tif",
+                                           output_d8_pntr,
                                            output = "network_d8.shp",
                                            wd = wbt_wd)
     stream_model <- sf::read_sf(file.path(wbt_wd, "network_d8.shp"))
-    # class(crs_wgs84)
 
-    # cat(crs_wgs84$wkt)
+    # Estabelece o sistema de coordenadas
     sf::st_crs(stream_model) <- EPSG
 
     # Gera drenagem classificada strahler
@@ -130,35 +133,44 @@ gera_estacoes <-
                                         "network_d8.tif",
                                         output_order,
                                         wd = wbt_wd)
+
+    # Atribui nome do arquivo da drenagem ordenada
     output_drenagem_ord <- "stream_strahler.shp"
+
+    # Converte a drenagem odenada de raster para vetor
     whitebox::wbt_raster_streams_to_vector(output_order,
                                            output_d8_pntr,
                                            output_drenagem_ord,
                                            wd = wbt_wd)
+
+     # Lê arquivo da drenagem gerado
     stream_strahler <-
       sf::read_sf(file.path(wbt_wd, "stream_strahler.shp"))
+
+    # Projeta para o sistema de coordenadas escolhido
     sf::st_crs(stream_strahler) <- EPSG
+
+    # Salva arquivo da drenagem ordenada na pasta escolhida
     sf::write_sf(stream_strahler,
-                 "outputs/stream_strahler.shp",
+                 paste0(dir_out, "stream_strahler.shp"),
+                 delete_layer = TRUE)
+    # Salva arquivo da drenagem modelada na pasta escolhida
+    sf::write_sf(stream_model, paste0(dir_out, "stream_model.shp"),
                  delete_layer = TRUE)
 
-    sf::write_sf(stream_model, "outputs/stream_model.shp", delete_layer = TRUE)
-
-    # suppressWarnings(suppressMessages(library(sf)))
-    ## Extrair vértices dos rios
-    ## Lê shape dos rios
-    ## Gera ESTAÇÕES ---------------------------------------------------------------
+    ## Gera ESTAÇÕES -----------------------------------------------------------
     ## Lê limite da area do projeto
-    area <- sf::read_sf(paste0(dir_campo, limite))
+    area <- sf::read_sf(paste0(dir_shp, limite))
 
     ## Lê massa d'água
-    massa_dagua <- sf::read_sf(paste0(dir_campo,massa_dagua))
+    massa_dagua <- sf::read_sf(paste0(dir_shp,massa_dagua))
 
     ## Lê área urbana
-    area_urbana <- sf::read_sf(paste0(dir_campo,area_urbana))
+    area_urbana <- sf::read_sf(paste0(dir_shp,area_urbana))
 
+    # Cria objeto lista para a saída
     out <- list()
-    ## Encontrar vértices das junções
+    ## Encontra vértices das junções
 
     # Simplify river shapefile
     shape_river_simple <- stream_model %>%
@@ -167,7 +179,7 @@ gera_estacoes <-
         sf::st_union()
       })
 
-    # Convert shapefile to point object
+    # Converte shapefile em objeto ponto - suprime mensagens de alerta
     river_to_points <- suppressWarnings({
       shape_river_simple %>%
         sf::st_as_sf() %>%
@@ -175,7 +187,7 @@ gera_estacoes <-
         dplyr::mutate(id = 1:nrow(.))
     })
 
-    # Check points that overlap
+    # Procura pontos que estão sobrepostos
     joins_selection <- river_to_points %>%
       sf::st_equals() %>%
       Filter(function(x) {
@@ -185,12 +197,11 @@ gera_estacoes <-
       unlist() %>%
       unique()
 
-    # Filter original point shapefile to retain only confluences
+    # Filtra shapefile do ponto original para obter só as confluências
     river_joins <- river_to_points %>%
       dplyr::filter(id %in% joins_selection)
 
     ## Criar buffer circular das junções (100 metros de raio)
-    # Buffer around the points
     joins_area <-
       suppressMessages({
         suppressWarnings({
@@ -198,7 +209,7 @@ gera_estacoes <-
         })
       })
 
-    ## Remover sobreposição buffer dos rios
+    ## Remove área de sobreposição do buffer dos rios - suprime alertas
     linhas <- stream_model  %>% sf::st_transform(4326)
     outlet <- joins_area  %>% sf::st_transform(4326)
     sf::sf_use_s2(FALSE)
@@ -208,11 +219,13 @@ gera_estacoes <-
           sf::st_difference(linhas, sf::st_union(outlet))
         })
       })
-    ep <- lwgeom::st_endpoint(res_ls)
-    p <- as.data.frame(do.call("rbind", ep))
+    # Acha os pontos finais dos trechos de drenagem resultantes
+    ep <- lwgeom::st_endpoint(res_ls) # lista todos os pontos
+    p <- as.data.frame(do.call("rbind", ep)) # convrte lista em data frame
+
+    # Converte tabela de coordenadas em dados espaciais
     pontos_originais <-
       sf::st_as_sf(p, coords = c("V1", "V2"), crs = 4326)
-
 
     ## Pontos selecionados pelo filtro de localização --------------------------
     ## Extrair pontos dentro da carta 100 mil
@@ -264,7 +277,7 @@ gera_estacoes <-
       ))
 
     png(
-      paste0("outputs/", "mapa_plan_ini.png"),
+      paste0(dir_out, "mapa_plan_ini.png"),
       units = "cm",
       width = 16,
       height = 16,

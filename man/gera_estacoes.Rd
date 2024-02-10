@@ -5,7 +5,7 @@
 \title{Gera estações nas confluências dos rios}
 \usage{
 gera_estacoes(
-  dir_campo = "inputs/campo/",
+  dir_shp = "inputs/campo/",
   dir_dem = "inputs/imagens/",
   dir_out = "outputs/",
   limite = "carta_100M.shp",
@@ -21,7 +21,7 @@ gera_estacoes(
 )
 }
 \arguments{
-\item{dir_campo}{Diretório dos dados espaciais}
+\item{dir_shp}{Diretório dos dados espaciais}
 
 \item{dir_dem}{Diretório da imagem tif srtm}
 

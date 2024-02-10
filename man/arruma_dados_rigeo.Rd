@@ -14,7 +14,7 @@ arruma_dados_rigeo(
 \item{folhas}{Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
 
-\item{dir_in}{Diretório onde estão os arqivos zip de protos do DGM}
+\item{dir_in}{Diretório onde estão os arqivos zip de prontos do DGM}
 
 \item{dir_out}{Diretório para gravação das planilhas de dados}
 }

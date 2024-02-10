@@ -9,7 +9,7 @@
 #' tabelas de atributos devem ser padronizadas.
 #' @param folhas Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 #' o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente
-#' @param dir_in Diretório onde estão os arqivos zip de protos do DGM
+#' @param dir_in Diretório onde estão os arqivos zip de prontos do DGM
 #' @param dir_out Diretório para gravação das planilhas de dados
 
 #' @return

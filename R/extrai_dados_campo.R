@@ -52,9 +52,45 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
     colnames(df_base)[1] <- "N_LAB"
     out <- data.frame()
     out <- df_base
-  } else{
-    out <- data.frame()
   }
   RODBC::odbcCloseAll()
+
+  if(tipo_base == 2){
+    # Lê arquivos do geodatabase
+    # Lista o que está na base
+    df <- st_layers( paste0(dir_base, base_campo, ".gdb"))
+
+    # Recupera nome da layer de pontos
+    pontos <- df[["name"]][1]
+
+    # Lê os dados da Base (pontos e amostras)
+    pontos <- st_read(paste0(dir_base, base_campo, ".gdb"),
+                      layer = pontos, quiet = TRUE)
+    amostras <-   st_read(paste0(dir_base, base_campo, ".gdb"),
+                          layer = "amostras", as_tibble = TRUE, quiet = TRUE)
+
+    # Une os dados de campo às amostras
+    df_base <-
+      dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))
+    out <- data.frame()
+    out <- df_base
+  }
+
+    if(tipo_base == 3){
+      # Lê arquivo no geopackage
+      # Dados das amostras
+      amostras <- st_read(paste0(dir_base, base_campo, ".gpkg"),
+                          layer = "amostras", as_tibble = TRUE, quiet = TRUE)
+      # Dados espaciais
+      pontos <- st_read(paste0(dir_base, base_campo, ".gpkg"),
+                               layer = "pontos_de_coleta", quiet = TRUE)
+      df_base <-
+        dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))
+
+      out <- data.frame()
+      out <- df_base
+
+  }
+
   return(out)
 }

@@ -10,17 +10,18 @@
 #' @param dir_bol Diretório dos boletins analíticos ex: "inputs/qumica/R/"
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 #'   corrente, 3 = rocha, 4 = solo, 5 = água
+#' @param dir_base Diretório dos dados de campo
+#' @param base_campo Nome do arquivo das bases de campo
 #' @param tipo_base tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
-#' @param nome_base nome da base de dados de campo
 #'
 #'@return Retorna a lista com as bases de dados em diferentes formatos
 #'  transformados ou brutos, pivotados ou não.
 #'@export
 #' @examples
 #' #prepara_bases(dir_bol = "inputs/quimica/R/",classe_am = 4,analise = 2,
-#' dir_base = "inputs/campo/", tipo_base = 1, nome_base = "fcampo" )
+#' dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
-                          tipo_base, nome_base = "fcampo" ) {
+                          tipo_base, base_campo ) {
   out <- list()
   a <- c("mineral", "química")
   t <-
@@ -31,7 +32,7 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
       "ÁGUA")
   if (analise == 2) {
     quimica <- le_boletim_quimica(classe_am, dir_bol)
-    dados_campo <- extrai_dados_campo(tipo_base, dir_base,  nome_base)
+    dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo )
 
     # Base não pivotada
     out[[1]] <- dplyr::right_join(dados_campo,

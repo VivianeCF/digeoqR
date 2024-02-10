@@ -15,7 +15,8 @@
 #' @examples
 #'
 extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
-  if (tipo_base == 1) {
+# Base de dados do fcampo (mdb) ------------------------------------------------
+    if (tipo_base == 1) {
     con <-
       RODBC::odbcDriverConnect(
         paste(
@@ -54,7 +55,7 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
     out <- df_base
   }
   RODBC::odbcCloseAll()
-
+# Base de dados do SURVEY123
   if(tipo_base == 2){
     # Lê arquivos do geodatabase
     # Lista o que está na base
@@ -75,7 +76,7 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo) {
     out <- data.frame()
     out <- df_base
   }
-
+# Base de dados do QFIELD
     if(tipo_base == 3){
       # Lê arquivo no geopackage
       # Dados das amostras

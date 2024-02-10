@@ -1,7 +1,7 @@
 # digeoqR
-<img align="left" src="https://github.com/VivianeCF/digeoqR/assets/19269838/11efc54a-8a03-4931-a41d-c787a8aeb341/logo_digeoqR2.png" width="100" height="100">
-
 ## Ferramentas para o tratamento de dados geoquímicos 
+<img align="left" src="https://github.com/VivianeCF/digeoqR/assets/19269838/802eb027-b291-4a6a-a4ed-4ec46d7160c4/logo_digeoqR2.png" width="70.343" height="81.090">
+
 Este repositório surgiu da necessidade de ter a disposição todos os códigos que desenvolvi para o meu trabalho.
 A idéia é desenvolver um pacote de funções no R para atender a Divisão de Geoquímica do Serviço Geológico do Brasil - SGB-CPRM.
 

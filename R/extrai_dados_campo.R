@@ -87,14 +87,21 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
     if(tipo_base == 3){
       # Lê arquivo no geopackage
       # Dados das amostras
-      amostras <- st_read(paste0(dir_base, base_campo, ".gpkg"),
+      amostras <- sf::st_read(paste0(dir_base, base_campo, ".gpkg"),
                           layer = "amostras", as_tibble = TRUE, quiet = TRUE)
+      amostras <- dplyr::select(amostras, !c("objectid", "globalid", "created_date",
+                                             "created_user", "last_edited_date",
+                                             "last_edited_user"))
       # Dados espaciais
-      pontos <- st_read(paste0(dir_base, base_campo, ".gpkg"),
+      pontos <- sf::st_read(paste0(dir_base, base_campo, ".gpkg"),
                                layer = "pontos_de_coleta", quiet = TRUE)
       df_base <-
         dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))
-
+      df_base <- as.data.frame(df_base)
+      # xy <- sf::st_coordinates(df_base)
+      # df_base <- data.frame(xy, df_base)
+      # colnames(df_base)[1:2] <- c("longitude", "latitude" )
+      df_base <- dplyr::select(df_base, -"geom")
   }
   if(tipo_base %in% 2:3){
     lista_osq <- list()

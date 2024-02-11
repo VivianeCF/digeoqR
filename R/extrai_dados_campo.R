@@ -60,22 +60,29 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
   if(tipo_base == 2){
     # Lê arquivos do geodatabase
     # Lista o que está na base
-    df <- st_layers( paste0(dir_base, base_campo, ".gdb"))
+    df <- sf::st_layers( paste0(dir_base, base_campo, ".gdb"))
 
     # Recupera nome da layer de pontos
     pontos <- df[["name"]][1]
 
     # Lê os dados da Base (pontos e amostras)
-    pontos <- st_read(paste0(dir_base, base_campo, ".gdb"),
+    pontos <- sf::st_read(paste0(dir_base, base_campo, ".gdb"),
                       layer = pontos, quiet = TRUE)
-    amostras <-   st_read(paste0(dir_base, base_campo, ".gdb"),
+    amostras <- sf::st_read(paste0(dir_base, base_campo, ".gdb"),
                           layer = "amostras", as_tibble = TRUE, quiet = TRUE)
-
+    amostras <- dplyr::select(amostras, !c("globalid", "created_date",
+                                           "created_user", "last_edited_date",
+                                           "last_edited_user"))
     # Une os dados de campo às amostras
     df_base <-
       dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))
 
-  }
+    xy <- sf::st_coordinates(df_base)
+    df_base <- data.frame(xy, df_base)
+    colnames(df_base)[1:2] <- c("longitude", "latitude" )
+    df_base <- dplyr::select(df_base, -"shape")
+
+}
 # Base de dados do QFIELD
     if(tipo_base == 3){
       # Lê arquivo no geopackage

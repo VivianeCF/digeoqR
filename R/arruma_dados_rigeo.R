@@ -591,10 +591,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     minerais <-
       minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL", "P_TOTAL_G"))]
 
-    # Padroniza e Organiza a tabela de dados da classe
-    tables_cb <-
-      tables_cb[, c(toupper(intersect(toupper(info), colnames(tables_cb))),
-                    c("LONGITUDE", "LATITUDE"), minerais)]
+    # # Padroniza e Organiza a tabela de dados da classe
+    # tables_cb <-
+    #   tables_cb[, c(toupper(intersect(toupper(info), colnames(tables_cb))),
+    #                 c("LONGITUDE", "LATITUDE"), minerais)]
 
     # Cria varável Lab unindo LEITURA e ABERTURA
     tables_cb <- tables_cb %>%
@@ -666,12 +666,10 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb))
     estacoes_folhas_cb <-  data.frame(BASE, estacoes_folhas_cb)
 
-    # Renomeia coluna com nomes dos projetos
-    colnames(estacoes_folhas_cb)[3] <- "PROJETO"
+    # Resume tabela para só colunas selecionadas e minerais
+    estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, "BASE", minerais)]
 
     # Padroniza a planilha de dados
-    estacoes_folhas_cb <-
-      estacoes_folhas_cb[, c(selecionadas, minerais)]
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb)[2] <- "N_LAB"
     colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
@@ -688,7 +686,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     #Remodela os dados para ter os campos Analito e Valor
     lista_pivo[[2]] <- estacoes_folhas_cb %>%
       tidyr::pivot_longer(
-        cols = minerais,
+        cols = 11:ncol(estacoes_folhas_cb),
         names_to = "Analito",
         values_to = "Valor"
       )

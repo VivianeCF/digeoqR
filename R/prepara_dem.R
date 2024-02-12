@@ -1,46 +1,43 @@
 #' Prepara imagem de SRTM para a modelagem de terreno
 #'
 #' Recupera dados de elevação do terreno da Amazon Web Services Terrain Tile
-#' didoníveis em https://registry.opendata.aws/terrain-tiles
+#' didoníveis em https://registry.opendata.aws/terrain-tiles.
+#' Para mais detalhes visite o repositório https://github.com/jhollist/elevatr
 #'
 #'
 #' @param limite Limite da área do srtm
 #' @param EPSG Projeçao usada
 #' @param z Nível de zoom para recuperar o SRTM
-#' @param cellsize
+#' @param dir_out Diretório de saída
 #'
 #' @return
 #' @export
 #'
 #' @examples
 prepara_dem <- function(limite = "inputs/campo/area_srtm.shp",
+                        dir_out = "inputs/imagens/",
                         EPSG = 4326,
-                        z = 11,
-                        cellsize = 0.0002777777776748480143) {
-  # Set up a projection (Brazil SIRGAS-2000 projection)
+                        z = 11) {
+
+  # Configura a projeção  do Brasil: SIRGAS-2000
   area <- sf::st_read(limite)
   area <- sf::st_transform(area, crs = EPSG)
-  # Define a bbox that will encompass the catchments of the study area
+
+ # Define os vértices (bbox) que irá abranger as bacias da área de estudo
   area_bbox <- sf::st_bbox(area,
                            crs = st_crs(EPSG))
   area_loc <- sf::st_as_sfc(area_bbox) |> sf::st_sf()
 
-  # Retrieve elevation data as raster
+  # Recupera os dados de elevação como raster
   dem_raw <-
-    elevatr::get_elev_raster(area_loc,  z = z, clip = "bbox") # ~30m resolution
+    elevatr::get_elev_raster(area_loc,  z = z, clip = "bbox") # ~30m resolução
 
-  # Project and define spatial resolution:
-  # dem_100m  <- stars::st_warp(stars::st_as_stars(dem_raw), cellsize = cellsize,
-  #                             crs = st_crs(EPSG))
-  # names(dem_100m) <- "warp"
-  dem_raw <- stars::st_as_stars(dem_raw)
+  # Projeta e define a resolução espacial
+   dem_raw <- stars::st_as_stars(dem_raw)
 
-  # Set negative values (ocean) to NA
-  # dem_100m[dem_100m < 0] <- NA
-
-  # Write to file
+  # Salva srtm no diretório escolhido
   stars::write_stars(dem_raw,
-                     file.path("inputs/imagens/", "srtm.tif"))
+                     file.path(dir_out, "srtm.tif"))
 
 
 }

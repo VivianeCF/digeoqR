@@ -43,7 +43,7 @@ prepara_legenda <- function(file_shp = "inputs/campo/geologia.shp",
   legenda_geo$Geo_Reg <- 1:nrow(legenda_geo)
   # Arruma nomes das colunas
   df <- legenda_geo[, c("SIGLA", "NOME", "ERA_MIN", "col_hex", "Geo_Reg")]
-  colnames(df)[3:4] <- c("IDADE", "RGB")
+  colnames(df)[2:5] <- c("DESCRICAO", "IDADE", "RGB", "Geo_cod")
   out[[1]] <- df
 
   # Legenda agrupada pelo campo RANGE
@@ -74,7 +74,7 @@ prepara_legenda <- function(file_shp = "inputs/campo/geologia.shp",
   df <- df[, c("RANGE", "LITOTIPOS", "ERA_MIN", "col_hex2", "Geo_Reg2")]
   df <- unique(df)
 
-  colnames(df)[c(1,3:5)] <- c("SIGLA", "IDADE", "RGB", "Geo_Cod")
+  colnames(df)[c(1,2:5)] <- c("SIGLA","DESCRICAO", "IDADE", "RGB", "Geo_Cod")
   out[[2]] <- df
   # out[[3]] <- legenda_geo
   return(out)

@@ -29,11 +29,6 @@ intersecta_bacias <- function(dir_campo = "inputs/campo/",
                               file_shp = "inputs/campo/geologia.shp",
                               file_xml = "inputs/diversos/geologia.xml")
 {
-  ## load packages
-  # library(rgdal)
-  # library(raster)
-  # library(rgeos)
-  # require(sf)
 
   options(encoding = "latin1")
   out <- list()
@@ -147,14 +142,15 @@ intersecta_bacias <- function(dir_campo = "inputs/campo/",
   ##ID <- seq(1:nrow(spy_grid@data))
   dc <- cbind(do.call("rbind", lst), spy_grid)
 
-  dc <-
-    dplyr::right_join(codlito[, c("SIGLA", "RGB", "Geo_Reg")], dc,  by =  "SIGLA")
+
+    dc <-
+    dplyr::right_join(codlito[, c("SIGLA", "RGB", "Geo_cod")], dc,  by =  "SIGLA")
   # colnames(dc)
   select_campos2 <-
     c(
       "SIGLA",
       "RGB" ,
-      "Geo_Reg"  ,
+      "Geo_cod"  ,
       "OBJECTID"  ,
       "ID_UNIDADE",
       "HIERARQUIA" ,
@@ -206,7 +202,7 @@ intersecta_bacias <- function(dir_campo = "inputs/campo/",
     fileEncoding = "latin1"
   )
  out[[2]] <- dc[, select_campos2]
-  mylitho <- dc[, c("VALUE", "Area_bacia", "Geo_Reg")]
+  mylitho <- dc[, c("VALUE", "Area_bacia", "Geo_cod")]
   mylitho$Area_bacia <- as.numeric(mylitho$Area_bacia)
   write.csv2(mylitho,
              paste0(dir_out,"mylitho.csv"),

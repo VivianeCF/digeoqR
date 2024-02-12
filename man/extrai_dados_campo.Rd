@@ -13,13 +13,15 @@ extrai_dados_campo(tipo_base, dir_base, base_campo, dir_os)
 
 \item{base_campo}{Nome da base de dados de campo}
 
-\item{dir_os}{Diretório das OS(ordens de serviço)}
+\item{dir_os}{Diretório das planilhas de OS}
 }
 \value{
 Retorna uma tabela com os dados de campo
 }
 \description{
 Uma base de dados é preparada com as informações da localização das amostras
-e os nomes de campo e laboratório. Esta função só está implementada para o
-tipo_base = 1 (FCAMPO)
+e os nomes de campo e laboratório. Esta função está implementada para
+diferentes bases de dados: FCAMPO, SURVEY123 e QFIELD. Usa as planilhas de OS
+(Ordem de Serviço) para recuperar a relação número de campo e número
+de laboratório.
 }

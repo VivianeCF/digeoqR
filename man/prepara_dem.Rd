@@ -2,24 +2,26 @@
 % Please edit documentation in R/prepara_dem.R
 \name{prepara_dem}
 \alias{prepara_dem}
-\title{Title}
+\title{Prepara imagem de SRTM para a modelagem de terreno}
 \usage{
 prepara_dem(
   limite = "inputs/campo/area_srtm.shp",
+  dir_out = "inputs/imagens/",
   EPSG = 4326,
-  z = 11,
-  cellsize = 0.000277777777674848
+  z = 11
 )
 }
 \arguments{
 \item{limite}{Limite da área do srtm}
 
+\item{dir_out}{Diretório de saída}
+
 \item{EPSG}{Projeçao usada}
 
 \item{z}{Nível de zoom para recuperar o SRTM}
-
-\item{cellsize}{}
 }
 \description{
-Title
+Recupera dados de elevação do terreno da Amazon Web Services Terrain Tile
+didoníveis em https://registry.opendata.aws/terrain-tiles.
+Para mais detalhes visite o repositório https://github.com/jhollist/elevatr
 }

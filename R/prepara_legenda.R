@@ -76,6 +76,6 @@ prepara_legenda <- function(file_shp = "inputs/campo/geologia.shp",
 
   colnames(df)[c(1,3:5)] <- c("SIGLA", "IDADE", "RGB", "Geo_Cod")
   out[[2]] <- df
-  out[[3]] <- geo_legenda
+  # out[[3]] <- legenda_geo
   return(out)
 }

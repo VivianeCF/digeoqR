@@ -3,8 +3,10 @@
 #' Este processamento usa a shape e xml do mapa das unidades litoestratigráficas
 #'do Brasil (2014) obtidos do GEOSGB (SGB-CPRM).
 #'
-#' @param file_shp Endereço e nome do arquivo da geologia
-#' @param file_xlm Endereço e nome do arquivo xlm
+#' @param dir_in Diretório dos arquivos shape e xml
+#' @param feicao Nome da feição shape e xml, o nome do xml deve ser igual
+#' ao da shape
+#'
 #' @return Tabelas com atrubutos da shape da geologia e cores das unidades
 #' (col_hex) e índice da geologia (Geo_Reg) em duas opções uma baseada no campo
 #' SIGLA e outra baseada no campo RANGE.
@@ -15,17 +17,17 @@
 #' #legenda <- prepara_legenda()
 #' #legenda
 
-prepara_legenda <- function(file_shp = "inputs/campo/geologia.shp",
-                            file_xml = "inputs/diversos/geologia.xml") {
+prepara_legenda <- function(dir_in = "inputs/campo/",
+                            feicao = "geologia") {
   out <- list()
-  lito_geo <- sf::st_read(file_shp)
+  lito_geo <- sf::st_read(paste0(dir_in,feicao, ".shp"))
   lito_geo <- lito_geo[!is.na(lito_geo$SIGLA), ]
 
   mylegend <- unique(lito_geo)
   mylegend <- lito_geo[!duplicated(lito_geo$SIGLA), ]
   mylegend <- mylegend[order(mylegend$IDADE_MIN), ]
   mylegend <- as.data.frame(mylegend)
-  legenda <- resgata_legenda_xml(file_xml)
+  legenda <- resgata_legenda_xml(paste0(dir_in,feicao, ".xml"))
   legenda_geo <- base::merge(mylegend,
                              legenda,
                              by.x = "SIGLA",

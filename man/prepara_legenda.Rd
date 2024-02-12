@@ -4,15 +4,13 @@
 \alias{prepara_legenda}
 \title{Cria legenda apartir da shape da feiÃ§Ã£o}
 \usage{
-prepara_legenda(
-  file_shp = "inputs/campo/geologia.shp",
-  file_xml = "inputs/diversos/geologia.xml"
-)
+prepara_legenda(dir_in = "inputs/campo/", feicao = "geologia")
 }
 \arguments{
-\item{file_shp}{EndereÃ§o e nome do arquivo da geologia}
+\item{dir_in}{DiretÃ³rio dos arquivos shape e xml}
 
-\item{file_xlm}{EndereÃ§o e nome do arquivo xlm}
+\item{feicao}{Nome da feiÃ§Ã£o shape e xml, o nome do xml deve ser igual
+ao da shape}
 }
 \value{
 Tabelas com atrubutos da shape da geologia e cores das unidades

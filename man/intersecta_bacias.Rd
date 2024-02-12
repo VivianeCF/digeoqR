@@ -5,19 +5,17 @@
 \title{Intersecta polÃ­gonos das bacias com outra feiÃ§Ã£o}
 \usage{
 intersecta_bacias(
-  dir_campo = "inputs/campo/",
+  dir_in = "inputs/campo/",
   dir_out = "outputs/",
   limite = "carta_100M",
   bacias = "bacias_area",
   feicao = "geologia",
   tipo_leg = 1,
-  estacoes = "estacoes",
-  file_shp = "inputs/campo/geologia.shp",
-  file_xml = "inputs/diversos/geologia.xml"
+  estacoes = "estacoes"
 )
 }
 \arguments{
-\item{dir_campo}{DiretÃ³rio dos dados espaciais e legenda}
+\item{dir_in}{DiretÃ³rio dos dados espaciais e legenda}
 
 \item{dir_out}{DiretÃ³rio de saÃ­da onde serÃ£o gravados as planilhas .csv}
 
@@ -28,16 +26,16 @@ intersecta_bacias(
 \item{feicao}{polÃ­gonos de algum tema (geologia,
 solo, geofÃ­sica, geomorfologia, etc)}
 
-\item{estacoes}{EstaÃ§Ãµes de coleta}
+\item{tipo_leg}{Tipo de legenda 1= pela SIGLA 2 = pelo RANGE}
 
-\item{legenda}{RÃ³tulos das unidades da feiÃ§Ã£o}
+\item{estacoes}{EstaÃ§Ãµes de coleta}
 }
 \value{
 Bacias
 }
 \description{
-Cada bacia Ã© recortada pelos polÃ­gonos da feiÃ§Ã£o de sobreposiÃ§Ã£o, que pode ser
-de mapeamento.
+Cada bacia Ã© recortada pelos polÃ­gonos da geologia. Esta funÃ§Ã£o estÃ¡
+configurada para a shape do mapa geolÃ³gico ao milhonÃ©simo 2014 do SGB-CPRM.
 }
 \examples{
 #intersecta_bacias()

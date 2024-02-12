@@ -1,17 +1,16 @@
-
 #' Intersecta polígonos das bacias com outra feição
 #'
-#'Cada bacia é recortada pelos polígonos da feição de sobreposição, que pode ser
-#' de mapeamento.
+#' Cada bacia é recortada pelos polígonos da geologia. Esta função está
+#' configurada para a shape do mapa geológico ao milhonésimo 2014 do SGB-CPRM.
 #'
 #' @param limite Limite da área do projeto
 #' @param bacias bacias obtidas a partir da função gera_bacias
 #' @param feicao polígonos de algum tema (geologia,
 #' solo, geofísica, geomorfologia, etc)
-#' @param legenda Rótulos das unidades da feição
 #' @param estacoes Estações de coleta
-#' @param dir_campo Diretório dos dados espaciais e legenda
+#' @param dir_in Diretório dos dados espaciais e legenda
 #' @param dir_out Diretório de saída onde serão gravados as planilhas .csv
+#' @param tipo_leg Tipo de legenda 1= pela SIGLA 2 = pelo RANGE
 #'
 #' @return
 #' Bacias
@@ -19,27 +18,25 @@
 #'
 #' @examples
 #' #intersecta_bacias()
-intersecta_bacias <- function(dir_campo = "inputs/campo/",
+intersecta_bacias <- function(dir_in = "inputs/campo/",
                               dir_out = "outputs/",
                               limite = "carta_100M",
                               bacias = "bacias_area",
                               feicao = "geologia",
                               tipo_leg = 1,
-                              estacoes = "estacoes",
-                              file_shp = "inputs/campo/geologia.shp",
-                              file_xml = "inputs/diversos/geologia.xml")
+                              estacoes = "estacoes")
 {
 
   options(encoding = "latin1")
   out <- list()
-  area <- sf::read_sf(paste0(dir_campo, limite, ".shp"))
+  area <- sf::read_sf(paste0(dir_in, limite, ".shp"))
   centroide <-
     sf::st_coordinates(suppressWarnings({
       sf::st_centroid(area)
     }))
   zone <- as.numeric(floor((centroide[, 1] + 180) / 6) + 1)
   ## import data
-  spy_grid <- sf::read_sf(paste0(dir_campo, bacias, ".shp"))
+  spy_grid <- sf::read_sf(paste0(dir_in, bacias, ".shp"))
   # sf::st_crs(spy_grid) <-
   spy_grid <- sf::st_transform(spy_grid,
                                paste0(
@@ -65,10 +62,10 @@ if(tipo_leg == 2){
     dplyr::summarize()
 }
 
-  legenda <- prepara_legenda(file_shp, file_xml )
+  legenda <- prepara_legenda(dir_in, feicao )
   codlito <- legenda[[tipo_leg]]
 
-  mydata <- sf::read_sf(paste0(dir_campo, estacoes, ".shp"))
+  mydata <- sf::read_sf(paste0(dir_in, estacoes, ".shp"))
   colnames(spy_grid)
   spy_grid <-
     dplyr::left_join(spy_grid , data.frame(mydata), by = "VALUE")

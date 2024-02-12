@@ -59,5 +59,5 @@ filtra_dados_mdb <- function(OS = 1723, input,
   RODBC::sqlSave(con2, AM_LOTE_AMOSTRA , addPK = TRUE, append = FALSE)
   RODBC::sqlQuery(con2, "DROP TABLE AM_LOTE")
   RODBC::sqlSave(con2, AM_LOTE , addPK = TRUE, append = FALSE)
-  odbcCloseAll()
+  RODBC::odbcCloseAll()
 }

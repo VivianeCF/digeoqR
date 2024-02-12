@@ -607,7 +607,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     # Remodela os dados para ficar com campos Mineral e value
     dfp <- tidyr::pivot_longer(
       data = tables_cb,
-      cols =  minerais,
+      cols =  all_of(minerais),
       names_to = "Mineral",
       values_to = "value"
     )
@@ -686,7 +686,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     #Remodela os dados para ter os campos Analito e Valor
     lista_pivo[[2]] <- estacoes_folhas_cb %>%
       tidyr::pivot_longer(
-        cols = 11:ncol(estacoes_folhas_cb),
+        cols = all_of(minerais),
         names_to = "Analito",
         values_to = "Valor"
       )

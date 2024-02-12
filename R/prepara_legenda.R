@@ -70,12 +70,17 @@ prepara_legenda <- function(file_shp = "inputs/campo/geologia.shp",
   # Arruma nomes das colunas
   df <- legenda_geo %>%
     dplyr::group_by(RANGE) %>%
-    dplyr::mutate(LITOTIPOS = paste0(LITOTIPOS, collapse = ""))
+    dplyr::mutate(LITOTIPOS = paste0(LITOTIPOS, collapse = ", "))
+
   df <- df[, c("RANGE", "LITOTIPOS", "ERA_MIN", "col_hex2", "Geo_Reg2")]
   df <- unique(df)
 
   colnames(df)[c(1,2:5)] <- c("SIGLA","DESCRICAO", "IDADE", "RGB", "Geo_Cod")
+
+  # Retira nomes de litotipos iguais da descrição em cada RANGE
+  df$DESCRICAO <- sapply(strsplit(df$DESCRICAO, ", "),
+                         function(x) paste(unique(x), collapse = ", "))
   out[[2]] <- df
-  # out[[3]] <- legenda_geo
+
   return(out)
 }

@@ -1,4 +1,8 @@
-#' Title
+#' Prepara imagem de SRTM para a modelagem de terreno
+#'
+#' Recupera dados de elevação do terreno da Amazon Web Services Terrain Tile
+#' didoníveis em https://registry.opendata.aws/terrain-tiles
+#'
 #'
 #' @param limite Limite da área do srtm
 #' @param EPSG Projeçao usada

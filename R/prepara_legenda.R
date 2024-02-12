@@ -75,7 +75,7 @@ prepara_legenda <- function(file_shp = "inputs/campo/geologia.shp",
   df <- df[, c("RANGE", "LITOTIPOS", "ERA_MIN", "col_hex2", "Geo_Reg2")]
   df <- unique(df)
 
-  colnames(df)[c(1,2:5)] <- c("SIGLA","DESCRICAO", "IDADE", "RGB", "Geo_Cod")
+  colnames(df)[c(1,2:5)] <- c("SIGLA","DESCRICAO", "IDADE", "RGB", "Geo_cod")
 
   # Retira nomes de litotipos iguais da descrição em cada RANGE
   df$DESCRICAO <- sapply(strsplit(df$DESCRICAO, ", "),

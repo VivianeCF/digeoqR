@@ -24,8 +24,10 @@ intersecta_bacias <- function(dir_campo = "inputs/campo/",
                               limite = "carta_100M",
                               bacias = "bacias_area",
                               feicao = "geologia",
-                              legenda = "legenda",
-                              estacoes = "estacoes")
+                              tipo_leg = 1,
+                              estacoes = "estacoes",
+                              file_shp = "inputs/campo/geologia.shp",
+                              file_xml = "inputs/diversos/geologia.xml")
 {
   ## load packages
   # library(rgdal)
@@ -61,8 +63,8 @@ intersecta_bacias <- function(dir_campo = "inputs/campo/",
                                  zone,
                                  " +south +datum=WGS84 +units=m +no_defs"
                                ))
-
-  codlito <- read.csv2(paste0(dir_campo, legenda, ".csv"))
+  legenda <- prepara_legenda(file_shp, file_xml )
+  codlito <- legenda[[tipo_leg]]
 
   mydata <- sf::read_sf(paste0(dir_campo, estacoes, ".shp"))
 

@@ -151,7 +151,7 @@ if(tipo_leg == 2){
   # do.call("rbind", lst)
   ##ID <- seq(1:nrow(spy_grid@data))
   dc <- cbind(do.call("rbind", lst), spy_grid)
-colnames(dc)[1] <- "SIGLA"
+  if(tipo_leg == 2){  colnames(dc)[1] <- "SIGLA"}
 
     dc <-
     dplyr::right_join(codlito[, c("SIGLA", "RGB", "Geo_cod")], dc,  by = "SIGLA")

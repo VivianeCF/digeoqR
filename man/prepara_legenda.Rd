@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepara_legenda.R
 \name{prepara_legenda}
 \alias{prepara_legenda}
-\title{Cria legenda apartir da shape da feição}
+\title{Cria legenda apartir da shape da feiÃ§Ã£o}
 \usage{
 prepara_legenda(
   file_shp = "inputs/campo/geologia.shp",
@@ -10,16 +10,18 @@ prepara_legenda(
 )
 }
 \arguments{
-\item{file_shp}{Endereço e nome do arquivo da geologia}
+\item{file_shp}{EndereÃ§o e nome do arquivo da geologia}
 
-\item{file_xlm}{Endereço e nome do arquivo xlm}
+\item{file_xlm}{EndereÃ§o e nome do arquivo xlm}
 }
 \value{
-Tabela com atrubutos da shape da geologia e cores das unidades (col_hex)
-e índice da geologia (Geo_Reg)
+Tabelas com atrubutos da shape da geologia e cores das unidades
+(col_hex) e Ã­ndice da geologia (Geo_Reg) em duas opÃ§Ãµes uma baseada no campo
+SIGLA e outra baseada no campo RANGE.
 }
 \description{
-Cria legenda apartir da shape da feição
+Este processamento usa a shape e xml do mapa das unidades litoestratigrÃ¡ficas
+do Brasil (2014) obtidos do GEOSGB (SGB-CPRM).
 }
 \examples{
 #legenda <- prepara_legenda()

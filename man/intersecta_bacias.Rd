@@ -2,7 +2,7 @@
 % Please edit documentation in R/intersecta_bacias.R
 \name{intersecta_bacias}
 \alias{intersecta_bacias}
-\title{Intersecta polígonos das bacias com outra feição}
+\title{Intersecta polÃ­gonos das bacias com outra feiÃ§Ã£o}
 \usage{
 intersecta_bacias(
   dir_campo = "inputs/campo/",
@@ -10,31 +10,33 @@ intersecta_bacias(
   limite = "carta_100M",
   bacias = "bacias_area",
   feicao = "geologia",
-  legenda = "legenda",
-  estacoes = "estacoes"
+  tipo_leg = 1,
+  estacoes = "estacoes",
+  file_shp = "inputs/campo/geologia.shp",
+  file_xml = "inputs/diversos/geologia.xml"
 )
 }
 \arguments{
-\item{dir_campo}{Diretório dos dados espaciais e legenda}
+\item{dir_campo}{DiretÃ³rio dos dados espaciais e legenda}
 
-\item{dir_out}{Diretório de saída onde serão gravados as planilhas .csv}
+\item{dir_out}{DiretÃ³rio de saÃ­da onde serÃ£o gravados as planilhas .csv}
 
-\item{limite}{Limite da área do projeto}
+\item{limite}{Limite da Ã¡rea do projeto}
 
-\item{bacias}{bacias obtidas a partir da função gera_bacias}
+\item{bacias}{bacias obtidas a partir da funÃ§Ã£o gera_bacias}
 
-\item{feicao}{polígonos de algum tema (geologia,
-solo, geofísica, geomorfologia, etc)}
+\item{feicao}{polÃ­gonos de algum tema (geologia,
+solo, geofÃ­sica, geomorfologia, etc)}
 
-\item{legenda}{Rótulos das unidades da feição}
+\item{estacoes}{EstaÃ§Ãµes de coleta}
 
-\item{estacoes}{Estações de coleta}
+\item{legenda}{RÃ³tulos das unidades da feiÃ§Ã£o}
 }
 \value{
 Bacias
 }
 \description{
-Cada bacia é recortada pelos polígonos da feição de sobreposição, que pode ser
+Cada bacia Ã© recortada pelos polÃ­gonos da feiÃ§Ã£o de sobreposiÃ§Ã£o, que pode ser
 de mapeamento.
 }
 \examples{

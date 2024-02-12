@@ -9,19 +9,19 @@ extrai_dados_campo(tipo_base, dir_base, base_campo, dir_os)
 \arguments{
 \item{tipo_base}{Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
 
-\item{dir_base}{Diretório da base de dados de campo}
+\item{dir_base}{DiretÃ³rio da base de dados de campo}
 
 \item{base_campo}{Nome da base de dados de campo}
 
-\item{dir_os}{Diretório das planilhas de OS}
+\item{dir_os}{DiretÃ³rio das planilhas de OS}
 }
 \value{
 Retorna uma tabela com os dados de campo
 }
 \description{
-Uma base de dados é preparada com as informações da localização das amostras
-e os nomes de campo e laboratório. Esta função está implementada para
+Uma base de dados Ã© preparada com as informaÃ§Ãµes da localizaÃ§Ã£o das amostras
+e os nomes de campo e laboratÃ³rio. Esta funÃ§Ã£o estÃ¡ implementada para
 diferentes bases de dados: FCAMPO, SURVEY123 e QFIELD. Usa as planilhas de OS
-(Ordem de Serviço) para recuperar a relação número de campo e número
-de laboratório.
+(Ordem de ServiÃ§o) para recuperar a relaÃ§Ã£o nÃºmero de campo e nÃºmero
+de laboratÃ³rio.
 }

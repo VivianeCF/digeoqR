@@ -40,7 +40,7 @@ modela_bacias <- function(fase = 2,
                           threshold = 250,
                           snap_dist = 0.02,
                           min_length = 0.02,
-                          max_ordem = 4)
+                          max_ordem = 3)
 {
   ### GERA DRENAGENS--------------------------------------------------------------
 
@@ -127,7 +127,7 @@ modela_bacias <- function(fase = 2,
 
   # Gera drenagem classificada strahler
   output_order <- "strahler_order.tif"
-  whitebox::wbt_strahler_stream_order(output_d8_pntr,
+  whitebox::wbt_strahler_stream_order("d8.tif",
                                       "network_d8.tif",
                                       output_order,
                                       wd = wbt_wd)

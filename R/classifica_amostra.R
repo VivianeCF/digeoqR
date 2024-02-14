@@ -573,7 +573,7 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
                  crs = r)
 
   data_originais_st <-
-    data_originais_st[data_originais_st$Folha != "", ]
+    data_originais_st[data_originais_st$FOLHA != "", ]
   sf::st_write(
     data_originais_st,
     "outputs/Dados_areas/TODAS/dados_arrumados_brutos.shp",
@@ -586,7 +586,7 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
                  coords = c("LONGITUDE", "LATITUDE"),
                  crs = r)
 
-  data_transf_st <- data_transf_st[data_transf_st$Folha != "", ]
+  data_transf_st <- data_transf_st[data_transf_st$FOLHA != "", ]
 
   sf::st_write(
     data_transf_st,

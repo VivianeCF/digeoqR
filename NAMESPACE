@@ -2,6 +2,7 @@
 
 export("%>%")
 export(arruma_dados_rigeo)
+export(classifica_amostra)
 export(estrutura_diretorio)
 export(extrai_dados_campo)
 export(filtra_dados_mdb)
@@ -14,4 +15,5 @@ export(prepara_bases)
 export(prepara_dem)
 export(prepara_legenda)
 export(resgata_legenda_xml)
+export(transforma_dados_05ld)
 importFrom(magrittr,"%>%")

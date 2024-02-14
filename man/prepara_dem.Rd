@@ -12,16 +12,16 @@ prepara_dem(
 )
 }
 \arguments{
-\item{limite}{Limite da Ã¡rea do srtm}
+\item{limite}{Limite da área do srtm}
 
-\item{dir_out}{DiretÃ³rio de saÃ­da}
+\item{dir_out}{Diretório de saída}
 
-\item{EPSG}{ProjeÃ§ao usada}
+\item{EPSG}{Projeçao usada}
 
-\item{z}{NÃ­vel de zoom para recuperar o SRTM}
+\item{z}{Nível de zoom para recuperar o SRTM}
 }
 \description{
-Recupera dados de elevaÃ§Ã£o do terreno da Amazon Web Services Terrain Tile
-didonÃ­veis em https://registry.opendata.aws/terrain-tiles.
-Para mais detalhes visite o repositÃ³rio https://github.com/jhollist/elevatr
+Recupera dados de elevação do terreno da Amazon Web Services Terrain Tile
+didoníveis em https://registry.opendata.aws/terrain-tiles.
+Para mais detalhes visite o repositório https://github.com/jhollist/elevatr
 }

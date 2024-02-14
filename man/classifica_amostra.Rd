@@ -12,5 +12,6 @@ classifica_amostra(file = "outputs/sc_tidy.csv")
 \description{
 A ferramenta permite transformar os dados do Rigeo e classificar as amostra
 pelo método Tucker Inner Fence (TIF) valores acima de 75\% são considerados
-anômalos.
+anômalos. Usar a mesma máscara do arquivo de saída da função
+arruma_dados_rigeo do sedimento de corrente.
 }

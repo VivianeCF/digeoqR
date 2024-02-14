@@ -99,10 +99,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 # Filtros-----------------------------------------------------------------------
 ## Bateia-----------------------------------------------------------------------
     filtered_df_bateia <-
-      dplyr::filter(x,
-                    grepl("Mineralometria",
-                          Name, ignore.case = TRUE),
-                    fixed = TRUE)[1, 1]
+      dplyr::filter(x, grepl("Mineralometria",
+                          Name, ignore.case = TRUE), fixed = TRUE)[1, 1]
 
     filtered_df_bateia <-
       filtered_df_bateia[!is.na(filtered_df_bateia)]
@@ -170,28 +168,18 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     }
 ## Sedimento-------------------------------------------------------------------
     filtered_df_sedimento <-
-      dplyr::filter(x,
-                    grepl("Sedimento de Corrente",
+      dplyr::filter(x, grepl("Sedimento de Corrente",
                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento2 <-
-      dplyr::filter(x,
-                    grepl("Sedimento_de_Corrente",
+      dplyr::filter(x, grepl("Sedimento_de_Corrente",
                           Name, ignore.case = TRUE))[1, 1]
 
     filtered_df_sedimento3 <-
-      dplyr::filter(x,
-                    grepl(
-                      "Resultados Analíticos",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
+      dplyr::filter(x, grepl( "Resultados Analíticos",
+                      Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento4 <-
-      dplyr::filter(x,
-                    grepl(
-                      "Geoq_Sed",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
+      dplyr::filter(x, grepl( "Geoq_Sed",
+                      Name, ignore.case = TRUE))[1, 1]
     filtered_df_sedimento <-
       c(
         filtered_df_sedimento,
@@ -231,27 +219,17 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
 ## Bateia Química--------------------------------------------------------------
     filtered_df_bateia_gq <-
-      dplyr::filter(x,
-                    grepl("mica Concentrado de Bateia",
+      dplyr::filter(x, grepl("mica Concentrado de Bateia",
                           Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq2 <-
-      dplyr::filter(x,
-                    grepl("mica de Concentrado de Bateia",
-                          Name, ignore.case = TRUE))[1, 1]
+      dplyr::filter(x, grepl("mica de Concentrado de Bateia",
+                       Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq3 <-
-      dplyr::filter(x,
-                    grepl(
-                      "mica_Concentrado_de_Bateia",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
+      dplyr::filter(x, grepl("mica_Concentrado_de_Bateia",
+                       Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq4 <-
-      dplyr::filter(x,
-                    grepl(
-                      "mica_de_Concentrado_de_Bateia",
-                      Name,
-                      ignore.case = TRUE
-                    ))[1, 1]
+      dplyr::filter(x, grepl("mica_de_Concentrado_de_Bateia",
+                       Name, ignore.case = TRUE))[1, 1]
     filtered_df_bateia_gq <-
       c(filtered_df_bateia_gq,
         filtered_df_bateia_gq2,
@@ -289,13 +267,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     }
 ## Solo --------------------------------------------------------------------
 
-    filtered_df_solo <- dplyr::filter(x, grepl("Geoquimica Solo",
-                                               Name, ignore.case = TRUE))[1, 1]
+    filtered_df_solo <-
+      dplyr::filter(x, grepl("Geoquimica Solo",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo2 <-
       dplyr::filter(x, grepl("Geoquimica de Solo",
                              Name, ignore.case = TRUE))[1, 1]
-    filtered_df_solo3 <- dplyr::filter(x, grepl("Geoquimica_Solo",
-                                                Name, ignore.case = TRUE))[1, 1]
+    filtered_df_solo3 <-
+      dplyr::filter(x, grepl("Geoquimica_Solo",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_solo4 <-
       dplyr::filter(x, grepl("Analise_Química_Solo",
                              Name, ignore.case = TRUE))[1, 1]
@@ -337,13 +317,15 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     }
 
 ## Rocha ----------------------------------------------------------------------
-    filtered_df_rocha <- dplyr::filter(x, grepl("mica Rocha",
-                                                Name, ignore.case = TRUE))[1, 1]
+    filtered_df_rocha <-
+      dplyr::filter(x, grepl("mica Rocha",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha2 <-
       dplyr::filter(x, grepl("mica de Rocha",
                              Name, ignore.case = TRUE))[1, 1]
-    filtered_df_rocha3 <- dplyr::filter(x, grepl("mica_Rocha",
-                                                 Name, ignore.case = TRUE))[1, 1]
+    filtered_df_rocha3 <-
+      dplyr::filter(x, grepl("mica_Rocha",
+                             Name, ignore.case = TRUE))[1, 1]
     filtered_df_rocha4 <-
       dplyr::filter(x, grepl("mica_de_Rocha",
                              Name, ignore.case = TRUE))[1, 1]
@@ -499,8 +481,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     colnames(estacoes_folhas_sc)[3] <- "FOLHA"
     colnames(estacoes_folhas_sc)[7] <- "PROJETO"
-    colnames(estacoes_folhas_sc)[2] <- "N_LAB"
-    colnames(estacoes_folhas_sc)[4:5] <- c("LONG", "LAT")
+    colnames(estacoes_folhas_sc)[6] <- "NCAMP"
+    colnames(estacoes_folhas_sc)[2] <- "NLAB"
+    # colnames(estacoes_folhas_sc)[4:5] <- c("LONG", "LAT")
     ## Cria campo Base com nome da fonte de dados
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_sc))
 
@@ -510,13 +493,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                  estacoes_folhas_sc [, 10:ncol(estacoes_folhas_sc)])
 
     ## Salva arquivo final do Rigeo
-    write.table(
+    write.csv2(
       estacoes_folhas_sc ,
       paste0(dir_out, "sc_tidy.csv"),
       row.names = FALSE,
       na = "",
-      sep = ";",
-      dec = ".",
       quote = TRUE
     )
     colnames(estacoes_folhas_sc)
@@ -569,7 +550,8 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       gsub("__", "_", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub("COL_TAN_", "COL_TAN", colnames(tables_cb),
                                 fixed = TRUE)
-    colnames(tables_cb) <- gsub("CENTRO_CUS", "CENTRO_CUSTO", colnames(tables_cb),
+    colnames(tables_cb) <- gsub("CENTRO_CUS", "CENTRO_CUSTO",
+                                colnames(tables_cb),
                                 fixed = TRUE)
     # nomes dos minerais
     minerais <- gsub("\u00c1", "A", minerais, fixed = TRUE)
@@ -667,21 +649,22 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     estacoes_folhas_cb <-  data.frame(BASE, estacoes_folhas_cb)
 
     # Resume tabela para só colunas selecionadas e minerais
-    estacoes_folhas_cb <- estacoes_folhas_cb[, c(selecionadas, "BASE", minerais)]
+    estacoes_folhas_cb <-
+      estacoes_folhas_cb[, c(selecionadas, "BASE", minerais)]
 
     # Padroniza a planilha de dados
     colnames(estacoes_folhas_cb)[3] <- "FOLHA"
-    colnames(estacoes_folhas_cb)[2] <- "N_LAB"
-    colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
+    colnames(estacoes_folhas_cb)[7] <- "PROJETO"
+    colnames(estacoes_folhas_cb)[6] <- "NCAMP"
+    colnames(estacoes_folhas_cb)[2] <- "NLAB"
+    # colnames(estacoes_folhas_cb)[4:5] <- c("LONG", "LAT")
 
     # Grava o arquivo csv com os dados da classe no diretório escolhido
-    write.table(
+    write.csv2(
       estacoes_folhas_cb ,
       paste0(dir_out, "cb_tidy.csv"),
       row.names = FALSE,
       na = "",
-      dec = ",",
-      sep = ";"
     )
     #Remodela os dados para ter os campos Analito e Valor
     lista_pivo[[2]] <- estacoes_folhas_cb %>%
@@ -749,8 +732,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     colnames(estacoes_folhas_cb_gq)[3] <- "FOLHA"
     colnames(estacoes_folhas_cb_gq)[7] <- "PROJETO"
-    colnames(estacoes_folhas_cb_gq)[2] <- "N_LAB"
-    colnames(estacoes_folhas_cb_gq)[4:5] <- c("LONG", "LAT")
+    colnames(estacoes_folhas_cb_gq)[6] <- "NCAMP"
+    colnames(estacoes_folhas_cb_gq)[2] <- "NLAB"
+    # colnames(estacoes_folhas_cb_gq)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_cb_gq))
 
@@ -760,13 +744,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                  estacoes_folhas_cb_gq [, 10:ncol(estacoes_folhas_cb_gq)])
 
     ## Salva arquivo final do Rigeo
-    write.table(
+    write.csv2(
       estacoes_folhas_cb_gq ,
       paste0(dir_out, "cb_gq_tidy.csv"),
       row.names = FALSE,
       na = "",
-      sep = ";",
-      dec = ".",
       quote = TRUE
     )
     #Pivoteia e une as bases
@@ -837,8 +819,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     colnames(estacoes_folhas_r)[3] <- "FOLHA"
     colnames(estacoes_folhas_r)[7] <- "PROJETO"
-    colnames(estacoes_folhas_r)[2] <- "N_LAB"
-    colnames(estacoes_folhas_r)[4:5] <- c("LONG", "LAT")
+    colnames(estacoes_folhas_r)[6] <- "NCAMP"
+    colnames(estacoes_folhas_r)[2] <- "NLAB"
+    # colnames(estacoes_folhas_r)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_r))
 
@@ -848,13 +831,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                  estacoes_folhas_r [, 10:ncol(estacoes_folhas_r)])
 
     ## Salva arquivo final do Rigeo
-    write.table(
+    write.csv2(
       estacoes_folhas_r ,
       paste0(dir_out, "r_tidy.csv"),
       row.names = FALSE,
       na = "",
-      sep = ";",
-      dec = ".",
       quote = TRUE
     )
     #Pivoteia e une as base
@@ -923,8 +904,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     colnames(estacoes_folhas_l)[3] <- "FOLHA"
     colnames(estacoes_folhas_l)[7] <- "PROJETO"
-    colnames(estacoes_folhas_l)[2] <- "N_LAB"
-    colnames(estacoes_folhas_l)[4:5] <- c("LONG", "LAT")
+    colnames(estacoes_folhas_l)[6] <- "NCAMP"
+    colnames(estacoes_folhas_l)[2] <- "NLAB"
+    # colnames(estacoes_folhas_l)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_l))
 
@@ -934,13 +916,11 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
                  estacoes_folhas_l [, 10:ncol(estacoes_folhas_l)])
 
     ## Salva arquivo final do Rigeo
-    write.table(
+    write.csv2(
       estacoes_folhas_l ,
       paste0(dir_out, "l_tidy.csv"),
       row.names = FALSE,
       na = "",
-      sep = ";",
-      dec = ".",
       quote = TRUE
     )
     #Pivoteia e une as bases
@@ -1011,8 +991,9 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
 
     colnames(estacoes_folhas_m)[3] <- "FOLHA"
     colnames(estacoes_folhas_m)[7] <- "PROJETO"
-    colnames(estacoes_folhas_m)[2] <- "N_LAB"
-    colnames(estacoes_folhas_m)[4:5] <- c("LONG", "LAT")
+    colnames(estacoes_folhas_m)[6] <- "NCAMP"
+    colnames(estacoes_folhas_m)[2] <- "NLAB"
+    # colnames(estacoes_folhas_m)[4:5] <- c("LONG", "LAT")
     ## Cria Base
     BASE <- rep("SGB-CPRM - Rigeo", nrow(estacoes_folhas_m))
 
@@ -1021,15 +1002,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       data.frame(estacoes_folhas_m [, 1:9], BASE,
                  estacoes_folhas_m [, 10:ncol(estacoes_folhas_m)])
 
-
     ## Salva arquivo final do Rigeo
-    write.table(
+    write.csv2(
       estacoes_folhas_m ,
       paste0(dir_out, "m_tidy.csv"),
       row.names = FALSE,
       na = "",
-      sep = ";",
-      dec = ".",
       quote = TRUE
     )
     #Pivoteia e une as base

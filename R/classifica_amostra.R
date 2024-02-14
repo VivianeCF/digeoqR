@@ -1,5 +1,9 @@
 
-#' Title
+#' Classificação dos dados geoquímicos para cartas de anomalias
+#'
+#' A ferramenta permite transformar os dados do Rigeo e classificar as amostra
+#' pelo método Tucker Inner Fence (TIF) valores acima de 75% são considerados
+#' anômalos.
 #'
 #' @param file Arquivo dos dados analiticos brutos
 #'
@@ -9,11 +13,9 @@
 #' @examples
 classifica_amostra <- function(file = "outputs/sc_tidy.csv"){
   df_new <- read.csv2(file)
-df_new$LONG <- as.numeric(df_new$LONG )
-df_new$LAT <- as.numeric(df_new$LAT )
-  #
-colnames(df_new) <- stringr::str_to_title(colnames(df_new))
-df_new <- df_new %>% dplyr::select(-Id)
+
+# colnames(df_new) <- stringr::str_to_title(colnames(df_new))
+df_new <- df_new %>% dplyr::select(-ID)
 #
 #
 # ### Rotina para classicar os dados----------------------------------------------
@@ -25,7 +27,7 @@ create_empty_table <- function(num_rows, num_cols) {
   frame <- data.frame(matrix(NA, nrow = num_rows, ncol = num_cols))
   return(frame)
 }
-#
+# colnames(df_new)
 #
 # # Prepara os dataframes de dados analíticos
 df_list <- transforma_dados_05ld(df_new)
@@ -58,8 +60,9 @@ for(l in 1:length(lab)) {
     write.csv2(data_brutos, paste0(path3,"dados_brutos.csv"), row.names = FALSE )
 
 # Cria lista das folhas e dos nomes das variáveis de campo
-    folhas <- unique(data$Folha)
+    folhas <- unique(data$FOLHA)
     folhas <- folhas[folhas != ""]
+    folhas <- folhas[!is.na(folhas)]
     nomes_campo <- colnames(data[,1:10])
 
   # Cria planilhas e shapes com anomalias de cada folha
@@ -70,8 +73,8 @@ for(l in 1:length(lab)) {
       dig <- c(2,2,2,2) # número de dígitos dos valores analíticos dos elementos
 
       # Extrai dados transformados das folhas e elementos
-      data_analise <- data[data$Folha == folhas[j],
-                           c(nomes_campo, nomes_elementos)]
+      data_analise <- data[data$FOLHA == folhas[j],
+                           c(nomes_campo, toupper(nomes_elementos))]
 
       # Retira da base linhas sem dados analíticos para os elementos selecionados
         data_analise <- data_analise %>%
@@ -82,14 +85,14 @@ for(l in 1:length(lab)) {
       data_campo <- data_analise[, 1:10]
 
       # Recorta base analítica da folha e elementos de interesse
-      data_analise <- data_analise[, nomes_elementos]
+      data_analise <- data_analise[, toupper(nomes_elementos)]
 
       # Arruma os nomes simplificado dos analitos
       colnames(data_analise) <- elementos
 
       # Extrai dados brutos das folhas e elementos
-      data_orig <- data_brutos[data_brutos$Folha == folhas[j],
-                                 c(nomes_campo, nomes_elementos)]
+      data_orig <- data_brutos[data_brutos$FOLHA == folhas[j],
+                                 c(nomes_campo, toupper(nomes_elementos))]
 
       # Substitui valores vazios por NA
 
@@ -101,7 +104,7 @@ for(l in 1:length(lab)) {
                                     complete.cases))
 
       # Recorta base analítica da folha e elementos de interesse
-      data_orig <- data_orig[, nomes_elementos]
+      data_orig <- data_orig[, toupper(nomes_elementos)]
 
       # Conta o número total de amostras que vão para classificação (N)
       n_analises[j] <- nrow(data_analise)
@@ -110,7 +113,7 @@ for(l in 1:length(lab)) {
       # Conta o número de amostras com análises validas por elemento
       n_val1 <-sapply(data_orig, function(y) sum(is.na(y))) # NA
       n_val2 <- sapply(data_orig, function(x) sum(stringr::str_detect(x, '<'))) # <LD
-      n_val3 <- sapply(data_orig, function(x) sum(stringr::str_detect(x, 'ND'))) # ND
+      n_val3 <- sapply(data_orig, function(x) sum(stringr::str_detect(x, "ND"))) # ND
       n_val <- n_tot-colSums(rbind(n_val1,n_val2,n_val3), na.rm=TRUE)
 
       if(nrow(data_analise) >= 5){
@@ -175,7 +178,7 @@ for(l in 1:length(lab)) {
         tab <- rbind(n_tot, n_val, tab)
         LAB <- rep(lab[l], 8)
 
-        FOLHA <- rep(unique(data_campo$Folha),8)
+        FOLHA <- rep(unique(data_campo$FOLHA),8)
         tab <- cbind(FOLHA,LAB,parametros, tab)
         tab[,4:7] <- apply(tab[,4:7] , 2, gsub, patt=".", replace=",", fixed=TRUE)
 
@@ -184,7 +187,7 @@ for(l in 1:length(lab)) {
         classifica <- classifica - 1
         classifica01 <- signif(classifica, 1)
         LAB <- rep(lab[l], length(elementos))
-        FOLHA <- rep(unique(data_campo$Folha),length(elementos))
+        FOLHA <- rep(unique(data_campo$FOLHA),length(elementos))
         # Cria tabela com resultados da classificação organizados
         limiares_elementos <- data.frame(cbind(FOLHA, LAB, elementos,lim, rotulo))
          # Dá nomes as colunas da classifixação
@@ -231,8 +234,8 @@ for(l in 1:length(lab)) {
 
         # Cria shapes com todas as amostras e só com as que tem destaques por folha
         plot_locations <- sf::st_as_sf(classifica_destaques_ordem,
-                                   coords = c("Long", "Lat"), crs = r)
-        plot_locations_todos <- sf::st_as_sf(classifica, coords = c("Long", "Lat"), crs = r)
+                                   coords = c("LONGITUDE", "LATITUDE"), crs = r)
+        plot_locations_todos <- sf::st_as_sf(classifica, coords = c("LONGITUDE", "LATITUDE"), crs = r)
         colnames(data_orig) <- c("Au_ppb", "Cu_ppm", "Pb_ppm", "Zn_ppm")
 
         # Salva planilhas csv das classificações por folha
@@ -325,7 +328,7 @@ for(l in 1:length(lab)) {
     #Gerar shapes
     ##Destaques
     destaques <- read.csv2( paste0( path2, "destaque_LAB_", lab[l], ".csv"))
-    destaques_st <-  sf::st_as_sf(destaques, coords = c("Long", "Lat"), crs = r)
+    destaques_st <-  sf::st_as_sf(destaques, coords = c("LONGITUDE", "LATITUDE"), crs = r)
     sf::st_write(destaques_st, paste0( path2, "destaque_LAB_", lab[l], ".shp"),
              driver="ESRI Shapefile", delete_layer = TRUE)
 
@@ -333,7 +336,7 @@ for(l in 1:length(lab)) {
     ##Destaques todas
     destaques_todas <- read.csv2( paste0( path2, "destaque_todas_LAB_",
                                           lab[l], ".csv"))
-    destaques_todas_st <-  sf::st_as_sf(destaques_todas, coords = c("Long", "Lat"),
+    destaques_todas_st <-  sf::st_as_sf(destaques_todas, coords = c("LONGITUDE", "LATITUDE"),
                                     crs = r)
 
      sf::st_write(destaques_todas_st, paste0( path2, "destaque_todas_LAB_", lab[l],
@@ -342,7 +345,7 @@ for(l in 1:length(lab)) {
 
     dados_analiticos <- read.csv2( paste0( path2, "dados_analiticos_LAB_",
                                            lab[l], ".csv"), fileEncoding = "latin1")
-    dados_analiticos_st <-  sf::st_as_sf(dados_analiticos, coords = c("Long", "Lat"),
+    dados_analiticos_st <-  sf::st_as_sf(dados_analiticos, coords = c("LONGITUDE", "LATITUDE"),
                                      crs = r)
     sf::st_write(dados_analiticos_st, paste0( path2, "dados_analiticos_LAB_", lab[l],
                                           ".shp"), driver="ESRI Shapefile",
@@ -355,14 +358,14 @@ for(l in 1:length(lab)) {
 
 colnames(df_brutos)
 # df <- data.frame(df[, c(1:5, 69:72, 79)], df[,c(6:68,73:78)])
-df_brutos <- df_brutos[df_brutos$N_lab %in% data_transf$N_lab,]
-data_originais_st <-  sf::st_as_sf(df_brutos, coords = c("Long", "Lat"),
+df_brutos <- df_brutos[df_brutos$NLAB %in% data_transf$NLAB,]
+data_originais_st <-  sf::st_as_sf(df_brutos, coords = c("LONGITUDE", "LATITUDE"),
                                crs = r)
 data_originais_st <- data_originais_st[data_originais_st$Folha != "",]
 sf::st_write(data_originais_st, "outputs/Dados_areas/TODAS/dados_arrumados_brutos.shp", driver="ESRI Shapefile",
          delete_layer = TRUE )
 
-data_transf_st <-  sf::st_as_sf(data_transf, coords = c("Long", "Lat"),
+data_transf_st <-  sf::st_as_sf(data_transf, coords = c("LONGITUDE", "LATITUDE"),
                             crs = r)
 data_transf_st <- data_transf_st[data_transf_st$Folha != "",]
 

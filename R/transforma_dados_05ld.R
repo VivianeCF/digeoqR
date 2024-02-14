@@ -37,7 +37,7 @@ if(!"AU_PPB" %in% colnames(data)){
   data[data == ""] <- NA
   data[data == "0"] <- NA
 
-df_sc <- data[,12:(ncol(data))]
+df_sc <- data[,11:(ncol(data))]
 df_sc_transf <- data.frame(lapply(df_sc, function(x) {
   gsub(",", ".", x)
 }))
@@ -49,13 +49,13 @@ df_sc_transf <- data.frame(lapply(df_sc_transf, function(x) {
   gsub("> ", "", x)
 }))
 
-df_sc_transf <- data.frame(data[,1:11], df_sc_transf)
+df_sc_transf <- data.frame(data[,1:10], df_sc_transf)
 
-df_sc_transf[,12:ncol(df_sc_transf)] <-
-  lapply(df_sc_transf[,12:ncol(df_sc_transf)], function(x) {as.numeric(x)})
+df_sc_transf[,11:ncol(df_sc_transf)] <-
+  lapply(df_sc_transf[,11:ncol(df_sc_transf)], function(x) {as.numeric(x)})
 
-df_sc_05ld <- rgr::ltdl.fix.df(df_sc_transf[,-1:-11])
-df_sc_05ld <- data.frame(df_sc_transf[1:11], df_sc_05ld)
+df_sc_05ld <- rgr::ltdl.fix.df(df_sc_transf[,-1:-10])
+df_sc_05ld <- data.frame(df_sc_transf[1:10], df_sc_05ld)
 out[[1]] <- df_sc_05ld
 df_zero <- df_sc_transf
 df_zero[df_zero < 0] <- 0

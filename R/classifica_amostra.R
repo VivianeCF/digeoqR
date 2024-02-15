@@ -155,14 +155,14 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
             }
             else {
               # Controle para 2 valores válidos
-              if (length(unique(data_analise[, i])) < 3) {
+              if (length(unique(data_analise[, i])) == 2) {
                 lim[i] <-  min(data_analise[, i], na.rm = TRUE)
                 pref[i] <- "> "
                 unidades[i]
               }
 
               # Controle para os demais números de valores válidos
-              if (length(unique(data_analise[, i])) >= 3) {
+              if (length(unique(data_analise[, i])) > 2) {
                 lim[i] <- 10 ^ (boxplot.stats(log10(data_analise[, i]))$stats[4])
                 pref[i] <- "> "
                 unidades[i]

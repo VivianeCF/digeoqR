@@ -32,9 +32,12 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
 
   # Prepara os dataframes de dados analíticos
   df_list <- transforma_dados_05ld(df_new)
-  data_transf <- df_list[[1]]
-  df_brutos <- df_list[[3]]
-
+  df_brutos_orig <- df_list[[1]]
+  df_brutos_orig <- df_brutos_orig[!is.na(df_brutos_orig$FOLHA),]
+  df_brutos <- df_list[[2]]
+  df_brutos <- df_brutos[!is.na(df_brutos$FOLHA),]
+  data_transf <- df_list[[3]]
+  data_transf <- data_transf[!is.na(data_transf$FOLHA),]
   ## Gera planilhas com resultados da classificação-------------------------------
   # para cada método analítico
   for (l in 1:length(lab)) {
@@ -45,7 +48,9 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
 
     # Recorta a base analítica pelo método analítico simplificado (Lab)
     data_brutos <- df_brutos[df_brutos$Lab == lab[l] ,]
+    data_brutos <- data_brutos[!is.na(data_brutos$FOLHA),]
     data <- data_transf[data_transf$Lab == lab[l],]
+    data <- data[!is.na(data$FOLHA),]
 
     # Controle para tratar só folhas com mais de uma amostra
     # só tratar dados > 0
@@ -602,6 +607,13 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
   write.csv2(
     data_transf,
     "outputs/Dados_areas/TODAS/dados_arrumados_transf.csv",
+    row.names = F
+  )
+
+  df_brutos_orig <- df_brutos_orig[df_brutos_orig$NLAB %in% data_transf$NLAB, ]
+   write.csv2(
+    df_brutos_orig,
+    "outputs/Dados_areas/TODAS/dados_brutos_originais.csv",
     row.names = F
   )
 

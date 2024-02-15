@@ -616,5 +616,52 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
     "outputs/Dados_areas/TODAS/dados_brutos_originais.csv",
     row.names = F
   )
+  # Unificar os resultados dos dois laboratórios
+   ## Dados Analíticos
+   path1 <- "outputs/Dados_areas/AA/"
+   path2 <- "outputs/Dados_areas/EE/"
 
+   ## Dados Classificados
+   path3 <- "outputs/Classificadas/AA/"
+   path4 <- "outputs/Classificadas/EE/"
+
+   # Dados destaque
+   dest1 <- read.csv2(paste0(path3, "destaque_LAB_AA.csv"), colClasses = "character")
+   dest2 <- read.csv2(paste0(path4, "destaque_LAB_EE.csv"), colClasses = "character")
+   dest = dplyr::bind_rows(dest1, dest2)
+   write.csv2(dest,"outputs/Processadas/destaque.csv", row.names = F)
+
+   # Dados destaque todos
+   destt1 <- read.csv2(paste0(path3, "destaque_todas_LAB_AA.csv"), colClasses = "character")
+   destt2 <- read.csv2(paste0(path4, "destaque_todas_LAB_EE.csv"), colClasses = "character")
+   destt = dplyr::bind_rows(dest1, dest2)
+   write.csv2(dest,"outputs/Processadas/destaque_todas.csv", row.names = F)
+
+   # Legenda
+   leg1 <- read.csv2(paste0(path3, "legenda_LAB_AA.csv"), colClasses = "character")
+   leg2 <- read.csv2(paste0(path4, "legenda_LAB_EE.csv"), colClasses = "character")
+   leg = dplyr::bind_rows(leg1, leg2)
+
+   write.csv2(leg,"outputs/Processadas/legenda.csv", row.names = F)
+
+   # Sumario
+   sum1 <- read.csv2(paste0(path3, "sumario_LAB_AA.csv"), colClasses = "character")
+   sum2 <- read.csv2(paste0(path4, "sumario_LAB_EE.csv"), colClasses = "character")
+   sum = dplyr::bind_rows(sum1, sum2)
+   write.csv2(sum,"outputs/Processadas/sumario.csv")
+
+   ## Shapes destaques
+   require(sf)
+   path5 <- "outputs/Classificadas/AA"
+   path6 <- "outputs/Classificadas/EE"
+   destsp1 <- sf::st_read(path5, "destaque_LAB_AA" )
+   destsp2 <- sf::st_read(path6, "destaque_LAB_EE")
+   destsp <- do.call(rbind, list(destsp1,destsp2))
+   st_write(destsp,"outputs/Processadas/destaque.shp", append=FALSE )
+
+   ## Shapes destaques todas
+   desttsp1 <- sf::st_read(path5, "destaque_todas_LAB_AA" )
+   desttsp2 <- sf::st_read(path6, "destaque_todas_LAB_EE")
+   desttsp <- do.call(rbind, list(desttsp1,desttsp2))
+   st_write(desttsp,"outputs/Processadas/destaque_todas.shp", append=FALSE )
 }

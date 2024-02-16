@@ -18,8 +18,8 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
   # colnames(df_new) <- stringr::str_to_title(colnames(df_new))
   df_new <- df_new %>% dplyr::select(-ID)
 
-  # ### Rotina para classicar os dados----------------------------------------------
-  # # ## Entra as condições do processamento
+  # Rotina para classicar os dados----------------------------------------------
+  ## Entra as condições do processamento ---------------------------------------
 
   # Atribui os valores do Lab (método analítico)
   lab <- c("EE", "AA")
@@ -38,7 +38,8 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
   df_brutos <- df_brutos[!is.na(df_brutos$FOLHA),]
   data_transf <- df_list[[3]]
   data_transf <- data_transf[!is.na(data_transf$FOLHA),]
-  ## Gera planilhas com resultados da classificação-------------------------------
+
+  ## Gera planilhas com resultados da classificação-----------------------------
   # para cada método analítico
   for (l in 1:length(lab)) {
     # Define os diretórios da saída
@@ -119,8 +120,10 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
 
         # Conta o número total de amostras que vão para classificação (N)
         n_analises[j] <- nrow(data_analise)
+
         # Cria vetor com dados de N para os elementos
         n_tot <- rep(nrow(data_orig), length(elementos))
+
         # Conta o número de amostras com análises validas por elemento
         n_val1 <- sapply(data_orig, function(y)
           sum(is.na(y))) # NA
@@ -131,6 +134,8 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
         n_val <-
           n_tot - colSums(rbind(n_val1, n_val2, n_val3), na.rm = TRUE)
 
+        # Testa se existem mais de 5 amostras analisadas
+        # e processa a classificação
         if (nrow(data_analise) >= 5) {
           lim <- 0
           pref <- 0
@@ -142,7 +147,8 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
           # Cria tabela de classificação para os elementos
           for (i in 1:4) {
             if (n_val[i] > 0) {
-              tab[i] <- round(10 ^ summary(log10(data_analise[, i]))[1:6], dig[i])
+              tab[i] <- round(10 ^ summary(log10(data_analise[, i]))[1:6],
+                              dig[i])
             } else{
               tab[i] <- c("", "", "", "", "", "")
             }
@@ -210,6 +216,7 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
               " Média",
               "3o. Qu.",
               " Máx.")
+
           # Gera a tabela com parâmetros estatísticos
           tab <- rbind(n_tot, n_val, tab)
           LAB <- rep(lab[l], 8)
@@ -255,16 +262,14 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
               fixed = TRUE
             )
 
-
-          # Elimina linhas vazias
-          # limiares_elementos <- limiares_elementos[!(rowSums(is.na(limiares_elementos))),]
           # Substitui o valor 2 (>75%)  pelo nome da coluna
-
           w <- which(classifica == 2 , arr.ind = TRUE)
           classifica[w] <- paste0(names(classifica)[w[, "col"]], " ")
+
           # Substitui 1 por vazio
           classifica[classifica == 1] <- ""
           classifica_el <- classifica
+
           # Função para concatenar strings
           col_concat <- function(data, sep = "") {
             if (!(any(class(data) %in% c("matrix", "data.frame"))))
@@ -272,23 +277,32 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
             apply(data, 1, paste0, collapse = sep)
           }
           attr(col_concat, "call") <- "col_concat"
+
           # Cria campo destaque Elementos anomalos concatenados (Destaques)
           Destaques <- col_concat(classifica, sep = "")
+
           # Elimina dados com valor "NA"
           Destaques <- gsub("NA", "", Destaques)
+
           # Define nome das colunas dos elementos classificados
           colnames(classifica_el) <-
             paste0("dest ", colnames(data_analise))
-          # Define tabelas de classificação com chave, campo, elementos e destaques
+
+          # Define tabelas de classificação com chave, campo,
+          # elementos e destaques
           classifica <-
             cbind(ID, data_campo, classifica_el, Destaques)
+
           # Define tabelas de classificação com chave, campo e destaques
           classifica2 <- cbind(ID, data_campo, Destaques)
+
           # Cria planilhas com todas as amostras e só com as que tem destaques
           classifica_destaques <-
             subset(classifica2, classifica$Destaques != "")
           classifica_destaques_ordem <-
-            classifica_destaques[order(classifica_destaques$Destaques), c(2:ncol(classifica_destaques))]
+            classifica_destaques[order(classifica_destaques$Destaques),
+                                 c(2:ncol(classifica_destaques))]
+
           # Atribui o sistema de coordenadas geográficas da projeção
           # 4674: SIRGAS2000
           r <-  4674
@@ -393,12 +407,13 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
         } else
           next
       }
-
+      ## Salva os resultados da classificação para cada método analítico---------
       ## Lista nomes de arquivos para ser combinado
       filenames <- paste0(path, list.files(
         path = path,
         pattern = glob2rx("destaque_todas*.csv")
       ))
+
       ## Combina arquivos listados do diretório
       dataset <- do.call("rbind", lapply(
         filenames,
@@ -406,7 +421,8 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
           read.csv2(files, fileEncoding = "latin1")
         }
       ))
-      # Salva planilha csv das classificações por folha
+
+      # Salva planilha csv das classificações
       write.table(
         dataset,
         paste0(path2,  "destaque_todas_LAB_", lab[l], ".csv"),
@@ -428,7 +444,8 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
           read.csv2(files)
         }
       ))
-      # Salva planilha csv das classificações por folha
+
+      # Salva planilha csv das classificações
       write.csv2(
         dataset,
         paste0(path2,  "destaque_LAB_", lab[l], ".csv"),
@@ -453,14 +470,13 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
 
       dataset <- dplyr::filter(dataset,!is.na(Limiar))
 
-      # Salva planilha csv das classificações por folha
+      # Salva planilha csv das classificações
       write.csv2(
         dataset,
         paste0(path2, "legenda_LAB_", lab[l], ".csv"),
         row.names = FALSE,
         na = ""
       )
-
 
       ## Lista nomes de arquivos para ser combinado
       filenames <- paste0(path, list.files(
@@ -478,14 +494,13 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
         }
       ))
 
-      # Salva planilha csv das classificações por folha
+      # Salva planilha csv das classificações
       write.csv2(
         dataset,
         paste0(path2, "sumario_LAB_", lab[l], ".csv"),
         row.names = FALSE,
         na = ""
       )
-
 
       ## Lista nomes de arquivos para ser combinado
       filenames <- paste0(path, list.files(
@@ -503,7 +518,7 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
         }
       ))
 
-      # Salva planilha csv das classificações por folha
+      # Salva planilha csv das classificações
       write.table(
         dataset,
         paste0(path2, "dados_analiticos_LAB_", lab[l], ".csv"),
@@ -527,7 +542,6 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
         driver = "ESRI Shapefile",
         delete_layer = TRUE
       )
-
 
       ## Destaques todas
       destaques_todas <-
@@ -564,12 +578,11 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
         delete_layer = TRUE
       )
 
-
     }
 
   }
 
-  ##
+## Salva os dados de entrada do processamento-----------------------------------
   df_brutos <- df_brutos[df_brutos$NLAB %in% data_transf$NLAB, ]
 
   data_originais_st <-
@@ -610,13 +623,30 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
     row.names = F
   )
 
+  # Dados brutos originais
+  # Filtra só linhas com amostras
   df_brutos_orig <- df_brutos_orig[df_brutos_orig$NLAB %in% data_transf$NLAB, ]
    write.csv2(
     df_brutos_orig,
     "outputs/Dados_areas/TODAS/dados_brutos_originais.csv",
     row.names = F
   )
-  # Unificar os resultados dos dois laboratórios
+   # Cria dados espaciais
+   df_brutos_orig_st <-
+     sf::st_as_sf(df_brutos_orig,
+                  coords = c("LONGITUDE", "LATITUDE"),
+                  crs = r)
+
+    # Salva dados espaciais
+     sf::st_write(
+     df_brutos_orig_st,
+     "outputs/Dados_areas/TODAS/dados_brutos_orig.shp",
+     driver = "ESRI Shapefile",
+     delete_layer = TRUE
+   )
+
+
+  # Unifica os resultados dos dois laboratórios -------------------------------
    ## Dados Analíticos
    path1 <- "outputs/Dados_areas/AA/"
    path2 <- "outputs/Dados_areas/EE/"
@@ -626,27 +656,35 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
    path4 <- "outputs/Classificadas/EE/"
 
    # Dados destaque
-   dest1 <- read.csv2(paste0(path3, "destaque_LAB_AA.csv"), colClasses = "character")
-   dest2 <- read.csv2(paste0(path4, "destaque_LAB_EE.csv"), colClasses = "character")
+   dest1 <- read.csv2(paste0(path3, "destaque_LAB_AA.csv"),
+                      colClasses = "character")
+   dest2 <- read.csv2(paste0(path4, "destaque_LAB_EE.csv"),
+                      colClasses = "character")
    dest = dplyr::bind_rows(dest1, dest2)
    write.csv2(dest,"outputs/Processadas/destaque.csv", row.names = F)
 
    # Dados destaque todos
-   destt1 <- read.csv2(paste0(path3, "destaque_todas_LAB_AA.csv"), colClasses = "character")
-   destt2 <- read.csv2(paste0(path4, "destaque_todas_LAB_EE.csv"), colClasses = "character")
+   destt1 <- read.csv2(paste0(path3, "destaque_todas_LAB_AA.csv"),
+                       colClasses = "character")
+   destt2 <- read.csv2(paste0(path4, "destaque_todas_LAB_EE.csv"),
+                       colClasses = "character")
    destt = dplyr::bind_rows(dest1, dest2)
    write.csv2(dest,"outputs/Processadas/destaque_todas.csv", row.names = F)
 
    # Legenda
-   leg1 <- read.csv2(paste0(path3, "legenda_LAB_AA.csv"), colClasses = "character")
-   leg2 <- read.csv2(paste0(path4, "legenda_LAB_EE.csv"), colClasses = "character")
+   leg1 <- read.csv2(paste0(path3, "legenda_LAB_AA.csv"),
+                     colClasses = "character")
+   leg2 <- read.csv2(paste0(path4, "legenda_LAB_EE.csv"),
+                     colClasses = "character")
    leg = dplyr::bind_rows(leg1, leg2)
 
    write.csv2(leg,"outputs/Processadas/legenda.csv", row.names = F)
 
    # Sumario
-   sum1 <- read.csv2(paste0(path3, "sumario_LAB_AA.csv"), colClasses = "character")
-   sum2 <- read.csv2(paste0(path4, "sumario_LAB_EE.csv"), colClasses = "character")
+   sum1 <- read.csv2(paste0(path3, "sumario_LAB_AA.csv"),
+                     colClasses = "character")
+   sum2 <- read.csv2(paste0(path4, "sumario_LAB_EE.csv"),
+                     colClasses = "character")
    sum = dplyr::bind_rows(sum1, sum2)
    write.csv2(sum,"outputs/Processadas/sumario.csv")
 

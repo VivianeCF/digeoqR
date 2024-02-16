@@ -693,11 +693,11 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
    destsp1 <- sf::st_read(path5, "destaque_LAB_AA" )
    destsp2 <- sf::st_read(path6, "destaque_LAB_EE")
    destsp <- do.call(rbind, list(destsp1,destsp2))
-   st_write(destsp,"outputs/Processadas/destaque.shp", append=FALSE )
+   sf::st_write(destsp,"outputs/Processadas/destaque.shp", append=FALSE )
 
    ## Shapes destaques todas
    desttsp1 <- sf::st_read(path5, "destaque_todas_LAB_AA" )
    desttsp2 <- sf::st_read(path6, "destaque_todas_LAB_EE")
    desttsp <- do.call(rbind, list(desttsp1,desttsp2))
-   st_write(desttsp,"outputs/Processadas/destaque_todas.shp", append=FALSE )
+   sf::st_write(desttsp,"outputs/Processadas/destaque_todas.shp", append=FALSE )
 }

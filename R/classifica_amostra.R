@@ -689,7 +689,6 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
    write.csv2(sum,"outputs/Processadas/sumario.csv")
 
    ## Shapes destaques
-   require(sf)
    path5 <- "outputs/Classificadas/AA"
    path6 <- "outputs/Classificadas/EE"
    destsp1 <- sf::st_read(path5, "destaque_LAB_AA" )

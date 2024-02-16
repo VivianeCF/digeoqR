@@ -584,6 +584,7 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
 
 ## Salva os dados de entrada do processamento-----------------------------------
   df_brutos <- df_brutos[df_brutos$NLAB %in% data_transf$NLAB, ]
+  data_transf <- data_transf[data_transf$FOLHA != "", ]
 
   data_originais_st <-
     sf::st_as_sf(df_brutos,
@@ -603,8 +604,6 @@ classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
     sf::st_as_sf(data_transf,
                  coords = c("LONGITUDE", "LATITUDE"),
                  crs = r)
-
-  data_transf_st <- data_transf_st[data_transf_st$FOLHA != "", ]
 
   sf::st_write(
     data_transf_st,

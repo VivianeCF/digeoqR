@@ -125,8 +125,8 @@ for(j in s) {
     data_s <- data
 
   } else{
-    data_bs <- data_b[data_b$UNIDADE == unidades[j], ]
-    data_s <- data[data$UNIDADE == unidades[j], ]
+    data_bs <- data_b[data_b$SIGLA == unidades[j], ]
+    data_s <- data[data$SIGLA == unidades[j], ]
   }
 
 
@@ -203,7 +203,8 @@ for(j in s) {
     MDN[i] <- round(10^(median(logselect[,i])), dig[i])
     DP[i] <- round(sd(select[,i]), dig[i])
     CV[i] <- round(DP[i]/MD[i], dig[i])
-    MIN[i] <- round(min(select[,i],na.rm = TRUE), dig[i])
+    MIN[i] <- ifelse(length(unique(select[,i])) == 1, unique(select[,i]),
+                     round(min(select[,i],na.rm = TRUE), dig[i]))
     MIN[i] <- ifelse(MIN[i]<LD[i], paste0("<", LD[i]), MIN[i])
     Q1[i] <- round(10^(quantile(logselect[,i], c(.25),na.rm = TRUE)), dig[i])
     Q3[i] <- round(10^(quantile(logselect[,i], c(.75),na.rm = TRUE)), dig[i])
@@ -244,9 +245,9 @@ for(j in s) {
     UCC[i] <- ifelse(UCC[i] == 0, NA, UCC[i])
     MAD[i] <- round(10^mad(logselect[,i], na.rm = TRUE), dig[i])
     MAD[i] <- ifelse(MAD[i] == 0, NA, MAD[i])
-    SWs[i] <- ifelse(length(unique(logselect[,i])) == 1, NA,
+    SWs[i] <- ifelse(length(unique(logselect[,i])) < 3, NA,
                      round(shapiro.test(logselect[,i])$statistic, 3))
-    SWp[i] <- ifelse(length(unique(logselect[,i])) == 1, NA,
+    SWp[i] <- ifelse(length(unique(logselect[,i])) < 3, NA,
                      round(shapiro.test(logselect[,i])$p.value, 3))
 
   }

@@ -1,19 +1,23 @@
 #' Extrai dados da legenda de um arquivo de estilo xml
 #'
-#' @param file Endereço e nome do arquivo
+#'  No QGIS use a ferramenta Create style database from project para gerar o XML,
+#'  da feição pretendida, aqui usei usei o do mapa geológico do Brasil
+#'  ao milhonésimo de 2014 do SGB-CPRM.
+#'
 #' @param find1 Nó de busca para a cor
 #' @param indice Índice dos registros da legenda xml
 #' @param value_cor Nome da variável com as cores
 #' @param find2 Nó de busca para os nomes das siglas
 #' @param value_name Nome da variável dos nomes das siglas
 #' @param value_sub Caracteres para substituir no nome das siglas
+#' @param file_xml Endereço do arquivo de estilo xml
 #'
 #' @return
 #' @export
 #'
 #' @examples
 resgata_legenda_xml <-
-  function(file_xml ,
+  function(file_xml = "inputs/campo/geologia.xml" ,
            find1 = "//symbol/layer" ,
            indice = "id",
            value_cor = "value",

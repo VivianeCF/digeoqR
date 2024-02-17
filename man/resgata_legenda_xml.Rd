@@ -5,7 +5,7 @@
 \title{Extrai dados da legenda de um arquivo de estilo xml}
 \usage{
 resgata_legenda_xml(
-  file_xml,
+  file_xml = "inputs/campo/geologia.xml",
   find1 = "//symbol/layer",
   indice = "id",
   value_cor = "value",
@@ -15,6 +15,8 @@ resgata_legenda_xml(
 )
 }
 \arguments{
+\item{file_xml}{EndereÃ§o do arquivo de estilo xml}
+
 \item{find1}{NÃ³ de busca para a cor}
 
 \item{indice}{Ãndice dos registros da legenda xml}
@@ -26,9 +28,9 @@ resgata_legenda_xml(
 \item{value_name}{Nome da variÃ¡vel dos nomes das siglas}
 
 \item{value_sub}{Caracteres para substituir no nome das siglas}
-
-\item{file}{EndereÃ§o e nome do arquivo}
 }
 \description{
-Extrai dados da legenda de um arquivo de estilo xml
+No QGIS use a ferramenta Create style database from project para gerar o XML,
+da feiÃ§Ã£o pretendida, aqui usei usei o do mapa geolÃ³gico do Brasil
+ao milhonÃ©simo de 2014 do SGB-CPRM.
 }

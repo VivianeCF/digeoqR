@@ -18,7 +18,7 @@
 #'  transformados ou brutos, pivotados ou não.
 #'@export
 #' @examples
-#' #prepara_bases(dir_bol = "inputs/quimica/R/",classe_am = 4,analise = 2,
+#' #prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
 #' dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
                           tipo_base, base_campo ) {
@@ -63,12 +63,15 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
     out[[4]] <- dplyr::right_join(dados_campo,
                                   mineral$`dados transformados pivotados`,
                                   by = "N_LAB")
+
   }
-  names(out) <-  c(
+ out[[5]] <- quimica[[7]]
+ names(out) <-  c(
     "dados brutos",
     "dados transformados",
     "dados brutos pivotados",
-    "dados transformados pivotados"
+    "dados transformados pivotados",
+    "condições analíticas"
   )
   return(out)
 }

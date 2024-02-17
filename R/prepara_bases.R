@@ -13,6 +13,7 @@
 #' @param dir_base Diretório dos dados de campo
 #' @param base_campo Nome do arquivo das bases de campo
 #' @param tipo_base tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
+#' @param dir_out Diretório de saída para os dados de campo
 #'
 #'@return Retorna a lista com as bases de dados em diferentes formatos
 #'  transformados ou brutos, pivotados ou não.
@@ -21,7 +22,7 @@
 #' #prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
 #' dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
-                          tipo_base, base_campo ) {
+                          tipo_base, base_campo, dir_out) {
   out <- list()
   a <- c("mineral", "química")
   t <-
@@ -30,9 +31,30 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
       "SOLO",
       "ROCHA",
       "ÁGUA")
+  nm_classe <- c("Concentrado de bateia",
+                 "Sedimento de corrente",
+                 "Solo",
+                 "Rocha",
+                 "Água")
   if (analise == 2) {
     quimica <- le_boletim_quimica(classe_am, dir_bol)
     dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo )
+    dados_campo <- dados_campo[dados_campo$CLASSE ==  nm_classe[classe_am],]
+    VALUE <- 1:nrow(dados_campo)
+    dados_campo <- data.frame(VALUE, dados_campo)
+
+    data_dup <-  dados_campo[duplicated(c( dados_campo$LONG_DEC,  dados_campo$LAT_DEC)), ]
+    data_dup <- data_dup[!is.na(data_dup$N_LAB),]
+    data_dup <- data_dup[!is.na(data_dup$N_LAB),]
+    dup <- rep("DUP", nrow(data_dup))
+    data_dup <- data.frame(COD_SMP = dup, data_dup)
+    data_smp <- unique(dados_campo[!duplicated(c(dados_campo$LONG_DEC, dados_campo$LAT_DEC)), ])
+    data_smp <- data_smp[!is.na(data_smp$N_LAB),]
+    smp <- rep("SMP", nrow(data_smp))
+    data_smp <- data.frame(COD_SMP = smp, data_smp)
+    data_campo <- rbind(data_smp, data_dup)
+    data_campo <- data_campo[order(data_campo$VALUE),]
+    data_campo <- data_campo %>% dplyr::relocate(COD_SMP, .after = NUM_CAMPO)
 
     # Base não pivotada
     out[[1]] <- dplyr::right_join(dados_campo,
@@ -66,12 +88,35 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
 
   }
  out[[5]] <- quimica[[7]]
+
+
+ dados_campo$LONG_DEC <- as.numeric(gsub(",", ".", dados_campo$LONG_DEC, fixed = TRUE))
+ dados_campo$LAT_DEC <- as.numeric(gsub(",", ".", dados_campo$LAT_DEC, fixed = TRUE))
+ out[[6]] <- dados_campo
+
+
+ write.csv2(dados_campo, paste0(dir_out, "dados_campo.csv"), row.names = FALSE)
+
+# Cria dados espaciais
+r <-  4674
+dados_campo_st <-
+  sf::st_as_sf(dados_campo,
+               coords = c("LONG_DEC", "LAT_DEC"),
+               crs = r, remove = FALSE )
+sf::st_write(
+  dados_campo_st,
+  paste0(dir_out, "estacoes", ".shp"),
+  driver = "ESRI Shapefile",
+  delete_layer = TRUE
+)
+
  names(out) <-  c(
     "dados brutos",
     "dados transformados",
     "dados brutos pivotados",
     "dados transformados pivotados",
-    "condições analíticas"
+    "condições analíticas",
+    "dados de campo"
   )
   return(out)
 }

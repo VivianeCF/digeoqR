@@ -15,19 +15,19 @@ resgata_legenda_xml(
 )
 }
 \arguments{
-\item{find1}{Nó de busca para a cor}
+\item{find1}{NÃ³ de busca para a cor}
 
-\item{indice}{Índice dos registros da legenda xml}
+\item{indice}{Ãndice dos registros da legenda xml}
 
-\item{value_cor}{Nome da variável com as cores}
+\item{value_cor}{Nome da variÃ¡vel com as cores}
 
-\item{find2}{Nó de busca para os nomes das siglas}
+\item{find2}{NÃ³ de busca para os nomes das siglas}
 
-\item{value_name}{Nome da variável dos nomes das siglas}
+\item{value_name}{Nome da variÃ¡vel dos nomes das siglas}
 
 \item{value_sub}{Caracteres para substituir no nome das siglas}
 
-\item{file}{Endereço e nome do arquivo}
+\item{file}{EndereÃ§o e nome do arquivo}
 }
 \description{
 Extrai dados da legenda de um arquivo de estilo xml

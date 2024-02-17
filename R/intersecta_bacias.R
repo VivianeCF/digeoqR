@@ -24,7 +24,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
                               bacias = "bacias_area",
                               feicao = "geologia",
                               tipo_leg = 1,
-                              estacoes = "estacoes")
+                              estacoes = "outputs/estacoes.shp")
 {
 
   options(encoding = "latin1")
@@ -48,7 +48,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
   spy_grid$Area_bacia <-
     round(sf::st_area(spy_grid, byid = TRUE) / 1000000, 3)
   # spy_grid@data <- spy_grid@data[,1:8]
-  spy_poly = sf::read_sf(file_shp)
+  spy_poly = sf::read_sf(paste0(dir_in, feicao, ".shp"))
   spy_poly <- sf::st_transform(spy_poly,
                                paste0(
                                  "+proj=utm +zone=",
@@ -65,7 +65,7 @@ if(tipo_leg == 2){
   legenda <- prepara_legenda(dir_in, feicao )
   codlito <- legenda[[tipo_leg]]
 
-  mydata <- sf::read_sf(paste0(dir_in, estacoes, ".shp"))
+  mydata <- sf::read_sf(estacoes)
   colnames(spy_grid)
   spy_grid <-
     dplyr::left_join(spy_grid , data.frame(mydata), by = "VALUE")
@@ -114,7 +114,7 @@ if(tipo_leg == 2){
     "Area_lito",
     "Pct_area"
   )
-
+  select_campos <- colnames(df)[colnames(df) %in% select_campos]
   write.csv2(
     df[, select_campos],
     paste0(dir_out,"lito_bacia_crop.csv"),

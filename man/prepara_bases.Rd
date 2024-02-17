@@ -32,6 +32,6 @@ layout modelo nos diretórios inputs/mineral ou inputs/quimica, conforme o
 exemplo.
 }
 \examples{
-#prepara_bases(dir_bol = "inputs/quimica/R/",classe_am = 4,analise = 2,
+#prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
 dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 }

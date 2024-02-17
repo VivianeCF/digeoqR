@@ -11,7 +11,7 @@ intersecta_bacias(
   bacias = "bacias_area",
   feicao = "geologia",
   tipo_leg = 1,
-  estacoes = "estacoes"
+  estacoes = "outputs/estacoes.shp"
 )
 }
 \arguments{

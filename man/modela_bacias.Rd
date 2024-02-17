@@ -13,7 +13,7 @@ modela_bacias(
   rios = "inputs/campo/rios_ibge.shp",
   massa_dagua = "inputs/campo/massa_dagua.shp",
   limite = "inputs/campo/carta_100M.shp",
-  estacoes = "inputs/campo/estacoes.shp",
+  estacoes = "outputs/estacoes.shp",
   threshold = 250,
   snap_dist = 0.02,
   min_length = 0.02,

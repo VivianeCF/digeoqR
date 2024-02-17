@@ -7,14 +7,15 @@
 tabela_estatistica(
   tipo = 1,
   rotulo_lito = "outputs/mylitho.csv",
-  estacao = "inputs/campo/estacoes.shp",
+  estacao = "outputs/estacoes.shp",
   ref_ucc = "inputs/quimica/ucc.csv",
   dir_bol = "inputs/quimica/S/",
   classe_am = 2,
   analise = 2,
   dir_base = "inputs/campo/",
   tipo_base = 1,
-  base_campo = "fcampo"
+  base_campo = "fcampo",
+  dir_out = "outputs/"
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ Rudnick e Gao 2004}
 \item{tipo_base}{Tipo de base de campo 1 = FCAMP, 2 = SURVEY123 e 3 = QFIELD}
 
 \item{base_campo}{Nome do arquivo da base de campo (sem extenção)}
+
+\item{dir_out}{Diretório de saída dados de campo e estações}
 }
 \description{
 Gera planilhas cos os principais parâmetros estatísticos

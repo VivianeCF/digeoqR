@@ -4,7 +4,15 @@
 \alias{prepara_bases}
 \title{Prepara a base de dados para o processamento dos dados geoquímicos}
 \usage{
-prepara_bases(dir_bol, classe_am, analise, dir_base, tipo_base, base_campo)
+prepara_bases(
+  dir_bol,
+  classe_am,
+  analise,
+  dir_base,
+  tipo_base,
+  base_campo,
+  dir_out
+)
 }
 \arguments{
 \item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/qumica/R/"}
@@ -19,6 +27,8 @@ corrente, 3 = rocha, 4 = solo, 5 = água}
 \item{tipo_base}{tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
 
 \item{base_campo}{Nome do arquivo das bases de campo}
+
+\item{dir_out}{Diretório de saída para os dados de campo}
 }
 \value{
 Retorna a lista com as bases de dados em diferentes formatos

@@ -15,6 +15,7 @@
 #' @param dir_base Diretório da base de dados de campo
 #' @param tipo_base Tipo de base de campo 1 = FCAMP, 2 = SURVEY123 e 3 = QFIELD
 #' @param base_campo Nome do arquivo da base de campo (sem extenção)
+#' @param dir_out Diretório de saída dados de campo e estações
 #'
 #' @return
 #' @export
@@ -23,20 +24,20 @@
 tabela_estatistica <-
   function(tipo = 1,
            rotulo_lito = "outputs/mylitho.csv",
-           estacao = "inputs/campo/estacoes.shp",
+           estacao = "outputs/estacoes.shp",
            ref_ucc = "inputs/quimica/ucc.csv",
            dir_bol = "inputs/quimica/S/",
            classe_am = 2,
            analise = 2,
            dir_base = "inputs/campo/",
            tipo_base = 1,
-           base_campo = "fcampo"){
+           base_campo = "fcampo", dir_out = "outputs/"){
 
     # Obter dados das análises químicas
      dados_bol <-  prepara_bases(dir_bol,
                                  classe_am, analise,
                                  dir_base, tipo_base,
-                                 base_campo )
+                                 base_campo, dir_out )
      lst_pr <- list()
      lst_el <- list()
      # Lê dados brutos
@@ -80,12 +81,8 @@ tabela_estatistica <-
     lista_legenda <- prepara_legenda()
     mylegend <- lista_legenda[[2]]
 
-    mylitho <- dplyr::inner_join(data, mylitho[, c("VALUE", "Area_bacia", "Geo_cod")], by= "VALUE")
+    mylitho <- dplyr::inner_join(data, mylitho, by= "VALUE")
 
-    mydata_dup <- mydata[duplicated(c(mydata$LONG_DEC, mydata$LAT_DEC)), ]
-    mydata_dup <- mydata_dup[!is.na(mydata_dup$N_LAB),]
-    mydata_smp <- unique(mydata[!duplicated(c(mydata$LONG_DEC, mydata$LAT_DEC)), ])
-    mydata_smp <- mydata_smp[!is.na(mydata_smp$N_LAB),]
 
 # colnames(mylitho)
 mylitho <- mylitho[,c("VALUE","N_LAB","LONG_DEC", "LAT_DEC", "NUM_CAMPO",
@@ -103,11 +100,10 @@ data_b <- dplyr::left_join(data_b, mylegend, by = "Geo_cod")
 
 data <-
   dplyr::inner_join(data,
-                    mylitho[, c("N_LAB", "Area_bacia", "Geo_cod")],
-                    by = "N_LAB")
+                    mylitho[, c("VALUE", "Area_bacia", "Geo_cod")],
+                    by = "VALUE")
 
 data <- dplyr::left_join(data, mylegend, by = "Geo_cod")
-
 
 unidades <- unique(data_b$SIGLA)
 

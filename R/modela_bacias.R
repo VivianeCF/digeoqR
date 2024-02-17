@@ -44,7 +44,7 @@ modela_bacias <- function(fase = 2,
 {
   ### GERA DRENAGENS--------------------------------------------------------------
 
-  wbt_wd <- tempdir(check = TRUE)
+  wbt_wd <- tempdir(check = FALSE)
   options("rgdal_show_exportToProj4_warnings" = "none")
   whitebox::wbt_rasterize_streams(
     rios,

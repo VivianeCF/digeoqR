@@ -25,7 +25,7 @@ recorta_feicao_area <- function(dir_in = "inputs/campo/", dir_out = "outputs/",
 
 
  crop_feicao <- suppressMessages({suppressWarnings({sf::st_crop(feicao_sf, area_sf)})})
- nc_dissolve <- crop_feicao %>% group_by(SIGLA) %>% summarize()
+ nc_dissolve <- crop_feicao %>% group_by(SIGLA) %>% suppressMessages({summarize()})
  # plot(nc_dissolve)
  feicao_edit <- suppressWarnings({suppressMessages({sf::st_join(nc_dissolve,crop_feicao, by = "SIGLA")})})
  sf::write_sf(feicao_edit, paste0(dir_out, feicao_out, ".shp"), delete_layer = TRUE)

@@ -15,22 +15,22 @@ resgata_legenda_xml(
 )
 }
 \arguments{
-\item{dir_xml}{DiretÃ³rio do arquivo xml}
+\item{dir_xml}{Diretório do arquivo xml}
 
 \item{nome_xml}{Nome do arquivo xml}
 
-\item{find1}{NÃ³ de busca para a cor}
+\item{find1}{Nó de busca para a cor}
 
-\item{indice}{Ãndice dos registros da legenda xml}
+\item{indice}{Índice dos registros da legenda xml}
 
-\item{value_cor}{Nome da variÃ¡vel com as cores}
+\item{value_cor}{Nome da variável com as cores}
 
-\item{find2}{NÃ³ de busca para os nomes das siglas}
+\item{find2}{Nó de busca para os nomes das siglas}
 
-\item{value_name}{Nome da variÃ¡vel dos nomes das siglas}
+\item{value_name}{Nome da variável dos nomes das siglas}
 }
 \description{
 No QGIS use a ferramenta Create style database from project para gerar o XML,
-da feiÃ§Ã£o pretendida, aqui usei usei o do mapa geolÃ³gico do Brasil
-ao milhonÃ©simo de 2014 do SGB-CPRM.
+da feição pretendida, aqui usei usei o do mapa geológico do Brasil
+ao milhonésimo de 2014 do SGB-CPRM.
 }

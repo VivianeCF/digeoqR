@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-recorta_feicao_area <- function(dir_in = "inputs/campo/", dir_out = "outputs",
+recorta_feicao_area <- function(dir_in = "inputs/campo/", dir_out = "outputs/",
                                 area = "area_srtm",
                                 feicao_in = "geologia_br",
                                 feicao_out = "geologia_area"){
@@ -27,7 +27,7 @@ recorta_feicao_area <- function(dir_in = "inputs/campo/", dir_out = "outputs",
  crop_feicao <- suppressMessages({suppressWarnings({sf::st_crop(feicao_sf, area_sf)})})
  nc_dissolve <- crop_feicao %>% group_by(SIGLA) %>% summarize()
  # plot(nc_dissolve)
- feicao_edit <- sf::st_join(nc_dissolve,crop_feicao, by = "SIGLA")
- sf::st_write(geologia, paste0(dir_out, feicao_out, ".shp"))
+ feicao_edit <- suppressWarnings({suppressMessages({sf::st_join(nc_dissolve,crop_feicao, by = "SIGLA")})})
+ sf::write_sf(feicao_edit, paste0(dir_out, feicao_out, ".shp"), delete_layer = TRUE)
  return( feicao_edit)
  }

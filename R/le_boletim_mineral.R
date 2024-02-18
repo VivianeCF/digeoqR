@@ -228,6 +228,7 @@ le_boletim_mineral <- function(classe_am, dir_bol) {
       paste0("Requisi", "\u00e7", "", "\u00e3", "o de an", "\u00e1", "lise")
     )
     boletim <- boletim[colSums(!is.na(boletim)) > 0]
+
     condicoes_analiticas <-
       condicoes_analiticas[condicoes_analiticas$analito %in%
                              colnames(boletim)[3:ncol(boletim)],-4]
@@ -247,7 +248,7 @@ le_boletim_mineral <- function(classe_am, dir_bol) {
   df = do.call(plyr::rbind.fill, datalist3)
   tp = do.call(plyr::rbind.fill, datalist4)
   dfp <- do.call(plyr::rbind.fill, datalist5)
-
+  df <- df %>% dplyr::select(-"NA.2")
   # Coloca Boletim na última coluna
   df <- df %>% dplyr::relocate(BOLETIM, .after = last_col())
   df$N_LAB <- gsub("-", "", df$N_LAB)

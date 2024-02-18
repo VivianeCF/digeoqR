@@ -6,10 +6,11 @@
 \usage{
 recorta_feicao_area(
   dir_in = "inputs/campo/",
-  dir_out = "outputs",
+  dir_out = "outputs/",
   area = "area_srtm",
   feicao_in = "geologia_br",
-  feicao_out = "geologia_area"
+  feicao_out = "geologia_area",
+  chave = "SIGLA"
 )
 }
 \arguments{

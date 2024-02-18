@@ -248,9 +248,14 @@ le_boletim_mineral <- function(classe_am, dir_bol) {
   df = do.call(plyr::rbind.fill, datalist3)
   tp = do.call(plyr::rbind.fill, datalist4)
   dfp <- do.call(plyr::rbind.fill, datalist5)
+
+  # Retira colunas
+  df <- df %>% dplyr::select(-"NUM_CAMPO")
   df <- df %>% dplyr::select(-"NA.2")
+
   # Coloca Boletim na última coluna
   df <- df %>% dplyr::relocate(BOLETIM, .after = last_col())
+  # Padroniza n_lab
   df$N_LAB <- gsub("-", "", df$N_LAB)
   df$N_LAB <- gsub(" ", "", df$N_LAB)
   # Substiui valores do campo BOLETIM

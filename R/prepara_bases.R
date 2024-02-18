@@ -72,13 +72,9 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
   } else{
     mineral <- le_boletim_mineral(classe_am, dir_bol)
     dados_brutos <- mineral$`dados brutos`
-    dados_brutos <- dados_brutos %>% dplyr::select(-"NUM_CAMPO")
     dados_transformados <- mineral$`dados transformados`
-    dados_transformados <- dados_transformados %>% dplyr::select(-"NUM_CAMPO")
-    dados_brutos_pivotados <- mineral$`dados brutos pivotados`
-    dados_brutos_pivotados <- dados_brutos_pivotados %>% dplyr::select(-"NUM_CAMPO")
+     dados_brutos_pivotados <- mineral$`dados brutos pivotados`
     dados_transformados_pivotados <- mineral$`dados transformados pivotados`
-    dados_transformados_pivotados <- dados_transformados_pivotados %>% dplyr::select(-"NUM_CAMPO")
 
 
     dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo)

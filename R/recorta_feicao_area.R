@@ -8,6 +8,7 @@
 #' @param area Nome do arquivo shape da área
 #' @param feicao_in Nome da shape da feição de entrada
 #' @param feicao_out Nome da shape da feição de saída
+#' @param chave Nome da chave para a dissolução da feição recortada
 #'
 #' @return
 #' @export

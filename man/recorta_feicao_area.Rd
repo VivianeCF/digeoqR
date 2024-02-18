@@ -23,6 +23,8 @@ recorta_feicao_area(
 \item{feicao_in}{Nome da shape da feição de entrada}
 
 \item{feicao_out}{Nome da shape da feição de saída}
+
+\item{chave}{Nome da chave para a dissolução da feição recortada}
 }
 \description{
 Ferramenta que extrai a shape da feição (geologia, solo...) a partir de uma

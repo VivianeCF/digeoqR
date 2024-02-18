@@ -67,27 +67,37 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
     out[[4]] <- dplyr::right_join(dados_campo,
                                   quimica$`dados transformados pivotados`,
                                   by = "N_LAB")
+    out[[5]] <- quimica[[7]]
 
   } else{
     mineral <- le_boletim_mineral(classe_am, dir_bol)
     dados_brutos <- mineral$`dados brutos`
+    dados_brutos <- dados_brutos %>% dplyr::select(-"NUM_CAMPO")
     dados_transformados <- mineral$`dados transformados`
-    dados_campo <- extrai_dados_campo(tipo_base, dir_base,  nome_base)
+    dados_transformados <- dados_transformados %>% dplyr::select(-"NUM_CAMPO")
+    dados_brutos_pivotados <- mineral$`dados brutos pivotados`
+    dados_brutos_pivotados <- dados_brutos_pivotados %>% dplyr::select(-"NUM_CAMPO")
+    dados_transformados_pivotados <- mineral$`dados transformados pivotados`
+    dados_transformados_pivotados <- dados_transformados_pivotados %>% dplyr::select(-"NUM_CAMPO")
+
+
+    dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo)
 
     # Base não pivotada
     out[[1]] <- dplyr::right_join(dados_campo,
-                                  mineral$`dados brutos`, by = "N_LAB")
+                                  dados_brutos, by = "N_LAB")
     out[[2]] <- dplyr::right_join(dados_campo,
-                                  mineral$`dados transformados`, by = "N_LAB")
+                                  dados_transformados, by = "N_LAB")
     # Base pivotada
     out[[3]] <- dplyr::right_join(dados_campo,
-                                  mineral$`dados brutos pivotados`, by = "N_LAB")
+                                  dados_brutos_pivotados, by = "N_LAB")
     out[[4]] <- dplyr::right_join(dados_campo,
-                                  mineral$`dados transformados pivotados`,
+                                  dados_transformados_pivotados,
                                   by = "N_LAB")
+    out[[5]] <- mineral[[7]]
 
   }
- out[[5]] <- quimica[[7]]
+
 
 
  dados_campo$LONG_DEC <- as.numeric(gsub(",", ".", dados_campo$LONG_DEC, fixed = TRUE))

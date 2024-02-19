@@ -27,7 +27,8 @@ prepara_legenda <- function(dir_in = "inputs/campo/",
   mylegend <- lito_geo[!duplicated(lito_geo$SIGLA), ]
   mylegend <- mylegend[order(mylegend$IDADE_MIN), ]
   mylegend <- as.data.frame(mylegend)
-  legenda <- resgata_legenda_xml(paste0(dir_in,feicao, ".xml"))
+  legenda <- resgata_legenda_xml(dir_xml = dir_in,
+                                 nome_xml = feicao )
   legenda_geo <- base::merge(mylegend,
                              legenda,
                              by.x = "SIGLA",

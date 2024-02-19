@@ -6,6 +6,8 @@
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 #'   corrente, 3 = rocha, 4 = solo, 5 = água
 #' @param dir_bol Diretório dos boletins analíticos ex: "inputs/quimica/R/"
+#' @param ref_ucc Planilha com valores da Concentração Média da Crosta Superior
+#' Rudnick e Gao 2004
 #'
 #' @return Retorna uma lista com todos os dados do boletim: resultados
 #'   analíticos, condições analíticas, QA/QC, requisição das análises e
@@ -13,7 +15,7 @@
 #' @export
 #' @examples
 #' # le_boletim_quimica()
-le_boletim_quimica <- function(classe_am, dir_bol) {
+le_boletim_quimica <- function(classe_am, dir_bol, ref_ucc) {
   # library(tidyverse)
   # require(rgr)
   options(OutDec = ",")
@@ -389,8 +391,38 @@ le_boletim_quimica <- function(classe_am, dir_bol) {
   #             sep=";", dec="," , row.names = FALSE,  quote = FALSE,
   #             fileEncoding = "latin1" )
 
+  # Lê condições analíticas
+  ref =  ca
+  ref = unique(ref[, c("analito", "unidades", "MDL")])
+  ref$MDL <- as.numeric(gsub(",", ".",  ref$MDL))
+  # Lê UCC dos elementos
+  ucc <- read.csv2(ref_ucc)
+  ref$nome_analito <- paste0(ref$analito,"_", ref$unidades)
+  ucc$nome_analito <- paste0(ucc$Elemento,"_", ucc$Unidade)
+  ref <- dplyr::left_join(ref, ucc[, c("nome_analito", "UCC")], by = "nome_analito")
+  count_decimals = function(x) {
+    #length zero input
+    if (length(x) == 0) return(numeric())
+
+    # Conta casas decimais
+    x_nchr = x %>% abs() %>% as.character() %>% nchar() %>% as.numeric()
+    x_int = floor(x) %>% abs() %>% nchar()
+    x_nchr = x_nchr - 1 - x_int
+    x_nchr[x_nchr < 0] = 0
+
+    x_nchr
+  }
+
+  ref$DIG <- count_decimals(ref$MDL)
+  df <- ref  %>% dplyr::group_by(nome_analito) %>% dplyr::summarize(min = min(MDL))
+  df <- dplyr::left_join(df, ref,  by = "nome_analito")
+  df$MDL <- df$min
+  ref <- df %>% dplyr::select(-"min")
+
+
+
   out[[4]] <- df2 # dados transformados pivotados
-  out[[7]] <-  ca # dados de informação do boletim
+  out[[7]] <-  ref # dados de informação do boletim
   out[[8]] <- lab_bol # dados da relação boletim e laboratório
   out[[1]] <- dpivo # dados analíticos brutos
   out[[6]] <- QAQC_transf # dados de qaqc transformados

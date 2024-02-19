@@ -11,7 +11,8 @@ prepara_bases(
   dir_base,
   tipo_base,
   base_campo,
-  dir_out
+  dir_out,
+  ref_ucc
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ corrente, 3 = rocha, 4 = solo, 5 = água}
 \item{base_campo}{Nome do arquivo das bases de campo}
 
 \item{dir_out}{Diretório de saída para os dados de campo}
+
+\item{ref_ucc}{Referência Concentração Média da Crosta Superior
+Rudnick e Gao, 2004}
 }
 \value{
 Retorna a lista com as bases de dados em diferentes formatos

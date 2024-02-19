@@ -14,6 +14,8 @@
 #' @param base_campo Nome do arquivo das bases de campo
 #' @param tipo_base tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
 #' @param dir_out Diretório de saída para os dados de campo
+#' @param ref_ucc Referência Concentração Média da Crosta Superior
+#' Rudnick e Gao, 2004
 #'
 #'@return Retorna a lista com as bases de dados em diferentes formatos
 #'  transformados ou brutos, pivotados ou não.
@@ -22,7 +24,7 @@
 #' #prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
 #' dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
-                          tipo_base, base_campo, dir_out) {
+                          tipo_base, base_campo, dir_out, ref_ucc) {
   out <- list()
   a <- c("mineral", "química")
   t <-
@@ -38,7 +40,7 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
                  "Rocha",
                  "Água")
   if (analise == 2) {
-    quimica <- le_boletim_quimica(classe_am, dir_bol)
+    quimica <- le_boletim_quimica(classe_am, dir_bol, ref_ucc)
     dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo )
     dados_campo <- dados_campo[dados_campo$CLASSE ==  nm_classe[classe_am],]
     VALUE <- 1:nrow(dados_campo)

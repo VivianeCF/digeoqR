@@ -4,13 +4,16 @@
 \alias{le_boletim_quimica}
 \title{Lê boletins de análises químicas}
 \usage{
-le_boletim_quimica(classe_am, dir_bol)
+le_boletim_quimica(classe_am, dir_bol, ref_ucc)
 }
 \arguments{
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo, 5 = água}
 
 \item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/quimica/R/"}
+
+\item{ref_ucc}{Planilha com valores da Concentração Média da Crosta Superior
+Rudnick e Gao 2004}
 }
 \value{
 Retorna uma lista com todos os dados do boletim: resultados

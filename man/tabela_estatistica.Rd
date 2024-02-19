@@ -8,14 +8,14 @@ tabela_estatistica(
   tipo = 1,
   rotulo_lito = "outputs/mylitho.csv",
   estacao = "outputs/estacoes.shp",
-  ref_ucc = "inputs/quimica/ucc.csv",
   dir_bol = "inputs/quimica/S/",
   classe_am = 2,
   analise = 2,
   dir_base = "inputs/campo/",
   tipo_base = 1,
   base_campo = "fcampo",
-  dir_out = "outputs/"
+  dir_out = "outputs/",
+  ref_ucc = "inputs/quimica/ucc.csv"
 )
 }
 \arguments{
@@ -26,9 +26,6 @@ tabela_estatistica(
 unidades litológicas dominantes em cada bacia.}
 
 \item{estacao}{Dados de campo das estações amostradas (shp)}
-
-\item{ref_ucc}{Planilha com valores da concentração média da crosta superior
-Rudnick e Gao 2004}
 
 \item{dir_bol}{Diretório dos arquivos dos boletins}
 

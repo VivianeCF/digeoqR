@@ -2,7 +2,7 @@
 #'
 #' Gera planilhas cos os principais parâmetros estatísticos
 #'
-#' @param tipo Modo de processamento: 1 = Todas amaostras e
+#' @param tipo Modo de processamento: 1 = Todas amostras e
 #'  2 = agrupadas por unidades
 #' @param rotulo_lito Planilha gerada pela função intersecta_bacias com as
 #' unidades litológicas dominantes em cada bacia.
@@ -291,12 +291,12 @@ for(j in s) {
   df_tb_t <- t(df_tb)
 
   #Salvando sumários
-  write.table(df_tb, file = paste0("outputs/",
-                             mtd_grupo,"/sum_stat_param_",
+  write.table(df_tb, file = paste0(dir_out,
+                             "sum_stat_param_",mtd_grupo, "_",
                              unidades[j],".csv"), na = "",
         row.names = FALSE, col.names = TRUE, quote = FALSE, sep = ";")
-  write.table(df_tb_t, file = paste0("outputs/",
-                                     mtd_grupo,"/sum_stat_el_",
+  write.table(df_tb_t, file = paste0(dir_out,
+                                     "sum_stat_el_",mtd_grupo, "_",
                                      unidades[j] ,".csv"), na = "",
         row.names = TRUE, col.names = FALSE, quote = FALSE, sep = ";")
   lst_pr[[j]] <- data.frame(rep(unidades[j], nrow(df_tb)), df_tb )
@@ -307,7 +307,7 @@ for(j in s) {
 
   m <- df_tb
 
-  png(filename = paste0("outputs/",mtd_grupo,"/sum_stat_todos_", unidades[j], ".png"),
+  png(filename = paste0(dir_out,"sum_stat_todos_",mtd_grupo, "_", unidades[j], ".png"),
       units = "cm", width=35,height=35,bg = "white", res = 300)
 
 
@@ -341,7 +341,7 @@ for(j in s) {
 
   dev.off()
 
-  png(filename = paste0("outputs/",mtd_grupo,"/sum_stat_resum_",
+  png(filename = paste0(dir_out,"sum_stat_resum_",mtd_grupo, "_",
                         unidades[j], ".png"), units = "cm", width = 11,
                         height = 35, bg = "white", res = 300)
   m_resum <- m[, c("EL", "UN", "MIN", "MAX", "MD", "DP", "SWs", "SWp")]
@@ -381,12 +381,12 @@ base_dados <- base_dados[!is.na(base_dados$Unidade),]
 transp_base <- t(base_dados)
 
 # por elementos
-write.csv2(transp_base, paste0("outputs/", mtd_grupo, "/",
+write.csv2(transp_base, paste0(dir_out, mtd_grupo, "_",
                                 "tabela_descr_pg.csv"))
 out[[1]] <- transp_base
 
 # por parâmetros
-write.csv2(base_dados, paste0("outputs/",mtd_grupo, "/",
+write.csv2(base_dados, paste0(dir_out, mtd_grupo, "_",
                               "tabela_descr_prm_pg.csv"))
 out[[2]] <- base_dados
 names(out) <- c("tabela descr pg", "tabela descr prm pg")

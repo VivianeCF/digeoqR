@@ -395,12 +395,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, ref_ucc) {
   ref =  ca
   ref = unique(ref[, c("analito", "unidades", "MDL")])
   ref$MDL <- as.numeric(gsub(",", ".",  ref$MDL))
-  # Lê UCC dos elementos
-  ucc <- read.csv2(ref_ucc)
-  ref$nome_analito <- paste0(ref$analito,"_", ref$unidades)
-  ucc$nome_analito <- paste0(ucc$Elemento,"_", ucc$Unidade)
-  ref <- dplyr::left_join(ref, ucc[, c("nome_analito", "UCC")], by = "nome_analito")
-  count_decimals = function(x) {
+    count_decimals = function(x) {
     #length zero input
     if (length(x) == 0) return(numeric())
 
@@ -413,12 +408,21 @@ le_boletim_quimica <- function(classe_am, dir_bol, ref_ucc) {
     x_nchr
   }
 
-  ref$DIG <- count_decimals(ref$MDL)
-  df <- ref  %>% dplyr::group_by(nome_analito) %>% dplyr::summarize(min = min(MDL))
-  df <- dplyr::left_join(df, ref,  by = "nome_analito")
+
+  df <- ref  %>% dplyr::group_by(analito) %>%
+    dplyr::summarize(min = min(MDL))
+
+  df <- dplyr::left_join(df, ref,  by = "analito")
+
   df$MDL <- df$min
   ref <- df %>% dplyr::select(-"min")
-
+  ref$DIG <- count_decimals(ref$MDL)
+  # Lê UCC dos elementos
+  ucc <- read.csv2(ref_ucc)
+  ref$nome_analito <- paste0(ref$analito,"_", ref$unidades)
+  ucc$nome_analito <- paste0(ucc$Elemento,"_", ucc$Unidade)
+  ref <- dplyr::left_join(ref, ucc[, c("nome_analito", "UCC")],
+                          by = "nome_analito")
 
 
   out[[4]] <- df2 # dados transformados pivotados

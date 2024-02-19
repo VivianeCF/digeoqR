@@ -246,9 +246,9 @@ for(j in s) {
     UCC[i] <- ifelse(UCC[i] == 0, NA, UCC[i])
     MAD[i] <- round(10^mad(logselect[,i], na.rm = TRUE), dig[i])
     MAD[i] <- ifelse(MAD[i] == 0, NA, MAD[i])
-    SWs[i] <- ifelse(length(unique(logselect[,i])) < 3, NA,
+    SWs[i] <- ifelse(length(unique(logselect[,i])) < 4, NA,
                      round(shapiro.test(logselect[,i])$statistic, 3))
-    SWp[i] <- ifelse(length(unique(logselect[,i])) < 3, NA,
+    SWp[i] <- ifelse(length(unique(logselect[,i])) < 4, NA,
                      round(shapiro.test(logselect[,i])$p.value, 3))
 
   }
@@ -377,18 +377,18 @@ for(j in s) {
 # Criar os dataframes com a classificação ====
 base_dados <- do.call(rbind, lst_pr)
 colnames(base_dados)[1] <- "Unidade"
+base_dados <- base_dados[!is.na(base_dados$Unidade),]
 transp_base <- t(base_dados)
-colnames(transp_base) <- transp_base[1,]
-transp_base <- transp_base[-1,]
-transp_base2 <- as.data.frame(transp_base)
 
 # por elementos
-write.csv2(transp_base2, paste0("outputs/", mtd_grupo, "/",
+write.csv2(transp_base, paste0("outputs/", mtd_grupo, "/",
                                 "tabela_descr_pg.csv"))
-out[[1]] <- transp_base2
+out[[1]] <- transp_base
+
 # por parâmetros
 write.csv2(base_dados, paste0("outputs/",mtd_grupo, "/",
                               "tabela_descr_prm_pg.csv"))
 out[[2]] <- base_dados
 names(out) <- c("tabela descr pg", "tabela descr prm pg")
+return(out)
 }

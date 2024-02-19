@@ -41,7 +41,9 @@ gera_estacoes <-
            min_length = 0.02,
            max_ordem = 4)
   {
-    ### GERA DRENAGENS--------------------------------------------------------------
+### GERA DRENAGENS--------------------------------------------------------------
+    # Cria objeto lista para a saída
+    out <- list()
     base = paste0(dir_dem, srtm)
     wbt_wd <- tempdir(check = TRUE)
     options("rgdal_show_exportToProj4_warnings" = "none")
@@ -154,9 +156,11 @@ gera_estacoes <-
     sf::write_sf(stream_strahler,
                  paste0(dir_out, "stream_strahler.shp"),
                  delete_layer = TRUE)
+    out[[1]] <- stream_strahler
     # Salva arquivo da drenagem modelada na pasta escolhida
     sf::write_sf(stream_model, paste0(dir_out, "stream_model.shp"),
                  delete_layer = TRUE)
+    out[[2]] <- stream_model
 
     ## Gera ESTAÇÕES -----------------------------------------------------------
     ## Lê limite da area do projeto
@@ -168,8 +172,6 @@ gera_estacoes <-
     ## Lê área urbana
     area_urbana <- sf::read_sf(paste0(dir_shp,area_urbana))
 
-    # Cria objeto lista para a saída
-    out <- list()
     ## Encontra vértices das junções
 
     # Simplify river shapefile
@@ -275,7 +277,7 @@ gera_estacoes <-
         " N= ",
         nrow(pontos_area)
       ))
-
+    out[[3]] <- m
     png(
       paste0(dir_out, "mapa_plan_ini.png"),
       units = "cm",
@@ -286,7 +288,13 @@ gera_estacoes <-
     print(m)
     dev.off()
     # ## Salvar dados espaciais gerados ----------------------------------------
+    pontos_area$id <- 1:nrow(pontos_area)
+    pontos_area <- pontos_area[, "id"]
+    out[[4]] <- pontos_area
     sf::write_sf(pontos_area,
                  paste0(dir_out, estacoes),
                  overwrite = TRUE)
+    names(out) <- c("stream sthraler", "stream model",
+                    "mapa", "estacoes geradas")
+    return(out)
   }

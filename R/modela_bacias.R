@@ -36,14 +36,14 @@ modela_bacias <- function(fase = 2,
                           rios = "inputs/campo/rios_ibge.shp",
                           massa_dagua = "inputs/campo/massa_dagua.shp",
                           limite = "inputs/campo/carta_100M.shp",
-                          estacoes = "outputs/estacoes.shp",
+                          estacoes = "outputs/estacoes_sc.shp",
                           threshold = 250,
                           snap_dist = 0.02,
                           min_length = 0.02,
                           max_ordem = 3)
 {
   ### GERA DRENAGENS--------------------------------------------------------------
-
+  out <- list()
   wbt_wd <- tempdir(check = FALSE)
   options("rgdal_show_exportToProj4_warnings" = "none")
   whitebox::wbt_rasterize_streams(
@@ -139,12 +139,15 @@ modela_bacias <- function(fase = 2,
   stream_strahler <-
     sf::read_sf(file.path(wbt_wd, "stream_strahler.shp"))
   sf::st_crs(stream_strahler) <- EPSG
+
   sf::write_sf(stream_strahler,
                "outputs/stream_strahler.shp",
                delete_layer = TRUE)
+  out[[1]] <- stream_strahler
 
-  sf::write_sf(stream_model, "outputs/stream_model.shp", delete_layer = TRUE)
-
+  sf::write_sf(stream_model, "outputs/stream_model.shp",
+               delete_layer = TRUE)
+  out[[2]] <- stream_model
   ### GERA BACIAS A PARTIR DOS PONTOS ------------------------------
 
   ## Lê limite da área do projeto
@@ -251,6 +254,7 @@ modela_bacias <- function(fase = 2,
                delete_layer = TRUE)
 
 
+
   if (fase == 1) {
     # Filtra bacias pelas áreas min e max
     bacias_area <-
@@ -273,10 +277,14 @@ modela_bacias <- function(fase = 2,
     sf::write_sf(bacias_area,
                  paste0("outputs/", "bacias_area_plan.shp"),
                  delete_layer = TRUE)
+    out[[3]] <- bacias_area
+
     sf::write_sf(pontos[, c("VALUE")],
                  paste0("outputs/",  "estacoes_plan.shp"),
                  delete_layer =
                    TRUE)
+    out[[4]] <- pontos[, c("VALUE")]
+
     sf::write_sf(pontos[, c("VALUE")],
                  paste0(wbt_wd, "\\", "estacoes_plan.shp"),
                  delete_layer =
@@ -297,11 +305,14 @@ modela_bacias <- function(fase = 2,
                                             output_bacias, wd = wbt_wd)
     bacias <- sf::read_sf(paste0(wbt_wd, "//", output_bacias))
     sf::write_sf(bacias, paste0("outputs/bacias_plan.shp"), delete_layer = TRUE)
+    out[[5]] <- bacias
   } else{
+    out[[3]] <- bacias_area
     pontos = pour_points
     output_bacias <- "bacias.shp"
     bacias <- sf::read_sf(paste0(wbt_wd, "//", output_bacias))
     sf::write_sf(bacias, paste0("outputs/", output_bacias), delete_layer = TRUE)
+    out[[4]] <- bacias
   }
 
 
@@ -342,5 +353,14 @@ modela_bacias <- function(fase = 2,
   )
   print(m)
   dev.off()
+if(fase == 1){
+  out[[6]] <- m
+  names(out) <- c("stream strahler", "stream model",
+                  "bacias area plan", "estacoes plan", "bacias plan", "mapa plan")
+  }else{
+    out[[5]] <- m
+    names(out) <- c("stream strahler", "stream model", "bacias area", "bacias", "mapa amostragem")
+    }
 
+return(out)
 }

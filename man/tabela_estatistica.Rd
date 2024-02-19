@@ -19,7 +19,7 @@ tabela_estatistica(
 )
 }
 \arguments{
-\item{tipo}{Modo de processamento: 1 = Todas amaostras e
+\item{tipo}{Modo de processamento: 1 = Todas amostras e
 2 = agrupadas por unidades}
 
 \item{rotulo_lito}{Planilha gerada pela função intersecta_bacias com as

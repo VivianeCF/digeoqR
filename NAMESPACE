@@ -2,7 +2,7 @@
 
 export("%>%")
 export(arruma_dados_rigeo)
-export(classifica_amostra)
+export(classifica_amostra_ca)
 export(estrutura_diretorio)
 export(extrai_dados_campo)
 export(filtra_dados_mdb)

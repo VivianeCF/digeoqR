@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-classifica_amostra <- function(file = "outputs/sc_tidy.csv") {
+classifica_amostra_ca <- function(file = "outputs/sc_tidy.csv") {
   df_new <- read.csv2(file)
 
   # colnames(df_new) <- stringr::str_to_title(colnames(df_new))

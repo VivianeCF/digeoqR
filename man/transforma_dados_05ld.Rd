@@ -2,7 +2,7 @@
 % Please edit documentation in R/transforma_dados_05ld.R
 \name{transforma_dados_05ld}
 \alias{transforma_dados_05ld}
-\title{Prepara e transforma dados para o tratamento estatístico}
+\title{Prepara e transforma dados para o tratamento estatÃ­stico}
 \usage{
 transforma_dados_05ld(data)
 }

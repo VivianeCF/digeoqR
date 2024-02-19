@@ -13,7 +13,7 @@ modela_bacias(
   rios = "inputs/campo/rios_ibge.shp",
   massa_dagua = "inputs/campo/massa_dagua.shp",
   limite = "inputs/campo/carta_100M.shp",
-  estacoes = "outputs/estacoes.shp",
+  estacoes = "outputs/estacoes_sc.shp",
   threshold = 250,
   snap_dist = 0.02,
   min_length = 0.02,
@@ -21,42 +21,42 @@ modela_bacias(
 )
 }
 \arguments{
-\item{fase}{Fase do levantamento geoquímico (1= Planejamento, 2 = Pós campo)}
+\item{fase}{Fase do levantamento geoquÃ­mico (1= Planejamento, 2 = PÃ³s campo)}
 
 \item{EPSG}{crs da camada}
 
-\item{bacia_minima}{Área mínima das bacias planejadas}
+\item{bacia_minima}{Ãrea mÃ­nima das bacias planejadas}
 
-\item{bacia_maxima}{Área máxima das bacias planejadas}
+\item{bacia_maxima}{Ãrea mÃ¡xima das bacias planejadas}
 
 \item{srtm}{Imagem de radar com os dados de altimetria}
 
-\item{rios}{Shape dos rios obtidos por cartas digitais, fotografia aérea ou
+\item{rios}{Shape dos rios obtidos por cartas digitais, fotografia aÃ©rea ou
 dados do IBGE}
 
-\item{massa_dagua}{Shape da massa d'água, obtidos por cartas digitais,
-fotografia aérea ou dados do IBGE}
+\item{massa_dagua}{Shape da massa d'Ã¡gua, obtidos por cartas digitais,
+fotografia aÃ©rea ou dados do IBGE}
 
-\item{limite}{Polígonono da área do projeto}
+\item{limite}{PolÃ­gonono da Ã¡rea do projeto}
 
-\item{estacoes}{Estaçãoes de coleta}
+\item{estacoes}{EstaÃ§Ã£oes de coleta}
 
-\item{threshold}{Numero de células mínimo para o traçado das drenagens}
+\item{threshold}{Numero de cÃ©lulas mÃ­nimo para o traÃ§ado das drenagens}
 
-\item{snap_dist}{Deslocamento máximo do ponto até a drenagem}
+\item{snap_dist}{Deslocamento mÃ¡ximo do ponto atÃ© a drenagem}
 
-\item{min_length}{Comprimento mínimo da drenagem}
+\item{min_length}{Comprimento mÃ­nimo da drenagem}
 
-\item{max_ordem}{Máxima ordem do rio para a busca do snap point}
+\item{max_ordem}{MÃ¡xima ordem do rio para a busca do snap point}
 }
 \value{
-Rasters da preparação das imagens para a extração do modelo de
+Rasters da preparaÃ§Ã£o das imagens para a extraÃ§Ã£o do modelo de
 drenagem. Shapes e rasters das drenagens e trechos drenagems com as ordens
 de strahler.
 }
 \description{
-A partir da imagem SRTM, rios, massa d'água é gerado um modelo de drenagem.
-A densidade de drenagem é dada pelo valor de threshold, quanto maior
+A partir da imagem SRTM, rios, massa d'Ã¡gua Ã© gerado um modelo de drenagem.
+A densidade de drenagem Ã© dada pelo valor de threshold, quanto maior
 este valor, menor a densidade dos cursos dos rios.
 }
 \examples{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/classifica_amostra.R
 \name{classifica_amostra}
 \alias{classifica_amostra}
-\title{Classificação dos dados geoquímicos para cartas de anomalias}
+\title{ClassificaÃ§Ã£o dos dados geoquÃ­micos para cartas de anomalias}
 \usage{
 classifica_amostra(file = "outputs/sc_tidy.csv")
 }
@@ -11,7 +11,7 @@ classifica_amostra(file = "outputs/sc_tidy.csv")
 }
 \description{
 A ferramenta permite transformar os dados do Rigeo e classificar as amostra
-pelo método Tucker Inner Fence (TIF) valores acima de 75\% são considerados
-anômalos. Usar a mesma máscara do arquivo de saída da função
+pelo mÃ©todo Tucker Inner Fence (TIF) valores acima de 75\% sÃ£o considerados
+anÃ´malos. Usar a mesma mÃ¡scara do arquivo de saÃ­da da funÃ§Ã£o
 arruma_dados_rigeo do sedimento de corrente.
 }

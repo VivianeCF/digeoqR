@@ -31,6 +31,7 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
       "SOLO",
       "ROCHA",
       "ÁGUA")
+  abrev <- c("cb", "sc", "solo", "rocha", "agua")
   nm_classe <- c("Concentrado de bateia",
                  "Sedimento de corrente",
                  "Solo",
@@ -98,6 +99,8 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
 
  dados_campo$LONG_DEC <- as.numeric(gsub(",", ".", dados_campo$LONG_DEC, fixed = TRUE))
  dados_campo$LAT_DEC <- as.numeric(gsub(",", ".", dados_campo$LAT_DEC, fixed = TRUE))
+
+ dados_campo <- dados_campo[dados_campo$CLASSE == nm_classe[classe_am],]
  out[[6]] <- dados_campo
 
 
@@ -111,7 +114,7 @@ dados_campo_st <-
                crs = r, remove = FALSE )
 sf::st_write(
   dados_campo_st,
-  paste0(dir_out, "estacoes", ".shp"),
+  paste0(dir_out, "estacoes_",abrev[classe_am], ".shp"),
   driver = "ESRI Shapefile",
   delete_layer = TRUE
 )

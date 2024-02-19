@@ -40,6 +40,7 @@ tabela_estatistica <-
                                  base_campo, dir_out )
      lst_pr <- list()
      lst_el <- list()
+     out <- list()
      # Lê dados brutos
      data_b <- dados_bol[[1]]
 
@@ -384,9 +385,10 @@ transp_base2 <- as.data.frame(transp_base)
 # por elementos
 write.csv2(transp_base2, paste0("outputs/", mtd_grupo, "/",
                                 "tabela_descr_pg.csv"))
-
+out[[1]] <- transp_base2
 # por parâmetros
 write.csv2(base_dados, paste0("outputs/",mtd_grupo, "/",
                               "tabela_descr_prm_pg.csv"))
-
+out[[2]] <- base_dados
+names(out) <- c("tabela descr pg", "tabela descr prm pg")
 }

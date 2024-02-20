@@ -11,6 +11,8 @@
 #' @param dir_in Diretório dos dados espaciais e legenda
 #' @param dir_out Diretório de saída onde serão gravados as planilhas .csv
 #' @param tipo_leg Tipo de legenda 1= pela SIGLA 2 = pelo RANGE
+#' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
+#'   corrente, 3 = rocha, 4 = solo, 5 = água
 #'
 #' @return
 #' Bacias
@@ -24,8 +26,15 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
                               bacias = "bacias_area",
                               feicao = "geologia",
                               tipo_leg = 1,
-                              estacoes = "outputs/estacoes.shp")
+                              estacoes = "estacoes",
+                              classe_am = 1)
 {
+  abrev <- c("cb", "sc", "solo", "rocha", "agua")
+  nm_classe <- c("Concentrado de bateia",
+                 "Sedimento de corrente",
+                 "Solo",
+                 "Rocha",
+                 "Água")
 
   options(encoding = "latin1")
   out <- list()
@@ -36,7 +45,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
     }))
   zone <- as.numeric(floor((centroide[, 1] + 180) / 6) + 1)
   ## import data
-  spy_grid <- sf::read_sf(paste0(dir_in, bacias, ".shp"))
+  spy_grid <- sf::read_sf(paste0(dir_out, bacias,"_", abrev[classe_am], ".shp"))
   # sf::st_crs(spy_grid) <-
   spy_grid <- sf::st_transform(spy_grid,
                                paste0(
@@ -55,7 +64,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
                                  zone,
                                  " +south +datum=WGS84 +units=m +no_defs"
                                ))
-  colnames(spy_poly)
+
 if(tipo_leg == 2){
   spy_poly <- spy_poly %>%
     dplyr::group_by(RANGE) %>%
@@ -65,8 +74,8 @@ if(tipo_leg == 2){
   legenda <- prepara_legenda(dir_in, feicao )
   codlito <- legenda[[tipo_leg]]
 
-  mydata <- sf::read_sf(estacoes)
-  colnames(spy_grid)
+  mydata <- sf::read_sf(paste0(dir_out, estacoes,"_", abrev[classe_am],".shp"))
+
   spy_grid <-
     dplyr::left_join(spy_grid , data.frame(mydata), by = "VALUE")
   area_lito <-

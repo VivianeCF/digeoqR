@@ -14,6 +14,8 @@
 #' @param tipo_base Tipo de base de campo 1 = FCAMP, 2 = SURVEY123 e 3 = QFIELD
 #' @param base_campo Nome do arquivo da base de campo (sem extenção)
 #' @param dir_out Diretório de saída dados de campo e estações
+#' @param ref_ucc referência UCC
+#' @param EPSG Sistema de coordenadas
 #'
 #' @return
 #' @export
@@ -28,13 +30,13 @@ tabela_estatistica <-
            analise = 2,
            dir_base = "inputs/campo/",
            tipo_base = 1,
-           base_campo = "fcampo", dir_out = "outputs/", ref_ucc = "inputs/quimica/ucc.csv"){
+           base_campo = "fcampo", dir_out = "outputs/", ref_ucc = "inputs/quimica/ucc.csv", EPSG){
 
     # Obter dados das análises químicas
      dados_bol <-  prepara_bases(dir_bol,
                                  classe_am, analise,
                                  dir_base, tipo_base,
-                                 base_campo, dir_out, ref_ucc )
+                                 base_campo, dir_out, ref_ucc, EPSG )
      lst_pr <- list()
      lst_el <- list()
      out <- list()

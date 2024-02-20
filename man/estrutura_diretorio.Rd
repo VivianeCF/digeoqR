@@ -2,17 +2,17 @@
 % Please edit documentation in R/estrutura_diretorio.R
 \name{estrutura_diretorio}
 \alias{estrutura_diretorio}
-\title{Cria diretórios e subdiretórios para o processamento de dados}
+\title{Cria diretÃ³rios e subdiretÃ³rios para o processamento de dados}
 \usage{
 estrutura_diretorio(path)
 }
 \arguments{
-\item{path}{diretório do projeto}
+\item{path}{diretÃ³rio do projeto}
 }
 \value{
-Cria a estrutura dos diretórios onde devem ser lidos os arquivos de
-entrada e salvos os arquivos de saída
+Cria a estrutura dos diretÃ³rios onde devem ser lidos os arquivos de
+entrada e salvos os arquivos de saÃ­da
 }
 \description{
-Cria diretórios e subdiretórios para o processamento de dados
+Cria diretÃ³rios e subdiretÃ³rios para o processamento de dados
 }

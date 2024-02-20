@@ -16,6 +16,7 @@
 #' @param dir_out Diretório de saída para os dados de campo
 #' @param ref_ucc Referência Concentração Média da Crosta Superior
 #' Rudnick e Gao, 2004
+#' @param EPSG Sistema de coordenadas
 #'
 #'@return Retorna a lista com as bases de dados em diferentes formatos
 #'  transformados ou brutos, pivotados ou não.
@@ -24,7 +25,7 @@
 #' #prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
 #' dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
-                          tipo_base, base_campo, dir_out, ref_ucc) {
+                          tipo_base, base_campo, dir_out, ref_ucc, EPSG) {
   out <- list()
   a <- c("mineral", "química")
   t <-
@@ -39,9 +40,16 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
                  "Solo",
                  "Rocha",
                  "Água")
+  r <-  EPSG
   if (analise == 2) {
     quimica <- le_boletim_quimica(classe_am, dir_bol, ref_ucc)
-    dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo )
+    ex_campo <- extrai_dados_campo(tipo_base,
+                                      dir_base,
+                                      base_campo,
+                                      dir_os,
+                                      EPSG,
+                                      dir_out)
+    dados_campo <- ex_campo[[1]]
     dados_campo <- dados_campo[dados_campo$CLASSE ==  nm_classe[classe_am],]
     VALUE <- 1:nrow(dados_campo)
     dados_campo <- data.frame(VALUE, dados_campo)
@@ -80,7 +88,16 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
     dados_transformados_pivotados <- mineral$`dados transformados pivotados`
 
 
-    dados_campo <- extrai_dados_campo(tipo_base, dir_base,  base_campo)
+    ex_campo <- extrai_dados_campo(tipo_base,
+                                   dir_base,
+                                   base_campo,
+                                   dir_os,
+                                   EPSG,
+                                   dir_out)
+    dados_campo <- ex_campo[[1]]
+    dados_campo <- dados_campo[dados_campo$CLASSE ==  nm_classe[classe_am],]
+    VALUE <- 1:nrow(dados_campo)
+    dados_campo <- data.frame(VALUE, dados_campo)
 
     # Base não pivotada
     out[[1]] <- dplyr::right_join(dados_campo,
@@ -106,10 +123,9 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
  out[[6]] <- dados_campo
 
 
- write.csv2(dados_campo, paste0(dir_out, "dados_campo.csv"), row.names = FALSE)
+ write.csv2(dados_campo, paste0(dir_out, "dados_campo","_", abrev[classe_am], ".csv"), row.names = FALSE)
 
 # Cria dados espaciais
-r <-  4674
 dados_campo_st <-
   sf::st_as_sf(dados_campo,
                coords = c("LONG_DEC", "LAT_DEC"),
@@ -120,14 +136,15 @@ sf::st_write(
   driver = "ESRI Shapefile",
   delete_layer = TRUE
 )
-
+ out [[7]] <- dados_campo_st
  names(out) <-  c(
     "dados brutos",
     "dados transformados",
     "dados brutos pivotados",
     "dados transformados pivotados",
     "condições analíticas",
-    "dados de campo"
+    "dados de campo",
+    "dados campo sf"
   )
   return(out)
 }

@@ -9,15 +9,22 @@ modela_bacias(
   EPSG = 4326,
   bacia_minima = 4,
   bacia_maxima = 100,
-  srtm = "inputs/imagens/srtm.tif",
   rios = "inputs/campo/rios_ibge.shp",
   massa_dagua = "inputs/campo/massa_dagua.shp",
   limite = "inputs/campo/carta_100M.shp",
-  estacoes = "outputs/estacoes_sc.shp",
+  limite_srtm = "area_srtm.shp",
   threshold = 250,
   snap_dist = 0.02,
   min_length = 0.02,
-  max_ordem = 3
+  max_ordem = 3,
+  dir_bol,
+  classe_am,
+  analise,
+  dir_base,
+  tipo_base,
+  base_campo,
+  dir_out,
+  ref_ucc
 )
 }
 \arguments{
@@ -29,8 +36,6 @@ modela_bacias(
 
 \item{bacia_maxima}{Área máxima das bacias planejadas}
 
-\item{srtm}{Imagem de radar com os dados de altimetria}
-
 \item{rios}{Shape dos rios obtidos por cartas digitais, fotografia aérea ou
 dados do IBGE}
 
@@ -39,8 +44,6 @@ fotografia aérea ou dados do IBGE}
 
 \item{limite}{Polígonono da área do projeto}
 
-\item{estacoes}{Estaçãoes de coleta}
-
 \item{threshold}{Numero de células mínimo para o traçado das drenagens}
 
 \item{snap_dist}{Deslocamento máximo do ponto até a drenagem}
@@ -48,6 +51,8 @@ fotografia aérea ou dados do IBGE}
 \item{min_length}{Comprimento mínimo da drenagem}
 
 \item{max_ordem}{Máxima ordem do rio para a busca do snap point}
+
+\item{ref_ucc}{}
 }
 \value{
 Rasters da preparação das imagens para a extração do modelo de

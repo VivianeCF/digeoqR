@@ -4,7 +4,7 @@
 \alias{extrai_dados_campo}
 \title{Extrai dados de campo do banco de dados}
 \usage{
-extrai_dados_campo(tipo_base, dir_base, base_campo, dir_os)
+extrai_dados_campo(tipo_base, dir_base, base_campo, dir_os, EPSG, dir_out)
 }
 \arguments{
 \item{tipo_base}{Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
@@ -14,6 +14,10 @@ extrai_dados_campo(tipo_base, dir_base, base_campo, dir_os)
 \item{base_campo}{Nome da base de dados de campo}
 
 \item{dir_os}{Diretório das planilhas de OS}
+
+\item{EPSG}{Sistema de coordenadas}
+
+\item{dir_out}{Diretório de saída}
 }
 \value{
 Retorna uma tabela com os dados de campo

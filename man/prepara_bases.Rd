@@ -12,7 +12,8 @@ prepara_bases(
   tipo_base,
   base_campo,
   dir_out,
-  ref_ucc
+  ref_ucc,
+  EPSG
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ corrente, 3 = rocha, 4 = solo, 5 = água}
 
 \item{ref_ucc}{Referência Concentração Média da Crosta Superior
 Rudnick e Gao, 2004}
+
+\item{EPSG}{Sistema de coordenadas}
 }
 \value{
 Retorna a lista com as bases de dados em diferentes formatos

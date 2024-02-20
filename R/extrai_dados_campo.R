@@ -10,6 +10,8 @@
 #' @param dir_base Diretório da base de dados de campo
 #' @param base_campo Nome da base de dados de campo
 #' @param dir_os Diretório das planilhas de OS
+#' @param dir_out Diretório de saída
+#' @param EPSG Sistema de coordenadas
 #'
 #' @return
 #' Retorna uma tabela com os dados de campo
@@ -17,9 +19,15 @@
 #'
 #' @examples
 #'
-extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
+extrai_dados_campo <- function(tipo_base,
+                               dir_base,
+                               base_campo,
+                               dir_os,
+                               EPSG,
+                               dir_out) {
 # Base de dados do fcampo (mdb) ------------------------------------------------
-    if (tipo_base == 1) {
+
+  if (tipo_base == 1) {
     con <-
       RODBC::odbcDriverConnect(
         paste(
@@ -58,7 +66,8 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
     out <- df_base
   }
   RODBC::odbcCloseAll()
-# Base de dados do SURVEY123
+  out <- list()
+  # Base de dados do SURVEY123
   if(tipo_base == 2){
     # Lê arquivos do geodatabase
     # Lista o que está na base
@@ -104,7 +113,9 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
       # df_base <- data.frame(xy, df_base)
       # colnames(df_base)[1:2] <- c("longitude", "latitude" )
       df_base <- dplyr::select(df_base, -"geom")
-  }
+
+    }
+
   if(tipo_base %in% 2:3){
     lista_osq <- list()
     lista_osm <- list()
@@ -141,8 +152,28 @@ extrai_dados_campo <- function(tipo_base, dir_base,  base_campo, dir_os) {
       dplyr::inner_join(df_base, df, by = c("cd_numero_campo"= "NUM_CAMPO"))
     df_base <- data.frame(rbind(df_base1, df_base2))
     df_base <-  df_base[, -ncol(df_base)]
-    out <- data.frame()
-    out <- df_base
-}
+  }
+  out[[1]] <- df_base
+
+  # Cria dados espaciais
+  r <-  EPSG
+
+  df_base$LONG_DEC <- as.numeric(gsub(",", ".", df_base$LONG_DEC, fixed = TRUE))
+  df_base$LAT_DEC <- as.numeric(gsub(",", ".", df_base$LAT_DEC, fixed = TRUE))
+
+  # df_base <- df_base[df_base$CLASSE == nm_classe[classe_am],]
+
+    dados_campo_st <-
+    sf::st_as_sf(df_base,
+                 coords = c("LONG_DEC", "LAT_DEC"),
+                 crs = r, remove = FALSE )
+  out[[2]] <- dados_campo_st
+  sf::st_write(
+    dados_campo_st,
+    paste0(dir_out, "estacoes", ".shp"),
+    driver = "ESRI Shapefile",
+    delete_layer = TRUE
+  )
+  names(out) <- c("dados de campo", "estações" )
   return(out)
 }

@@ -6,12 +6,10 @@
 \usage{
 gera_estacoes(
   dir_shp = "inputs/campo/",
-  dir_dem = "inputs/imagens/",
   dir_out = "outputs/",
   limite = "carta_100M.shp",
+  limite_srtm = "area_srtm.shp",
   area_urbana = "area_urbana.shp",
-  estacoes = "estacoes_geradas.shp",
-  srtm = "srtm.tif",
   EPSG = 4326,
   rios = "rios_ibge.shp",
   massa_dagua = "massa_dagua.shp",
@@ -23,17 +21,13 @@ gera_estacoes(
 \arguments{
 \item{dir_shp}{Diretório dos dados espaciais}
 
-\item{dir_dem}{Diretório da imagem tif srtm}
-
 \item{dir_out}{Diretório de saída}
 
 \item{limite}{nome do arquivo da área do projeto}
 
+\item{limite_srtm}{}
+
 \item{area_urbana}{nome do arquivo da área urbana}
-
-\item{estacoes}{Estações geradas a partir da drenagem modelada}
-
-\item{srtm}{DEM da área}
 
 \item{EPSG}{Sistema de coordenadas}
 

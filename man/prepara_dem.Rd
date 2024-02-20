@@ -5,14 +5,15 @@
 \title{Prepara imagem de SRTM para a modelagem de terreno}
 \usage{
 prepara_dem(
-  limite = "inputs/campo/area_srtm.shp",
-  dir_out = "inputs/imagens/",
+  dir_shp = "inputs/campo/",
+  limite_srtm = "area_srtm.shp",
+  dir_out = "outputs/",
   EPSG = 4326,
   z = 11
 )
 }
 \arguments{
-\item{limite}{Limite da área do srtm}
+\item{limite_srtm}{}
 
 \item{dir_out}{Diretório de saída}
 

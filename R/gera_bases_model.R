@@ -1,0 +1,36 @@
+#' Gera bases para a modelagem das bacias e estações
+#'
+#' Converte as bases de entrada em um alista de dados para serem carregadas nas
+#' funções modela_bacias e gera estações.
+#'
+#' @param dir_shp
+#' @param limite
+#' @param area_urbana
+#' @param rios
+#' @param massa_dagua
+#' @param limite_srtm
+#'
+#' @return
+#' @export
+#'
+#' @examples
+gera_bases_model <- function(dir_shp = "inputs/campo/",
+                             limite = "carta_100M.shp",
+                             limite_srtm = "area_srtm.shp",
+                             area_urbana = "area_urbana.shp",
+                             rios = "rios_ibge.shp",
+                             massa_dagua = "massa_dagua.shp"
+                             )
+{
+  out <- list()
+
+  out[[1]] <- sf::read_sf(paste0(dir_shp, limite_srtm))
+  out[[2]] <- sf::read_sf(paste0(dir_shp, limite))
+  out[[3]] <- sf::read_sf(paste0(dir_shp, area_urbana))
+  out[[4]] <- sf::read_sf(paste0(dir_shp, rios))
+  out[[5]] <- sf::read_sf(paste0(dir_shp, massa_dagua))
+   names(out) <-
+    c("limite da área srtm", "limite da área folha", "área urbana",
+      "rios", "massa de água")
+  return(out)
+}

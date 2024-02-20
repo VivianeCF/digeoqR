@@ -4,7 +4,6 @@
 #'    A densidade de drenagem é dada pelo valor de threshold, quanto maior
 #'este valor, menor a densidade dos cursos dos rios.
 #'
-#' @param srtm Imagem de radar com os dados de altimetria
 #' @param rios Shape dos rios obtidos por cartas digitais, fotografia aérea ou
 #' dados do IBGE
 #' @param massa_dagua Shape da massa d'água, obtidos por cartas digitais,
@@ -14,11 +13,19 @@
 #' @param bacia_minima Área mínima das bacias planejadas
 #' @param bacia_maxima Área máxima das bacias planejadas
 #' @param limite Polígonono da área do projeto
-#' @param estacoes Estaçãoes de coleta
 #' @param snap_dist Deslocamento máximo do ponto até a drenagem
 #' @param min_length Comprimento mínimo da drenagem
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
 #' @param EPSG crs da camada
+#' @param limite_srtm
+#' @param dir_bol
+#' @param classe_am
+#' @param analise
+#' @param dir_base
+#' @param tipo_base
+#' @param base_campo
+#' @param dir_out
+#' @param ref_ucc
 #'
 #' @return Rasters da preparação das imagens para a extração do modelo de
 #' drenagem. Shapes e rasters das drenagens e trechos drenagems com as ordens
@@ -32,23 +39,58 @@ modela_bacias <- function(fase = 2,
                           EPSG = 4326,
                           bacia_minima = 4,
                           bacia_maxima = 100,
-                          srtm = "inputs/imagens/srtm.tif",
                           rios = "inputs/campo/rios_ibge.shp",
                           massa_dagua = "inputs/campo/massa_dagua.shp",
                           limite = "inputs/campo/carta_100M.shp",
-                          estacoes = "outputs/estacoes_sc.shp",
+                          limite_srtm = "area_srtm.shp",
                           threshold = 250,
                           snap_dist = 0.02,
                           min_length = 0.02,
-                          max_ordem = 3)
+                          max_ordem = 3, dir_bol, classe_am, analise, dir_base,
+                          tipo_base, base_campo, dir_out, ref_ucc)
 {
   ### GERA DRENAGENS--------------------------------------------------------------
+  nm_classe <- c("Concentrado de bateia",
+                 "Sedimento de corrente",
+                 "Solo",
+                 "Rocha",
+                 "Água")
+  abrev_classe <- c("cb", "sc", "solo", "rocha", "agua" )
+
   out <- list()
-  wbt_wd <- tempdir(check = FALSE)
+  wbt_wd <- tempfile()
+  dir.create(wbt_wd)
   options("rgdal_show_exportToProj4_warnings" = "none")
-  whitebox::wbt_rasterize_streams(
-    rios,
-    base = srtm,
+
+  bases <- gera_bases_model()
+
+  ## Lê limite da area do projeto
+  area <- bases[["limite da área folha"]]
+
+  ## Lê massa d'água
+  massa_dagua <- bases[["massa de água"]]
+
+  ## Lê área urbana
+  area_urbana <- bases[["área urbana"]]
+
+  ## Lê rios da área do projeto
+  rios_ibge = bases[["rios"]]
+
+    ## Lê rios e grava no temp
+  sf::write_sf(bases[["rios"]], paste0(wbt_wd,"\\","rios.shp"))
+
+
+
+ if(fase == 2){
+   ## Lê DEM e grava no temp
+   dem <- prepara_dem()
+   stars::write_stars(dem,
+                      file.path( wbt_wd, "srtm.tif"))
+
+   options("rgdal_show_exportToProj4_warnings" = "none")
+   whitebox::wbt_rasterize_streams(
+    "rios.shp",
+    base = "srtm.tif",
     output = "network_topage.tif",
     nodata = 0,
     wd = wbt_wd
@@ -63,16 +105,10 @@ modela_bacias <- function(fase = 2,
     delete_layer = TRUE,
     quiet = TRUE
   )
-  network_topage <- sf::read_sf(rios)
-  sf::write_sf(
-    network_topage,
-    file.path(wbt_wd, "network_topage.shp"),
-    delete_layer = TRUE,
-    quiet = TRUE
-  )
+
   whitebox::wbt_burn_streams_at_roads(
-    dem = srtm,
-    streams = "network_topage.shp",
+    dem = "srtm.tif",
+    streams = "rios.shp",
     roads = "roads.shp",
     output = "dem_100m_burn.tif",
     wd = wbt_wd
@@ -133,7 +169,7 @@ modela_bacias <- function(fase = 2,
                                       wd = wbt_wd)
   output_drenagem_ord <- "stream_strahler.shp"
   whitebox::wbt_raster_streams_to_vector(output_order,
-                                         output_d8_pntr,
+                                         "d8.tif",
                                          output_drenagem_ord,
                                          wd = wbt_wd)
   stream_strahler <-
@@ -148,25 +184,44 @@ modela_bacias <- function(fase = 2,
   sf::write_sf(stream_model, "outputs/stream_model.shp",
                delete_layer = TRUE)
   out[[2]] <- stream_model
+}
   ### GERA BACIAS A PARTIR DOS PONTOS ------------------------------
 
-  ## Lê limite da área do projeto
-  area <- sf::read_sf(limite)
 
-  ## Lê rios da área do projeto
-  rios_ibge = sf::read_sf(rios)
 
   ## Lê estaçoes da área do projeto
-  pour_points = sf::read_sf(estacoes)
+ if(fase == 1){
+   ex_campo = gera_estacoes(dir_shp,
+                            dir_out ,
+                            limite,
+                            limite_srtm,
+                            area_urbana,
+                            EPSG,
+                            rios,
+                            massa_dagua,
+                            threshold,
+                            min_length,
+                            max_ordem)
+   wbt_wd <- ex_campo[[5]]
+   sf::write_sf(ex_campo[["estacoes geradas"]],
+                paste0(wbt_wd, "/", "estacoes.shp"))
+
+ } else{
+  ex_campo <- extrai_dados_campo(tipo_base,
+                                 dir_base,
+                                 base_campo,
+                                 dir_os,
+                                 EPSG,
+                                 dir_out)
+  pontos <- ex_campo[["estações"]]
+  pontos <- pontos[pontos$CLASSE == nm_classe[classe_am], ]
+  sf::write_sf(pontos, paste0(wbt_wd, "/", "estacoes.shp"))
+
+}
   # Desloca pontos para a drenagem
   ## Snap metodo Jenson
   stream <- "network_d8.tif"
   output_snap <- "snappoints.shp"
-
-  sf::write_sf(pour_points,
-               file.path(wbt_wd, "estacoes.shp"),
-               delete_layer = TRUE)
-
 
   r = stars::read_stars(paste0(wbt_wd, "\\", "strahler_order.tif"))
   r[r > max_ordem] = NA
@@ -182,7 +237,7 @@ modela_bacias <- function(fase = 2,
   # Cria bacias a partir dos pontos deslocados
 
   output_ws <-  "bacias.tif"
-  whitebox::wbt_watershed(output_d8_pntr,
+  whitebox::wbt_watershed("d8.tif",
                           output_snap,
                           output_ws,
                           wd = wbt_wd)
@@ -195,7 +250,7 @@ modela_bacias <- function(fase = 2,
 
   # Cria bacias não aninhadas
   output_unest <- "unested_bacias.tif"
-  whitebox::wbt_unnest_basins(output_d8_pntr,
+  whitebox::wbt_unnest_basins("d8.tif",
                               output_snap,
                               output_unest,
                               wd = wbt_wd)
@@ -250,7 +305,7 @@ modela_bacias <- function(fase = 2,
   # Calcula área
   sf::write_sf(bacias_area,
                paste0("outputs/",
-                      "bacias_area.shp"),
+                      "bacias_area", "_", abrev_classe[classe_am],".shp"),
                delete_layer = TRUE)
 
 
@@ -293,7 +348,7 @@ modela_bacias <- function(fase = 2,
     output_ws <-  "bacias.tif"
 
     whitebox::wbt_watershed(
-      d8_pntr = output_d8_pntr,
+      d8_pntr = "d8.tif",
       pour_pts = "estacoes_plan.shp",
       output =  output_ws,
       wd = wbt_wd
@@ -308,16 +363,12 @@ modela_bacias <- function(fase = 2,
     out[[5]] <- bacias
   } else{
     out[[3]] <- bacias_area
-    pontos = pour_points
-    output_bacias <- "bacias.shp"
-    bacias <- sf::read_sf(paste0(wbt_wd, "//", output_bacias))
-    sf::write_sf(bacias, paste0("outputs/", output_bacias), delete_layer = TRUE)
+    output_bacias <- "bacias"
+    bacias <- sf::read_sf(paste0(wbt_wd, "//", output_bacias, ".shp"))
+    sf::write_sf(bacias, paste0("outputs/", output_bacias, "_", abrev_classe[classe_am], ".shp"), delete_layer = TRUE)
     out[[4]] <- bacias
   }
 
-
-
-  plot(bacias)
   # Mapa
   m <- ggplot2::ggplot() +
     ggplot2::coord_fixed() +
@@ -342,7 +393,7 @@ modela_bacias <- function(fase = 2,
   if (fase == 1) {
     nome_mapa <- "mapa_amostragem_planejada.png"
   } else{
-    nome_mapa <- "mapa_amostragem_executada.png"
+    nome_mapa <- paste0("mapa_amostragem_executada","_", abrev_classe[classe_am],".png")
   }
   png(
     paste0("outputs/", nome_mapa),

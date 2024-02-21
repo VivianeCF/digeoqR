@@ -13,7 +13,8 @@ testes_estatisticos(mydata, mydata_b, info_bol, mylitho_max_sc)
 
 \item{info_bol}{IncormaÃ§Ãµes das condiÃ§Ãµes analÃ­ticas}
 
-\item{mylitho_max_sc}{}
+\item{mylitho_max_sc}{Litologia dominante de cada amostra considerando sua
+bacia de captaÃ§Ã£o}
 }
 \description{
 Testes de normalidade e de comparaÃ§Ã£o das amostras

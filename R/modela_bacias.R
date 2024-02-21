@@ -46,8 +46,8 @@ modela_bacias <- function(fase = 2,
                           threshold = 250,
                           snap_dist = 0.02,
                           min_length = 0.02,
-                          max_ordem = 3, dir_bol, classe_am, analise, dir_base,
-                          tipo_base, base_campo, dir_out, ref_ucc)
+                          max_ordem = 3, dir_bol = NULL, classe_am = NULL, analise = NULL, dir_base = NULL,
+                          tipo_base = NULL, base_campo = NULL, dir_out = "outputs/", ref_ucc = NULL)
 {
   ### GERA DRENAGENS--------------------------------------------------------------
   nm_classe <- c("Concentrado de bateia",

@@ -2,20 +2,20 @@
 % Please edit documentation in R/testes_statisticos.R
 \name{testes_estatisticos}
 \alias{testes_estatisticos}
-\title{Testes EstatÃ­ticos}
+\title{Testes Estatíticos}
 \usage{
 testes_estatisticos(mydata, mydata_b, info_bol, mylitho_max_sc)
 }
 \arguments{
-\item{mydata}{Dados quÃ­micos transformados}
+\item{mydata}{Dados químicos transformados}
 
-\item{mydata_b}{Dados quimÃ­cos brutos}
+\item{mydata_b}{Dados quimícos brutos}
 
-\item{info_bol}{IncormaÃ§Ãµes das condiÃ§Ãµes analÃ­ticas}
+\item{info_bol}{Incormações das condições analíticas}
 
 \item{mylitho_max_sc}{Litologia dominante de cada amostra considerando sua
-bacia de captaÃ§Ã£o}
+bacia de captação}
 }
 \description{
-Testes de normalidade e de comparaÃ§Ã£o das amostras
+Testes de normalidade e de comparação das amostras
 }

@@ -1,0 +1,222 @@
+#' Testes Estatíticos
+#'
+#' Testes de normalidade e de comparação das amostras
+#'
+#' @param mydata Dados químicos transformados
+#' @param mydata_b Dados quimícos brutos
+#' @param info_bol Incormações das condições analíticas
+#' @param mylitho_max_sc Litologia dominante de cada amostra considerando sua
+#' bacia de captação
+#'
+#' @return
+#' @export
+#'
+#' @examples
+testes_estatisticos <- function(mydata, mydata_b, info_bol, mylitho_max_sc){
+ lst_pr <- list()
+ lst_el <- list()
+# Lê arquivos
+## Bacias modeladas pelo SRTM usando o projeto R MODEL_BACIAS
+mydata <- dados_transf_sc
+
+mydata_b <- dados_brutos_sc
+
+info_bol <- info_bol[!duplicated(info_bol$nome_analito), ]
+myjob <- info_bol
+
+# Criar vetor das unidades
+Geo_cod <- unique(mylitho_max_sc$Geo_cod)
+
+elementos <- myjob$nome_analito
+mydata <- dplyr::left_join(mydata, mylitho_max_sc, by = "VALUE")
+
+t <- data.frame(table(mylitho_max_sc$Geo_cod))
+un_val <- as.numeric(as.character(t[t$Freq > 10,"Var1"]))
+
+# Ordena as Unidades pelo código das unidades (Geo_cod)
+cod_unidades <- leg2
+abrev <- cod_unidades$SIGLA
+nome_unidade <- cod_unidades$SIGLA
+
+## Testes de Normalidade
+## Calcula % dos dados validos
+
+n <- 0
+ncoded <- 0
+nneg <- 0
+nna <- 0
+coded <- -9999
+xmat <- mydata_b[,elementos]
+nvars <- dim(xmat)[2]
+vars <- seq(1:nvars)
+for (i in 1:nvars) {
+  ii <- vars[i]
+  x <- xmat[, ii]
+  n[i] <- length(x)
+  ncoded[i] <- length(x[!is.na(x) & x == coded])
+  nna[i] <- length(x[is.na(x)])
+  nneg[i] <- length(x[x < 0]) - nna[i] - ncoded[i]
+
+}
+elementos <- colnames(xmat)
+
+stat_fix <- cbind.data.frame(elementos,n ,nna, nneg, ncoded)
+nval_ppc <- 100-round((stat_fix$nna + stat_fix$nneg)/n*100,0)
+stat_fix <- cbind.data.frame(stat_fix, nval_ppc)
+
+# ## Listar elementos com menos de 30% qualificados
+filtro_nval <- stat_fix %>% dplyr::filter(nval_ppc > 70)
+elem_val <- filtro_nval$elementos
+df_sc_val <- mydata[,elem_val]
+
+
+## Teste de normalidade ########################################################
+##o valor p> 0,05 implica que a distribuição dos dados não é
+## significativamente diferente da distribuição normal. Em outras
+## palavras, podemos assumir a normalidade.
+
+## Teste Shapiro_Wilk para os dados logtransformados
+sw <- list()
+
+for(un in un_val){
+print(un)
+  dl <-log10(mydata[mydata$Geo_cod == un ,elem_val])
+ps <- as.data.frame(do.call(rbind, lapply(dl, function(x)
+  shapiro.test(x)[c("statistic", "p.value")])))
+
+df <- data.frame(pvalue=do.call(rbind,ps$p.value), do.call(rbind,ps$statistic),
+                 unidade = rep(nome_unidade[un], length(elem_val)))
+
+colnames(df) <- c("p.value", "W")
+df$elemento <- rownames(df)
+sw[[un]] <- df
+}
+res_sw <- do.call(rbind,sw)
+colnames(res_sw)[3] <- "Unidade"
+res_sw <- res_sw[!is.na(res_sw$Unidade),]
+write.table(res_sw, paste0(dir_out, "test_norm_ShapiroWilk_log",
+                       "_unidades",".csv"), sep = ";", dec = ",",
+            row.names = FALSE)
+
+## Teste Lilefors
+lf <- list()
+un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
+for(un in un_val){
+  dl <-log10(mydata[mydata$Geo_cod == un ,elem_val])
+  pl <- as.data.frame(do.call(rbind, lapply(dl, function(x)
+    nortest::lillie.test(x)[c("statistic", "p.value")])))
+
+  df <- data.frame(pvalue=do.call(rbind,ps$p.value), do.call(rbind,ps$statistic),
+                   unidade = rep(nome_unidade[un], length(elem_val)))
+  colnames(df) <- c("p.value", "W")
+  df$elemento <- rownames(df)
+  lf[[un]] <- df
+}
+res_lf <- do.call(rbind,lf)
+colnames(res_lf)[3] <- "Unidade"
+write.table(res_lf, paste0(dir_out, "test_norm_Lillie_log",
+                           "_unidades",".csv"), sep = ";", dec = ",", row.names = FALSE)
+
+
+# Teste para comparar amostras independentes ################################
+# Teste Wilcoxon não pareado ou de Mann-Whitney
+# É apresentado a estatística de teste "W", o p-valor e a hipótese alternativa.
+# Concluí-se que não há evidências para rejeitar H0 pois p−valor=0.5174 que por
+# sua vez é >0.05, ou seja, as duas amostras pertencem a mesma população.
+#############################################################################
+
+mydata_p <- mydata %>%
+  tidyr::pivot_longer(cols = elementos, names_to = "elemento", values_to = "valor")
+mydata_p$Geo_cod <- as.factor(mydata_p$Geo_cod)
+unidades <- (unique(mydata$Geo_cod))
+unidades <- unidades[!is.na(unidades)]
+comb_u <- t(combn(unidades,2))
+
+# Teste wilcox não pareado - p-value
+res <- list()
+w <- 0
+df <- 0
+for(u in 1:nrow(comb_u)) {
+  for (i in seq(elementos)) {
+
+    el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elementos[i]]
+    el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elementos[i]]
+
+   if(length((!is.na(el1)))> 30 & length(!is.na(el2))> 30) {
+   w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
+   df[i] <-  as.numeric(w$p.value)}else{ df[i] = NA
+   }
+  }
+  res[[u]] <- df
+}
+
+test <- data.frame(do.call(cbind, res))
+colnames(test) <- paste0("p-value - ", comb_u[,1],"-" ,comb_u[,2] )
+test$elemento <- elementos
+# Elimina colunas só com NAs
+test <- test[,colSums(is.na(test))<nrow(test)]
+test <- na.omit(test)
+write.csv2(test, "outputs/test_Wilcoxon_pvalue.csv")
+
+# Teste wilcox não pareado - statistic (W)
+w <- 0
+df <- 0
+res2 <- list()
+for(u in 1:nrow(comb_u)) {
+  for (i in seq(elementos)) {
+    el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elementos[i]]
+    el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elementos[i]]
+    if(length(!is.na(el1))> 30 & length(!is.na(el2))> 30) {
+      w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
+      df[i] <-  as.numeric(w$statistic)
+    }else{ df[i] = NA}
+  }
+  res2[[u]] <- df
+}
+
+test2 <- data.frame(do.call(cbind, res2))
+colnames(test2) <- paste0("W - ", comb_u[,1],"-" ,comb_u[,2] )
+test2$elemento <- elementos
+# Elimina colunas só com NAs
+test2 <- test2[,colSums(is.na(test2))<nrow(test2)]
+test2 <- na.omit(test2)
+
+write.csv2(test2, "outputs/test_Wilcoxon_statistic.csv")
+
+#Teste Shapiro Wilker##########################################################
+#Todas as amostras
+un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
+
+elementos <- myjob$nome_analito
+
+## Elementos válitos
+sum(duplicated(mydata$Ag_ppm))
+lista_sum <- lapply(mydata[, elem_val], function(x) sum(duplicated(x)))
+
+dl <-log10(mydata[ ,elementos_select])
+ps <- as.data.frame(do.call(rbind, lapply(dl, function(x)
+  shapiro.test(x)[c("statistic", "p.value")])))
+
+df <- data.frame(pvalue=do.call(rbind,ps$p.value), do.call(rbind,ps$statistic))
+colnames(df) <- c("p.value", "W")
+df$elemento <- rownames(df)
+# Elimina colunas só com NAs
+df <- df[,colSums(is.na(df))<nrow(df)]
+df <- na.omit(df)
+write.table(df, paste0("outputs/test_norm_ShapiroWilk_log",
+                       "_Geral",".csv"), sep = ";", dec = ",", row.names = FALSE)
+
+#Teste Lillie-Fors############################################################
+dl <-log10(mydata[ ,elem_val])
+ps <- as.data.frame(do.call(rbind, lapply(dl, function(x)
+  nortest::lillie.test(x)[c("statistic", "p.value")])))
+
+df <- data.frame(pvalue=do.call(rbind,ps$p.value), do.call(rbind,ps$statistic))
+colnames(df) <- c("p.value", "W")
+df$elemento <- rownames(df)
+# Elimina colunas só com NAs
+df <- df[,colSums(is.na(df))<nrow(df)]
+df <- na.omit(df)
+write.table(df, paste0("outputs/test_norm_Lillie_log",
+                       "_Geral",".csv"), sep = ";", dec = ",", row.names = FALSE)
+}

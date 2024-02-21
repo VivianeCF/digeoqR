@@ -4,17 +4,23 @@
 \alias{testes_estatisticos}
 \title{Testes Estatísticos}
 \usage{
-testes_estatisticos(mydata, mydata_b, info_bol, mylitho_max_sc)
+testes_estatisticos(
+  dados_transf_sc,
+  dados_brutos_sc,
+  info_bol,
+  mylitho_max_sc,
+  mtd_transf = 1
+)
 }
 \arguments{
-\item{mydata}{Dados químicos transformados}
-
-\item{mydata_b}{Dados quimícos brutos}
-
 \item{info_bol}{Incormações das condições analíticas}
 
 \item{mylitho_max_sc}{Litologia dominante de cada amostra considerando sua
 bacia de captação}
+
+\item{mydata}{Dados químicos transformados}
+
+\item{mydata_b}{Dados quimícos brutos}
 }
 \description{
 Testes de normalidade e de comparação das amostras

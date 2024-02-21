@@ -1,4 +1,4 @@
-#' Testes Estatíticos
+#' Testes Estatísticos
 #'
 #' Testes de normalidade e de comparação das amostras
 #'

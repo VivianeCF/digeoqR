@@ -2,7 +2,7 @@
 % Please edit documentation in R/testes_statisticos.R
 \name{testes_estatisticos}
 \alias{testes_estatisticos}
-\title{Testes Estatíticos}
+\title{Testes Estatísticos}
 \usage{
 testes_estatisticos(mydata, mydata_b, info_bol, mylitho_max_sc)
 }

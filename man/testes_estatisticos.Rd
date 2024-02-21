@@ -13,14 +13,17 @@ testes_estatisticos(
 )
 }
 \arguments{
+\item{dados_transf_sc}{Dados químicos valores <LD substituidos por 0,5*LD}
+
+\item{dados_brutos_sc}{Dados químicos originais}
+
 \item{info_bol}{Incormações das condições analíticas}
 
 \item{mylitho_max_sc}{Litologia dominante de cada amostra considerando sua
 bacia de captação}
 
-\item{mydata}{Dados químicos transformados}
-
-\item{mydata_b}{Dados quimícos brutos}
+\item{mtd_transf}{Método de transformação dos dados
+1 = sem transformação e 2 = logtransformados}
 }
 \description{
 Testes de normalidade e de comparação das amostras

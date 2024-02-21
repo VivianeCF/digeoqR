@@ -2,11 +2,13 @@
 #'
 #' Testes de normalidade e de comparação das amostras
 #'
-#' @param mydata Dados químicos transformados
-#' @param mydata_b Dados quimícos brutos
 #' @param info_bol Incormações das condições analíticas
 #' @param mylitho_max_sc Litologia dominante de cada amostra considerando sua
 #' bacia de captação
+#' @param dados_transf_sc Dados químicos valores <LD substituidos por 0,5*LD
+#' @param dados_brutos_sc Dados químicos originais
+#' @param mtd_transf Método de transformação dos dados
+#' 1 = sem transformação e 2 = logtransformados
 #'
 #' @return
 #' @export
@@ -306,7 +308,7 @@ if(mtd_transf == 2){
   # Elimina colunas só com NAs
   test <- test[,colSums(is.na(test))<nrow(test)]
   test <- na.omit(test)
-  write.csv2(test, "outputs/test_Wilcoxon_pvalue.csv")
+  write.csv2(test, "outputs/test_Wilcoxon_pvalue_log.csv")
   out[[4]] <- test
 
   # Teste wilcox não pareado - statistic (W)
@@ -332,7 +334,7 @@ if(mtd_transf == 2){
   test2 <- test2[,colSums(is.na(test2)) < nrow(test2)]
   test2 <- na.omit(test2)
   out[[5]] <- test2
-  write.csv2(test2, "outputs/test_Wilcoxon_statistic.csv")
+  write.csv2(test2, "outputs/test_Wilcoxon_statistic_log.csv")
 
   #Teste Shapiro Wilker##########################################################
   #Todas as amostras

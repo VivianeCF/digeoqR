@@ -18,6 +18,7 @@ testes_estatisticos <- function(dados_transf_sc, dados_brutos_sc,
                                 info_bol, mylitho_max_sc, mtd_transf = 1){
  lst_pr <- list()
  lst_el <- list()
+ out <- list()
 # Lê arquivos
 ## Bacias modeladas pelo SRTM usando o projeto R MODEL_BACIAS
 mydata <- dados_transf_sc
@@ -202,6 +203,7 @@ df$elemento <- rownames(df)
 # Elimina colunas só com NAs
 df <- df[,colSums(is.na(df))<nrow(df)]
 df <- na.omit(df)
+out[[6]] <- df
 write.table(df, paste0("outputs/test_norm_ShapiroWilk",
                        "_Geral",".csv"), sep = ";", dec = ",", row.names = FALSE)
 
@@ -216,12 +218,14 @@ df$elemento <- rownames(df)
 # Elimina colunas só com NAs
 df <- df[,colSums(is.na(df))<nrow(df)]
 df <- na.omit(df)
+out[[7]] <- df
 write.table(df, paste0("outputs/test_norm_Lillie",
                        "_Geral",".csv"), sep = ";", dec = ",",
             row.names = FALSE)
-names(out) <- c("elementos pct qualificado", "test. norm. Shapiro-Wilk",
-                "test. norm. Lillie", "test. Wilcoxon pvalue",
-                "test. Wilcoxon statistic")
+names(out) <- c("elementos pct qualificado", "test. norm. Shapiro-Wilk unidades",
+                "test. norm. Lillie unidades", "test. Wilcoxon pvalue",
+                "test. Wilcoxon statistic", "test. norm. Shapiro-Wilk geral",
+                "test. norm. Lillie geral")
 }
 if(mtd_transf == 2){
   ## Teste de normalidade ########################################################
@@ -356,6 +360,7 @@ if(mtd_transf == 2){
   # Elimina colunas só com NAs
   df <- df[,colSums(is.na(df))<nrow(df)]
   df <- na.omit(df)
+  out[[6]] <- df
   write.table(df, paste0("outputs/test_norm_ShapiroWilk_log",
                          "_Geral",".csv"), sep = ";", dec = ",", row.names = FALSE)
 
@@ -370,12 +375,14 @@ if(mtd_transf == 2){
   # Elimina colunas só com NAs
   df <- df[,colSums(is.na(df))<nrow(df)]
   df <- na.omit(df)
+  out[[7]] <- df
   write.table(df, paste0("outputs/test_norm_Lillie_log",
                          "_Geral",".csv"), sep = ";", dec = ",",
               row.names = FALSE)
-  names(out) <- c("elementos pct qualificado", "test. norm. Shapiro-Wilk log",
-                  "test. norm. Lillie log", "test. Wilcoxon pvalue log",
-                  "test. Wilcoxon statistic log")
+  names(out) <- c("elementos pct qualificado", "test. norm. Shapiro-Wilk log unidades",
+                  "test. norm. Lillie log unidades", "test. Wilcoxon pvalue log",
+                  "test. Wilcoxon statistic log", "test. norm. Shapiro-Wilk log geral",
+                  "test. norm. Lillie log geral")
 }
 return(out)
 }

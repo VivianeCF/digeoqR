@@ -263,7 +263,6 @@ if(mtd_transf == 2){
     dl <- log10(mydata[mydata$Geo_cod == un ,elem_val])
     pl <- as.data.frame(do.call(rbind, lapply(dl, function(x)
       nortest::lillie.test(x)[c("statistic", "p.value")])))
-
     df <- data.frame(pvalue=do.call(rbind,ps$p.value), do.call(rbind,ps$statistic),
                      unidade = rep(nome_unidade[un], length(elem_val)))
     colnames(df) <- c("p.value", "W")
@@ -343,17 +342,12 @@ if(mtd_transf == 2){
   #Teste Shapiro Wilker##########################################################
   #Todas as amostras
   un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
-
   elementos <- myjob$nome_analito
 
-  ## Elementos válitos
-  sum(duplicated(mydata$Ag_ppm))
-  lista_sum <- lapply(mydata[, elem_val], function(x) sum(duplicated(x)))
-
+  ## Filtra elementos válidos
   dl <- log10(mydata[ , elem_val])
   ps <- as.data.frame(do.call(rbind, lapply(dl, function(x)
     shapiro.test(x)[c("statistic", "p.value")])))
-
   df <- data.frame(pvalue=do.call(rbind,ps$p.value), do.call(rbind,ps$statistic))
   colnames(df) <- c("p.value", "W")
   df$elemento <- rownames(df)

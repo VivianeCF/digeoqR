@@ -423,10 +423,11 @@ le_boletim_quimica <- function(classe_am, dir_bol, ref_ucc) {
   ucc$nome_analito <- paste0(ucc$Elemento,"_", ucc$Unidade)
   ref <- dplyr::left_join(ref, ucc[, c("nome_analito", "UCC")],
                           by = "nome_analito")
+  ref <- unique(ref)
 
 
   out[[4]] <- df2 # dados transformados pivotados
-  out[[7]] <-  ref # dados de informação do boletim
+  out[[7]] <- ref # dados de informação do boletim
   out[[8]] <- lab_bol # dados da relação boletim e laboratório
   out[[1]] <- dpivo # dados analíticos brutos
   out[[6]] <- QAQC_transf # dados de qaqc transformados

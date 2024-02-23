@@ -50,5 +50,5 @@ recorta_feicao_area <- function(dir_in = "inputs/campo/",
     sf::write_sf(sf_geo, paste0(dir_out, feicao_out,"_", chave, ".shp"),
                   delete_layer = TRUE)
 
-    return(nc_dissolve)
+    return(sf_geo)
  }

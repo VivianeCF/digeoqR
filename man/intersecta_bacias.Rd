@@ -2,7 +2,7 @@
 % Please edit documentation in R/intersecta_bacias.R
 \name{intersecta_bacias}
 \alias{intersecta_bacias}
-\title{Intersecta polÃ­gonos das bacias com outra feiÃ§Ã£o}
+\title{Intersecta polígonos das bacias com outra feição}
 \usage{
 intersecta_bacias(
   dir_in = "inputs/campo/",
@@ -18,21 +18,21 @@ intersecta_bacias(
 )
 }
 \arguments{
-\item{dir_out}{DiretÃ³rio de saÃ­da onde serÃ£o gravados as planilhas .csv}
+\item{dir_out}{Diretório de saída onde serão gravados as planilhas .csv}
 
-\item{limite}{Limite da Ã¡rea do projeto}
+\item{limite}{Limite da área do projeto}
 
-\item{bacias}{bacias obtidas a partir da funÃ§Ã£o gera_bacias}
+\item{bacias}{bacias obtidas a partir da função gera_bacias}
 
-\item{feicao}{polÃ­gonos de algum tema (geologia,
-solo, geofÃ­sica, geomorfologia, etc)}
+\item{feicao}{polígonos de algum tema (geologia,
+solo, geofísica, geomorfologia, etc)}
 
 \item{tipo_leg}{Tipo de legenda 1= pela SIGLA 2 = pelo RANGE}
 
-\item{estacoes}{EstaÃ§Ãµes de coleta}
+\item{estacoes}{Estações de coleta}
 
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
+corrente, 3 = rocha, 4 = solo, 5 = água}
 
 \item{feicao_rec}{}
 }
@@ -40,8 +40,8 @@ corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
 Bacias
 }
 \description{
-Cada bacia Ã© recortada pelos polÃ­gonos da geologia. Esta funÃ§Ã£o estÃ¡
-configurada para a shape do mapa geolÃ³gico ao milhonÃ©simo 2014 do SGB-CPRM.
+Cada bacia é recortada pelos polígonos da geologia. Esta função está
+configurada para a shape do mapa geológico ao milhonésimo 2014 do SGB-CPRM.
 }
 \examples{
 #intersecta_bacias()

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tabela_estatistica.R
 \name{tabela_estatistica}
 \alias{tabela_estatistica}
-\title{SumÃ¡rio EstatÃ­stico das anÃ¡lises quÃ­micas}
+\title{Sumário Estatístico das análises químicas}
 \usage{
 tabela_estatistica(
   tipo_proc = 1,
@@ -23,29 +23,29 @@ tabela_estatistica(
 \item{tipo_proc}{Modo de processamento: 1 = Todas amostras e
 2 = agrupadas por unidades}
 
-\item{rotulo_lito}{Planilha gerada pela funÃ§Ã£o intersecta_bacias com as
-unidades litolÃ³gicas dominantes em cada bacia.}
+\item{rotulo_lito}{Planilha gerada pela função intersecta_bacias com as
+unidades litológicas dominantes em cada bacia.}
 
-\item{estacao}{Dados de campo das estaÃ§Ãµes amostradas (shp)}
+\item{estacao}{Dados de campo das estações amostradas (shp)}
 
-\item{dir_bol}{DiretÃ³rio dos arquivos dos boletins}
+\item{dir_bol}{Diretório dos arquivos dos boletins}
 
 \item{classe_am}{Classe de amostra}
 
-\item{analise}{tipo de anÃ¡lise 1 = mineralÃ³gica e 2 = quÃ­mica}
+\item{analise}{tipo de análise 1 = mineralógica e 2 = química}
 
-\item{dir_base}{DiretÃ³rio da base de dados de campo}
+\item{dir_base}{Diretório da base de dados de campo}
 
 \item{tipo_base}{Tipo de base de campo 1 = FCAMP, 2 = SURVEY123 e 3 = QFIELD}
 
-\item{base_campo}{Nome do arquivo da base de campo (sem extenÃ§Ã£o)}
+\item{base_campo}{Nome do arquivo da base de campo (sem extenção)}
 
-\item{dir_out}{DiretÃ³rio de saÃ­da dados de campo e estaÃ§Ãµes}
+\item{dir_out}{Diretório de saída dados de campo e estações}
 
-\item{ref_ucc}{referÃªncia UCC}
+\item{ref_ucc}{referência UCC}
 
 \item{EPSG}{Sistema de coordenadas}
 }
 \description{
-Gera planilhas cos os principais parÃ¢metros estatÃ­sticos
+Gera planilhas cos os principais parâmetros estatísticos
 }

@@ -25,13 +25,13 @@
 intersecta_bacias <- function(dir_in = "inputs/campo/",
                               dir_out = "outputs/",
                               limite = "inputs/campo/carta_100M.shp",
-                              bacias = bacias_area_sc,
-                              feicao = geologia,
+                              bacias,
+                              feicao,
                               tipo_leg = 2,
-                              estacoes = estacoes,
+                              estacoes,
                               classe_am = 2,
                               nome_xml = "geologia",
-                              feicao_rec = "outputs/geologia_area.shp")
+                              feicao_rec = "geologia_area.shp")
 {
   abrev <- c("cb", "sc", "solo", "rocha", "agua")
   nm_classe <- c("Concentrado de bateia",
@@ -75,7 +75,8 @@ if(tipo_leg == 2){
     dplyr::summarize()
 }
 
-  legenda <- prepara_legenda(feicao_rec, dir_in, nome_xml)
+  legenda <- prepara_legenda(feicao_rec, dir_out,
+                             dir_in , nome_xml)
   codlito <- legenda[[tipo_leg]]
 
   mydata <- estacoes

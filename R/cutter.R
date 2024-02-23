@@ -1,3 +1,12 @@
+#' Corta pelas quebras calculadas do boxplot
+#'
+#' @param x vetor
+#' @param cuts quebra
+#'
+#' @return
+#' @export
+#'
+#' @examples
 cutter <- function (x, cuts) {
   ncuts <- length(cuts)
   xi <- cut(x, breaks = cuts, labels = FALSE, include.left = TRUE)

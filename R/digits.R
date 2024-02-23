@@ -1,3 +1,13 @@
+#' Calcula número de digitos decimais
+#'
+#' @param x numero
+#' @param n
+#' @param simplify
+#'
+#' @return
+#' @export
+#'
+#' @examples
 digits <- function(x, n=NULL, simplify = FALSE) {
     if(length(x) > 1) {
         if(is.null(n) & simplify) {

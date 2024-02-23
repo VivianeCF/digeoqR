@@ -1,3 +1,11 @@
+#' Calcula as quebras do booxplot
+#'
+#' @param x
+#'
+#' @return
+#' @export
+#'
+#' @examples
 zcut_bxp <- function (x) {
   z <- log10(x)
   q <-quantile(z, probs = c(0.25, 0.75), na.rm = TRUE)

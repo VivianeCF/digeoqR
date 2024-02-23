@@ -33,18 +33,22 @@ recorta_feicao_area <- function(dir_in = "inputs/campo/",
     crop_feicao <-
       suppressMessages({suppressWarnings({sf::st_crop(feicao_sf, area_sf)})})
 
-    nc_dissolve <-
-      suppressMessages({crop_feicao %>% dplyr::group_by(get(chave)) %>%
-      dplyr::summarize()})
+    df_geo <- as.data.frame(crop_feicao)
+    df_geo <- df_geo[, -ncol(df_geo)]
 
-    # plot(nc_dissolve)
+    nc_dissolve <-  sf::st_union(crop_feicao, by_feature = TRUE)
 
-    feicao_edit <-
-      suppressWarnings({suppressMessages({sf::st_join(crop_feicao, nc_dissolve,
-                                                      by = chave)})})
-    feicao_edit <- feicao_edit[,-ncol(feicao_edit)]
-    sf::write_sf(feicao_edit, paste0(dir_out, feicao_out, ".shp"),
+    nc_dissolve <- nc_dissolve %>%
+     dplyr::group_by(get(chave)) %>%
+     dplyr::summarise()
+
+    colnames(nc_dissolve)[1] <- chave
+
+    sf_geo <- dplyr::left_join(nc_dissolve,df_geo, by= chave)
+    # ggplot2::ggplot(nc_dissolve) + ggplot2::geom_sf(fill = "grey")
+
+    sf::write_sf(sf_geo, paste0(dir_out, feicao_out,"_", chave, ".shp"),
                   delete_layer = TRUE)
 
-    return( feicao_edit)
+    return(nc_dissolve)
  }

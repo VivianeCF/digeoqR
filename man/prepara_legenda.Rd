@@ -4,7 +4,11 @@
 \alias{prepara_legenda}
 \title{Cria legenda apartir da shape da feiÃ§Ã£o}
 \usage{
-prepara_legenda(dir_in = "inputs/campo/", feicao = "geologia")
+prepara_legenda(
+  feicao_rec = "outputs/geologia_area.shp",
+  dir_in = "inputs/campo/",
+  nome_xml = "geologia"
+)
 }
 \arguments{
 \item{dir_in}{DiretÃ³rio dos arquivos shape e xml}

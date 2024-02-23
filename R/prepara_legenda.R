@@ -17,10 +17,10 @@
 #' #legenda <- prepara_legenda()
 #' #legenda
 
-prepara_legenda <- function(dir_in = "inputs/campo/",
-                            feicao = "geologia") {
+prepara_legenda <- function(feicao_rec = "outputs/geologia_area.shp",
+                            dir_in = "inputs/campo/", nome_xml = "geologia") {
   out <- list()
-  lito_geo <- sf::st_read(paste0(dir_in,feicao, ".shp"))
+  lito_geo <- sf::st_read(feicao_rec)
   lito_geo <- lito_geo[!is.na(lito_geo$SIGLA), ]
 
   mylegend <- unique(lito_geo)
@@ -28,7 +28,7 @@ prepara_legenda <- function(dir_in = "inputs/campo/",
   mylegend <- mylegend[order(mylegend$IDADE_MIN), ]
   mylegend <- as.data.frame(mylegend)
   legenda <- resgata_legenda_xml(dir_xml = dir_in,
-                                 nome_xml = feicao )
+                                 nome_xml = nome_xml )
   legenda_geo <- base::merge(mylegend,
                              legenda,
                              by.x = "SIGLA",

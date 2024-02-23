@@ -81,7 +81,7 @@ unidades <- unique(data_b$SIGLA)
 
 mtds_grupos <- c("Geral", "Agrupado")
 
-mtd_grupo <- mtds_grupos[tipo]
+mtd_grupo <- mtds_grupos[tipo_proc]
 
 if(mtd_grupo == "Geral") {
   s <- 1

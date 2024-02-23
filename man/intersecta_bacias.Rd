@@ -7,17 +7,17 @@
 intersecta_bacias(
   dir_in = "inputs/campo/",
   dir_out = "outputs/",
-  limite = "carta_100M",
-  bacias = "bacias_area",
-  feicao = "geologia",
-  tipo_leg = 1,
-  estacoes = "estacoes",
-  classe_am = 1
+  limite = "inputs/campo/carta_100M.shp",
+  bacias = bacias_area_sc,
+  feicao = geologia,
+  tipo_leg = 2,
+  estacoes = estacoes,
+  classe_am = 2,
+  nome_xml = "geologia",
+  feicao_rec = "outputs/geologia_area.shp"
 )
 }
 \arguments{
-\item{dir_in}{DiretÃ³rio dos dados espaciais e legenda}
-
 \item{dir_out}{DiretÃ³rio de saÃ­da onde serÃ£o gravados as planilhas .csv}
 
 \item{limite}{Limite da Ã¡rea do projeto}
@@ -33,6 +33,8 @@ solo, geofÃ­sica, geomorfologia, etc)}
 
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
+
+\item{feicao_rec}{}
 }
 \value{
 Bacias

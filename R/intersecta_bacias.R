@@ -8,11 +8,13 @@
 #' @param feicao polígonos de algum tema (geologia,
 #' solo, geofísica, geomorfologia, etc)
 #' @param estacoes Estações de coleta
-#' @param dir_in Diretório dos dados espaciais e legenda
 #' @param dir_out Diretório de saída onde serão gravados as planilhas .csv
 #' @param tipo_leg Tipo de legenda 1= pela SIGLA 2 = pelo RANGE
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 #'   corrente, 3 = rocha, 4 = solo, 5 = água
+#' @param dir_in
+#' @param nome_xml
+#' @param feicao_rec
 #'
 #' @return
 #' Bacias
@@ -22,12 +24,14 @@
 #' #intersecta_bacias()
 intersecta_bacias <- function(dir_in = "inputs/campo/",
                               dir_out = "outputs/",
-                              limite = "carta_100M",
-                              bacias = "bacias_area",
-                              feicao = "geologia",
-                              tipo_leg = 1,
-                              estacoes = "estacoes",
-                              classe_am = 1)
+                              limite = "inputs/campo/carta_100M.shp",
+                              bacias = bacias_area_sc,
+                              feicao = geologia,
+                              tipo_leg = 2,
+                              estacoes = estacoes,
+                              classe_am = 2,
+                              nome_xml = "geologia",
+                              feicao_rec = "outputs/geologia_area.shp")
 {
   abrev <- c("cb", "sc", "solo", "rocha", "agua")
   nm_classe <- c("Concentrado de bateia",
@@ -38,14 +42,14 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
 
   options(encoding = "latin1")
   out <- list()
-  area <- sf::read_sf(paste0(dir_in, limite, ".shp"))
+  area <- sf::read_sf(limite)
   centroide <-
     sf::st_coordinates(suppressWarnings({
       sf::st_centroid(area)
     }))
   zone <- as.numeric(floor((centroide[, 1] + 180) / 6) + 1)
   ## import data
-  spy_grid <- sf::read_sf(paste0(dir_out, bacias,"_", abrev[classe_am], ".shp"))
+  spy_grid <- bacias
   # sf::st_crs(spy_grid) <-
   spy_grid <- sf::st_transform(spy_grid,
                                paste0(
@@ -57,7 +61,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
   spy_grid$Area_bacia <-
     round(sf::st_area(spy_grid, byid = TRUE) / 1000000, 3)
   # spy_grid@data <- spy_grid@data[,1:8]
-  spy_poly = sf::read_sf(paste0(dir_in, feicao, ".shp"))
+  spy_poly = geologia
   spy_poly <- sf::st_transform(spy_poly,
                                paste0(
                                  "+proj=utm +zone=",
@@ -71,10 +75,10 @@ if(tipo_leg == 2){
     dplyr::summarize()
 }
 
-  legenda <- prepara_legenda(dir_in, feicao )
+  legenda <- prepara_legenda(feicao_rec, dir_in, nome_xml)
   codlito <- legenda[[tipo_leg]]
 
-  mydata <- sf::read_sf(paste0(dir_out, estacoes,"_", abrev[classe_am],".shp"))
+  mydata <- estacoes
 
   spy_grid <-
     dplyr::left_join(spy_grid , data.frame(mydata), by = "VALUE")

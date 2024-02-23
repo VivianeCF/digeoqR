@@ -125,7 +125,7 @@ if(tipo_leg == 1){
     ggspatial::geom_sf(ggplot2::aes(fill=factor(class)), colour="grey", lwd = 0) +
     ggspatial::geom_sf(data = geologia, alpha = 0, lwd = 0.01) +
     rot_geo +
-    map_Theme +
+    map_Theme + ggplot2::theme_void() + ggplot2::theme(legend.position = "none") +
     ggplot2::scale_fill_manual(name = paste0("Concentração \n",eq," (",unidade,")"),
                       values=setNames(pal_cod, 1:9),
                       guide = ggplot2::guide_legend(reverse = TRUE)) +
@@ -289,7 +289,8 @@ if(tipo_leg == 1){
     dados4 <- dplyr::arrange(dados4, teor)
 
     #Tema ggplot do boxplot
-    bp_Theme <- ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+    bp_Theme <- ggplot2::theme(
+                      axis.title.x = ggplot2::element_blank(),
                       axis.title.y = ggplot2::element_blank(),
                       axis.text.x = ggplot2::element_blank(),
                       axis.text.y = ggplot2::element_blank(),
@@ -307,9 +308,8 @@ if(tipo_leg == 1){
       ggplot2::stat_boxplot(data = dados2, geom ='errorbar', width = 0.1, lwd = 0.2) +
       ggplot2::geom_boxplot(data = dados2, width = 0.2, position = "dodge",
                    outlier.size=0.5, lwd = 0.2) +
-      ggplot2::theme_void() +
       ln_ucc +
-      bp_Theme +
+      bp_Theme +  ggplot2::theme_void() +
       ggplot2::geom_point(data = dados1, cex = 10/3, pch = 22, bg = pal_cod[sby_id]) +
       # geom_point(data = dados1, cex = df_sb$cex1_cod, pch = df_sb$pch_cod,
       # col = "black", stroke = df_sb$lwd1_cod ) +

@@ -21,7 +21,7 @@ mapa_tif_unidades <- function(bacias, geologia, dados_transf_sc,
 ######################################################################
 
 # Definição do formato numérico, vírgula decimal
-options(OutDec = ",")
+options(OutDec = ",", scipen = 999)
 
 ## Chama as funções de classificação e digitos
 # source('R/cutter.R', local = TRUE)
@@ -350,6 +350,6 @@ for (e in seq_along(elem_val))   {
 bd_long <- do.call(rbind, cl_list)
 bd_long <- bd_long[, -4]
 bd_long <- bd_long[, c("VALUE", "EL", "class")]
-pv_bd <- pivot_wider(bd_long, names_from = "EL", values_from = "class")
+pv_bd <- tidyr::pivot_wider(bd_long, names_from = "EL", values_from = "class")
 write.csv2(pv_bd, "outputs/classes_bxp_log.csv", row.names = FALSE)
 }

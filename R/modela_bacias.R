@@ -18,14 +18,11 @@
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
 #' @param EPSG crs da camada
 #' @param limite_srtm
-#' @param dir_bol
 #' @param classe_am
-#' @param analise
 #' @param dir_base
 #' @param tipo_base
 #' @param base_campo
 #' @param dir_out
-#' @param ref_ucc
 #'
 #' @return Rasters da preparação das imagens para a extração do modelo de
 #' drenagem. Shapes e rasters das drenagens e trechos drenagems com as ordens
@@ -46,8 +43,8 @@ modela_bacias <- function(fase = 2,
                           threshold = 250,
                           snap_dist = 0.02,
                           min_length = 0.02,
-                          max_ordem = 3, dir_bol = NULL, classe_am = NULL, analise = NULL, dir_base = NULL,
-                          tipo_base = NULL, base_campo = NULL, dir_out = "outputs/", ref_ucc = NULL)
+                          max_ordem = 3, classe_am = NULL, dir_base = NULL,
+                          tipo_base = NULL, base_campo = NULL, dir_out = "outputs/")
 {
   ### GERA DRENAGENS--------------------------------------------------------------
   nm_classe <- c("Concentrado de bateia",

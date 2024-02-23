@@ -2,7 +2,7 @@
 % Please edit documentation in R/digits.R
 \name{digits}
 \alias{digits}
-\title{Calcula número de digitos decimais}
+\title{Calcula nÃºmero de digitos decimais}
 \usage{
 digits(x, n = NULL, simplify = FALSE)
 }
@@ -12,5 +12,5 @@ digits(x, n = NULL, simplify = FALSE)
 \item{simplify}{}
 }
 \description{
-Calcula número de digitos decimais
+Calcula nÃºmero de digitos decimais
 }

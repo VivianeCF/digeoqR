@@ -17,10 +17,10 @@
 #' #legenda <- prepara_legenda()
 #' #legenda
 
-prepara_legenda <- function(feicao_rec = "outputs/geologia_area.shp",
+prepara_legenda <- function(feicao_rec, dir_out,
                             dir_in = "inputs/campo/", nome_xml = "geologia") {
   out <- list()
-  lito_geo <- sf::st_read(feicao_rec)
+  lito_geo <- feicao_rec
   lito_geo <- lito_geo[!is.na(lito_geo$SIGLA), ]
 
   mylegend <- unique(lito_geo)
@@ -29,11 +29,10 @@ prepara_legenda <- function(feicao_rec = "outputs/geologia_area.shp",
   mylegend <- as.data.frame(mylegend)
   legenda <- resgata_legenda_xml(dir_xml = dir_in,
                                  nome_xml = nome_xml )
-  legenda_geo <- base::merge(mylegend,
+  colnames( legenda) <- gsub("nome", "SIGLA",colnames( legenda)  )
+  legenda_geo <- dplyr::left_join(mylegend,
                              legenda,
-                             by.x = "SIGLA",
-                             by.y = "nome",
-                             all.x = TRUE)
+                             by = "SIGLA")
 
   # Arruma campo col_hex
   legenda_geo[nchar(legenda_geo$col_hex) == 6, "col_hex"] <-

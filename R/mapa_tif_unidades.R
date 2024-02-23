@@ -5,15 +5,15 @@
 #' @param info_bol
 #' @param litho_max
 #' @param dados_transf
-#' @param leg
 #' @param elem_val
-#'
+#' @param tipo_leg
+#' @param leg
 #' @return
 #' @export
 #'
 #' @examples
 mapa_tif_unidades <- function(bacias, geologia, dados_transf,
-                     info_bol, litho_max, elem_val, leg )
+                     info_bol, litho_max, elem_val, tipo_leg, leg )
   {
 
 ######################################################################
@@ -67,6 +67,7 @@ for (ul in un_val) {
 # Paleta de cores dos simbolos e mapa
 pal_cod <- pals::jet(9)
 cl_list <- list()
+list_map <- list()
 for (e in seq_along(elem_val))   {
 
   #############################################################################
@@ -114,12 +115,16 @@ for (e in seq_along(elem_val))   {
                         info_bol[info_bol$nome_analito == eq, "analito"], " - TIF")
 
   bacias_rec <- dplyr::inner_join(bacias, base_dados, by='VALUE')
-
+if(tipo_leg == 1){
+  rot_geo <- ggplot2::geom_sf_text(data = geologia, ggplot2::aes(label = SIGLA), size = 1,
+                                        alpha = 0.6)}else{
+  rot_geo <-   ggplot2::geom_sf_text(data = geologia, ggplot2::aes(label = RANGE), size = 1,
+                                        alpha = 0.6)
+                                        }
   p1 <- ggplot2::ggplot(data = bacias_rec) +
     ggspatial::geom_sf(ggplot2::aes(fill=factor(class)), colour="grey", lwd = 0) +
     ggspatial::geom_sf(data = geologia, alpha = 0, lwd = 0.01) +
-    ggplot2::geom_sf_text(data = geologia, ggplot2::aes(label = SIGLA), size = 1,
-                 alpha = 0.6) +
+    rot_geo +
     map_Theme +
     ggplot2::scale_fill_manual(name = paste0("Concentração \n",eq," (",unidade,")"),
                       values=setNames(pal_cod, 1:9),
@@ -331,16 +336,22 @@ for (e in seq_along(elem_val))   {
                c(2,2,2,2,2,2,2,2,2,2,2,2,2,2),
                c(2,2,2,2,2,2,2,2,2,2,2,2,2,2))
 
-  png(filename = paste0("outputs/mapa_geoquimico_tif_geral_unidades_", eq,  ".png"),
-      units = "cm", width=15, height=14, bg = "white", res = 300)
   bp_leg <- do.call(gridExtra::"grid.arrange", c(bx, ncol=length(un_val), nrow=1))
-   gridExtra::grid.arrange(p1, bp_leg, layout_matrix = lay)
-  dev.off()
+  list_map[[e]] <- gridExtra::grid.arrange(p1, bp_leg, layout_matrix = lay)
+  # png(filename = paste0("outputs/mapa_geoquimico_tif_geral_unidades_", eq,  ".png"),
+  #     units = "cm", width=15, height=14, bg = "white", res = 300)
+  # bp_leg <- do.call(gridExtra::"grid.arrange", c(bx, ncol=length(un_val), nrow=1))
+  #  gridExtra::grid.arrange(p1, bp_leg, layout_matrix = lay)
+  # dev.off()
   cl_list[[e]] <- data.frame(base_dados, EL = rep(eq, nrow(base_dados)))
+
 }
 bd_long <- do.call(rbind, cl_list)
 bd_long <- bd_long[, -4]
 bd_long <- bd_long[, c("VALUE", "EL", "class")]
 pv_bd <- tidyr::pivot_wider(bd_long, names_from = "EL", values_from = "class")
+out <- list(list_map, pv_bd)
+names(out) <- c("mapas", "dados classificados tif")
 write.csv2(pv_bd, "outputs/classes_bxp_log.csv", row.names = FALSE)
+return(out)
 }

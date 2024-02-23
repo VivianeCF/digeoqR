@@ -2,7 +2,7 @@
 #'
 #' Gera planilhas cos os principais parâmetros estatísticos
 #'
-#' @param tipo Modo de processamento: 1 = Todas amostras e
+#' @param tipo_proc Modo de processamento: 1 = Todas amostras e
 #'  2 = agrupadas por unidades
 #' @param rotulo_lito Planilha gerada pela função intersecta_bacias com as
 #' unidades litológicas dominantes em cada bacia.
@@ -22,7 +22,7 @@
 #'
 #' @examples
 tabela_estatistica <-
-  function(tipo = 1,
+  function(tipo_proc = 1,
            rotulo_lito = "outputs/mylitho.csv",
            estacao = "outputs/estacoes.shp",
            dir_bol = "inputs/quimica/S/",

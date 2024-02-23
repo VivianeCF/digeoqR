@@ -2,7 +2,7 @@
 % Please edit documentation in R/mapa_tif_unidades.R
 \name{mapa_tif_unidades}
 \alias{mapa_tif_unidades}
-\title{Mapa geoquímico (TIF)}
+\title{Mapa geoquÃ­mico (TIF)}
 \usage{
 mapa_tif_unidades(
   bacias,
@@ -11,12 +11,10 @@ mapa_tif_unidades(
   info_bol,
   litho_max,
   elem_val,
+  tipo_leg,
   leg
 )
 }
-\arguments{
-\item{elem_val}{}
-}
 \description{
-Mapa geoquímico (TIF)
+Mapa geoquÃ­mico (TIF)
 }

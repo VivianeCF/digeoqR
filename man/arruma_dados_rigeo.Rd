@@ -2,7 +2,7 @@
 % Please edit documentation in R/arruma_dados_rigeo.R
 \name{arruma_dados_rigeo}
 \alias{arruma_dados_rigeo}
-\title{Recupera dados geoquÃ­micos do Rigeo}
+\title{Recupera dados geoquímicos do Rigeo}
 \usage{
 arruma_dados_rigeo(
   folhas = "inputs/campo/folhas.shp",
@@ -11,20 +11,20 @@ arruma_dados_rigeo(
 )
 }
 \arguments{
-\item{folhas}{ArticulaÃ§Ã£o das folhas. Dica: gerar grid das folhas no QGIS com
+\item{folhas}{Articulação das folhas. Dica: gerar grid das folhas no QGIS com
 o plugin DSGTools - Grid Algorithms - Gerar Grid Sistematicamente}
 
-\item{dir_in}{DiretÃ³rio onde estÃ£o os arqivos zip de prontos do DGM}
+\item{dir_in}{Diretório onde estão os arqivos zip de prontos do DGM}
 
-\item{dir_out}{DiretÃ³rio para gravaÃ§Ã£o das planilhas de dados}
+\item{dir_out}{Diretório para gravação das planilhas de dados}
 }
 \description{
 Prepara os dados disponibilizados pelo SGB-CPRM. Estes dados
-estÃ£o em parte na Ã¡rea de download do GEOSGB e em parte no link dos projetos
-no RIGEO e compactados na extenÃ§Ã£o zip. A funÃ§Ã£o abre este arquivos e coloca
-num diretÃ³rio temporÃ¡rio e depois salva arquivos csv para cada classe e para
-todas as classes. Ã preciso ter o cuidado de sÃ³ colocar para rodar arquivos
-semelhantes aos do modelo. Arquivos excel devem xlsx e as mÃ¡scaras das
+estão em parte na área de download do GEOSGB e em parte no link dos projetos
+no RIGEO e compactados na extenção zip. A função abre este arquivos e coloca
+num diretório temporário e depois salva arquivos csv para cada classe e para
+todas as classes. É preciso ter o cuidado de só colocar para rodar arquivos
+semelhantes aos do modelo. Arquivos excel devem xlsx e as máscaras das
 tabelas de atributos devem ser padronizadas.
 }
 \examples{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/recorta_feicao_area.R
 \name{recorta_feicao_area}
 \alias{recorta_feicao_area}
-\title{Recorta a feiÃ§Ã£o pela Ã¡rea}
+\title{Recorta a feição pela área}
 \usage{
 recorta_feicao_area(
   dir_in = "inputs/campo/",
@@ -14,19 +14,19 @@ recorta_feicao_area(
 )
 }
 \arguments{
-\item{dir_in}{DiretÃ³rio de entrada das feiÃ§Ãµes}
+\item{dir_in}{Diretório de entrada das feições}
 
-\item{dir_out}{DiretÃ³rio da feiÃ§Ã£o de saÃ­da}
+\item{dir_out}{Diretório da feição de saída}
 
-\item{area}{Nome do arquivo shape da Ã¡rea}
+\item{area}{Nome do arquivo shape da área}
 
-\item{feicao_in}{Nome da shape da feiÃ§Ã£o de entrada}
+\item{feicao_in}{Nome da shape da feição de entrada}
 
-\item{feicao_out}{Nome da shape da feiÃ§Ã£o de saÃ­da}
+\item{feicao_out}{Nome da shape da feição de saída}
 
-\item{chave}{Nome da chave para a dissoluÃ§Ã£o da feiÃ§Ã£o recortada}
+\item{chave}{Nome da chave para a dissolução da feição recortada}
 }
 \description{
-Ferramenta que extrai a shape da feiÃ§Ã£o (geologia, solo...) a partir de uma
-feiÃ§Ã£o de escala menor. Usei o mapa geolÃ³gico do Brasil ao milhonÃ©simo do SGB.
+Ferramenta que extrai a shape da feição (geologia, solo...) a partir de uma
+feição de escala menor. Usei o mapa geológico do Brasil ao milhonésimo do SGB.
 }

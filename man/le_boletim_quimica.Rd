@@ -2,27 +2,27 @@
 % Please edit documentation in R/le_boletim_quimica.R
 \name{le_boletim_quimica}
 \alias{le_boletim_quimica}
-\title{LÃª boletins de anÃ¡lises quÃ­micas}
+\title{Lê boletins de análises químicas}
 \usage{
 le_boletim_quimica(classe_am, dir_bol, ref_ucc)
 }
 \arguments{
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
+corrente, 3 = rocha, 4 = solo, 5 = água}
 
-\item{dir_bol}{DiretÃ³rio dos boletins analÃ­ticos ex: "inputs/quimica/R/"}
+\item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/quimica/R/"}
 
-\item{ref_ucc}{Planilha com valores da ConcentraÃ§Ã£o MÃ©dia da Crosta Superior
+\item{ref_ucc}{Planilha com valores da Concentração Média da Crosta Superior
 Rudnick e Gao 2004}
 }
 \value{
 Retorna uma lista com todos os dados do boletim: resultados
-analÃ­ticos, condiÃ§Ãµes analÃ­ticas, QA/QC, requisiÃ§Ã£o das anÃ¡lises e
-preparaÃ§Ã£o das amostras.
+analíticos, condições analíticas, QA/QC, requisição das análises e
+preparação das amostras.
 }
 \description{
-Esta funÃ§Ã£o lÃª os boletins csv e extrai as informaÃ§Ãµes na forma de tabelas
-que sÃ£o gravadas no diretÃ³rio de saÃ­da.
+Esta função lê os boletins csv e extrai as informações na forma de tabelas
+que são gravadas no diretório de saída.
 }
 \examples{
 # le_boletim_quimica()

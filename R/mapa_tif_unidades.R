@@ -2,18 +2,18 @@
 #'
 #' @param bacias
 #' @param geologia
-#' @param dados_transf_sc
 #' @param info_bol
-#' @param mylitho_max_sc
+#' @param litho_max
+#' @param dados_transf
+#' @param leg
 #' @param elem_val
-#' @param leg2
 #'
 #' @return
 #' @export
 #'
 #' @examples
-mapa_tif_unidades <- function(bacias, geologia, dados_transf_sc,
-                     info_bol, mylitho_max_sc, elem_val, leg2 )
+mapa_tif_unidades <- function(bacias, geologia, dados_transf,
+                     info_bol, litho_max, elem_val, leg )
   {
 
 ######################################################################
@@ -23,52 +23,43 @@ mapa_tif_unidades <- function(bacias, geologia, dados_transf_sc,
 # Definição do formato numérico, vírgula decimal
 options(OutDec = ",", scipen = 999)
 
-## Chama as funções de classificação e digitos
-# source('R/cutter.R', local = TRUE)
-# source('R/digits.R', local = TRUE)
-# source('R/log_class_bxp.R', local = TRUE)
-# source('R/zcut_bxp.R', local = TRUE)
-
-# Lê arquivos
-## Bacias modeladas pelo SRTM usando o projeto R MODEL_BACIAS
+# Carrega dados
+## Bacias modeladas pelo SRTM pela função modela_bacias
 bacias <-  bacias
-## Arquivo shapefile com os polígonos das unidades
+## Polígonos das unidades
 geologia <-  geologia
-## Arquivo csv com os dados de campo, analíticos  e unidades geológicas
-mydata <- dados_transf
-#Arquivo com informações de cada elemento analisado e UCC
-myjob <- as.data.frame(info_bol)
-myjob[is.na(myjob$UCC),"UCC"] <- 0
-# rownames(myjob) <- myjob$nome_analito
-# Criar vetor das unidades
-mylitho <- mylitho_max_sc
-Geo_cod <- unique(mylitho$Geo_cod)
+## Dados de campo, analíticos pela função prepara_bases
+data <- dados_transf
+# Informações de cada elemento analisado e UCC pela função prepara_bases
+info_bol <- as.data.frame(info_bol)
+info_bol[is.na(info_bol$UCC),"UCC"] <- 0
+# Vetor das unidades
+litho <- litho_max
+Geo_cod <- unique(litho$Geo_cod)
 
-mydata <- dplyr::left_join(mydata, mylitho, by = "VALUE")
+data <- dplyr::left_join(data, litho, by = "VALUE")
 
-t <- data.frame(table(mylitho$Geo_cod))
+t <- data.frame(table(litho$Geo_cod))
 un_val <- as.numeric(as.character(t[t$Freq > 10,"Var1"]))
 
 # Ordena as Unidades pelo código das unidades (Geo_cod)
-cod_unidades <- leg2
+cod_unidades <- leg
 abrev <- cod_unidades$SIGLA
 nome_unidade <- cod_unidades$SIGLA
 
-
 # Criar vetor das unidades tectônicas
-Geo_cod <- unique(mydata$Geo_cod)
+Geo_cod <- unique(data$Geo_cod)
 
 # Criar vetor com sigla dos elementos
 elementos <- elem_val
-# mydata <-
 
-# Criar a lista e o dataframe dos dados
-
+# Prepara lista com dados classificados
 res <- list()
+
 # Calcula as classes boxplot por elemento e por unidade
 un_val <- as.character(un_val)
 for (ul in un_val) {
-  select <- mydata[mydata$Geo_cod == ul, ]
+  select <- data[data$Geo_cod == ul, ]
   res[[ul]] <- lapply(select[,elementos], function(x)
     cbind(select[,"Geo_cod"], select[,"VALUE"],  log_class_bxp(x),  x))
 }
@@ -84,8 +75,8 @@ for (e in seq_along(elem_val))   {
 
   # Atribui elemento a variável eq
   eq <-elem_val[e]
-  unidade <- myjob[myjob$nome_analito == elem_val[e], "unidades"]
-  dig <- myjob[myjob$nome_analito == elem_val[e], "DIG"]
+  unidade <- info_bol[info_bol$nome_analito == elem_val[e], "unidades"]
+  dig <- info_bol[info_bol$nome_analito == elem_val[e], "DIG"]
 
   # Criar uma lista de dataset  iterando as unidades para o
   #elemento (eq) escolhido
@@ -120,7 +111,7 @@ for (e in seq_along(elem_val))   {
   y1 <- round(st_bbox(bacias)[[4]],1)+0.1
   base_dados <- base_dados[!is.na(base_dados$valor),]
   titulo_mapa <- paste0("Geochemical Map -  Stream sediment - ", "\n",
-                        myjob[myjob$nome_analito == eq, "analito"], " - TIF")
+                        info_bol[info_bol$nome_analito == eq, "analito"], " - TIF")
 
   bacias_rec <- dplyr::inner_join(bacias, base_dados, by='VALUE')
 
@@ -253,8 +244,8 @@ for (e in seq_along(elem_val))   {
     rot_teor <- round(teor, dig)
 
     # Testa o mínimo e coloca o operador < antes do LD nos rótulos do boxplot
-    if(round(10^lmin,dig)<= round(myjob[myjob$nome_analito == eq, "MDL"]/2, dig)){
-      rot_teor[1] <- paste0("<",myjob[myjob$nome_analito == eq, "MDL"])
+    if(round(10^lmin,dig)<= round(info_bol[info_bol$nome_analito == eq, "MDL"]/2, dig)){
+      rot_teor[1] <- paste0("<",info_bol[info_bol$nome_analito == eq, "MDL"])
     }
 
     # Assegura o rótulo do mínimo
@@ -272,17 +263,17 @@ for (e in seq_along(elem_val))   {
     nli <- sum(dados2$teor < LI)
 
     #Controle UCC
-    if(myjob[myjob$nome_analito == eq, "UCC"] > 0.001 & myjob[myjob$nome_analito == eq, "UCC"] <= 10^lmax ){
-      lb_ucc <- ggplot2::geom_text(ggplot2::aes(label = paste0( myjob[myjob$nome_analito == eq, "analito"], ": UCC*"), x = 0.7,
-                              y = myjob[myjob$nome_analito == eq, "analito"]),
+    if(info_bol[info_bol$nome_analito == eq, "UCC"] > 0.001 & info_bol[info_bol$nome_analito == eq, "UCC"] <= 10^lmax ){
+      lb_ucc <- ggplot2::geom_text(ggplot2::aes(label = paste0( info_bol[info_bol$nome_analito == eq, "analito"], ": UCC*"), x = 0.7,
+                              y = info_bol[info_bol$nome_analito == eq, "analito"]),
                           size = 3, colour="red")
-      ln_ucc <- ggplot2::geom_segment(ggplot2::aes(x=0,xend=0.5, y=myjob[myjob$nome_analito == eq, "MDL"],
-                                 yend = myjob[myjob$nome_analito == eq, "MDL"]),
+      ln_ucc <- ggplot2::geom_segment(ggplot2::aes(x=0,xend=0.5, y=info_bol[info_bol$nome_analito == eq, "MDL"],
+                                 yend = info_bol[info_bol$nome_analito == eq, "MDL"]),
                              colour = "red", linetype = "dotdash")
       pos <- c(pos,0.5)
-      teor <- c(teor, myjob[eq, "UCC"])
+      teor <- c(teor, info_bol[eq, "UCC"])
       rotulo_lim <- c(rotulo_lim,"UCC*")
-      rot_teor <- c(rot_teor, myjob[eq, "UCC"])
+      rot_teor <- c(rot_teor, info_bol[eq, "UCC"])
     }else{
       ln_ucc <- ggplot2::geom_segment(ggplot2::aes(x = 0,xend = 0.5,y = 10^lmax, yend = 10^lmax),
                              colour = "transparent", linetype = "dotdash")
@@ -319,7 +310,7 @@ for (e in seq_along(elem_val))   {
       # col = "black", stroke = df_sb$lwd1_cod ) +
       ggplot2::xlim(-0.02, 1) +
       ggplot2::scale_y_log10(limit = c(min(base_dados$valor), max(base_dados$valor))) +
-      # scale_y_continuous(limit = c(min(mydata[,eq]), max(mydata[,eq]))) +
+      # scale_y_continuous(limit = c(min(data[,eq]), max(data[,eq]))) +
       ggplot2::ggtitle(paste0(nome_un, "\noutliers: inf./sup.: ", nli,"/", nls))  +
       ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.4))
   }

@@ -6,7 +6,6 @@
 #'  2 = agrupadas por unidades
 #' @param rotulo_lito Planilha gerada pela função intersecta_bacias com as
 #' unidades litológicas dominantes em cada bacia.
-#' @param estacao Dados de campo das estações amostradas (shp)
 #' @param dir_bol Diretório dos arquivos dos boletins
 #' @param classe_am Classe de amostra
 #' @param analise tipo de análise 1 = mineralógica e 2 = química
@@ -16,6 +15,8 @@
 #' @param dir_out Diretório de saída dados de campo e estações
 #' @param ref_ucc referência UCC
 #' @param EPSG Sistema de coordenadas
+#' @param feicao_rec
+#' @param nome_xml
 #'
 #' @return
 #' @export
@@ -23,14 +24,16 @@
 #' @examples
 tabela_estatistica <-
   function(tipo_proc = 1,
-           rotulo_lito = "outputs/mylitho.csv",
-           estacao = "outputs/estacoes.shp",
+           rotulo_lito,
            dir_bol = "inputs/quimica/S/",
            classe_am = 2,
            analise = 2,
            dir_base = "inputs/campo/",
            tipo_base = 1,
-           base_campo = "fcampo", dir_out = "outputs/", ref_ucc = "inputs/quimica/ucc.csv", EPSG){
+           base_campo = "fcampo",
+           dir_out = "outputs/",
+           ref_ucc = "inputs/quimica/ucc.csv",
+           EPSG, feicao_rec, nome_xml = "geologia"){
 
     # Obter dados das análises químicas
      dados_bol <-  prepara_bases(dir_bol,
@@ -46,11 +49,12 @@ tabela_estatistica <-
      # Lê dados transformados
      data <- dados_bol[[2]]
 
-    mylitho <- read.csv2(rotulo_lito)
+    mylitho <- rotulo_lito
     # mydata <- sf::read_sf(dados_campo)
     # mydata <- as.data.frame(mydata)
 
-    lista_legenda <- prepara_legenda()
+    lista_legenda <- prepara_legenda(feicao_rec, dir_out,
+                                     dir_in = dir_base, nome_xml)
     mylegend <- lista_legenda[[2]]
 
     mylitho <- dplyr::inner_join(data, mylitho, by= "VALUE")

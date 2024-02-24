@@ -2,7 +2,7 @@
 % Please edit documentation in R/le_boletim_mineral.R
 \name{le_boletim_mineral}
 \alias{le_boletim_mineral}
-\title{Lê boletins de análises mineralométricas}
+\title{LÃª boletins de anÃ¡lises mineralomÃ©tricas}
 \usage{
 le_boletim_mineral(classe_am, dir_bol)
 }
@@ -10,15 +10,15 @@ le_boletim_mineral(classe_am, dir_bol)
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo}
 
-\item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/mineral/B/"}
+\item{dir_bol}{DiretÃ³rio dos boletins analÃ­ticos ex: "inputs/mineral/B/"}
 }
 \value{
 Retorna uma lista com todos os dados do boletim: resultados
-analíticos, condições analíticas, requisição das análises, preparação das
-amostras, separação grav-magnética.
+analÃ­ticos, condiÃ§Ãµes analÃ­ticas, requisiÃ§Ã£o das anÃ¡lises, preparaÃ§Ã£o das
+amostras, separaÃ§Ã£o grav-magnÃ©tica.
 }
 \description{
-Lê boletins de análises mineralométricas
+LÃª boletins de anÃ¡lises mineralomÃ©tricas
 }
 \examples{
 #le_boletim_mineral()

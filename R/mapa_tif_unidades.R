@@ -5,15 +5,17 @@
 #' @param info_bol
 #' @param litho_max
 #' @param dados_transf
+#' @param nbc
 #' @param elem_val
 #' @param tipo_leg
 #' @param leg
+#'
 #' @return
 #' @export
 #'
 #' @examples
 mapa_tif_unidades <- function(bacias, geologia, dados_transf,
-                     info_bol, litho_max, elem_val, tipo_leg, leg )
+                     info_bol, litho_max, nbc = 10 , elem_val, tipo_leg, leg)
   {
 
 ######################################################################
@@ -40,7 +42,7 @@ Geo_cod <- unique(litho$Geo_cod)
 data <- dplyr::left_join(data, litho, by = "VALUE")
 
 t <- data.frame(table(litho$Geo_cod))
-un_val <- as.numeric(as.character(t[t$Freq > 10,"Var1"]))
+un_val <- as.numeric(as.character(t[t$Freq > nbc ,"Var1"]))
 
 # Ordena as Unidades pelo código das unidades (Geo_cod)
 cod_unidades <- leg

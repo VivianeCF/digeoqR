@@ -3,6 +3,7 @@
 export("%>%")
 export(arruma_dados_rigeo)
 export(classifica_amostra_ca)
+export(classifica_metodos)
 export(cutter)
 export(digits)
 export(estrutura_diretorio)

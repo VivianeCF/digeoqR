@@ -6,17 +6,15 @@
 #'excluídos locais nas áreas urbanas e de massa d'água. Todos os arquivos devem
 #'ser no formato shapefile.
 #'
-#'@param rios nome do arquivo os rios
-#'@param limite nome do arquivo da área do projeto
-#'@param massa_dagua nome do arquivo da massa d'água
-#'@param area_urbana nome do arquivo da área urbana
+#'@param dem Modeolo digital do terreno (SRTM)
 #'@param EPSG Sistema de coordenadas
 #'@param threshold Valor de corte da área das bacias modeladas
 #'@param min_length Comprimento mínimo do curso do rio
 #'@param max_ordem Ordem Strhaler máxima para a validaçãon da estação
-#'@param dir_shp Diretório dos dados espaciais
+#'@param bases_model Bases definidas na função gera_bases_model
 #'@param dir_out Diretório de saída
-#' @param limite_srtm
+#'@param wbt_wd
+
 #'
 #'@return Imagem (.png) do mapa de planejamento preliminar.
 #'Arquivo da shape (shp) das estações.
@@ -26,28 +24,21 @@
 #' #gera_estacoes()
 #'
 gera_estacoes <-
-  function(dir_shp = "inputs/campo/",
-           dir_out = "outputs/",
-           limite = "carta_100M.shp",
-           limite_srtm = "area_srtm.shp",
-           area_urbana = "area_urbana.shp",
+  function(dem, dir_out = "outputs/",
+           bases_model,
            EPSG = 4326,
-           rios = "rios_ibge.shp",
-           massa_dagua = "massa_dagua.shp",
            threshold = 250,
-           min_length = 0.02,
-           max_ordem = 4)
+           min_length = "0.02",
+           max_ordem = 4,  wbt_wd = "outputs/modelo/")
   {
 ### GERA DRENAGENS--------------------------------------------------------------
     # Cria objeto lista para a saída
     out <- list()
-    wbt_wd <- tempfile()
-    dir.create(wbt_wd)
-    bases <- gera_bases_model()
-    dem <- prepara_dem()
+    # wbt_wd <- tempfile()
+    # dir.create(wbt_wd)
     stars::write_stars(dem,
                        file.path( wbt_wd, "srtm.tif"))
-    sf::write_sf(bases[["rios"]], paste0(wbt_wd,"\\","rios.shp"))
+    sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"\\","rios.shp"))
     options("rgdal_show_exportToProj4_warnings" = "none")
 
     whitebox::wbt_rasterize_streams(
@@ -62,7 +53,7 @@ gera_estacoes <-
     # Vamos negligenciar o efeito dos aterros rodoviários no DEM de 30m
     # criando um shapefile vazio para as estradas
     sf::write_sf(
-      sf::st_sfc(sf::st_multilinestring(), crs = 4326),
+      sf::st_sfc(sf::st_multilinestring(), crs = EPSG),
       file.path(wbt_wd, "roads.shp"),
       delete_layer = TRUE,
       quiet = TRUE
@@ -103,18 +94,12 @@ gera_estacoes <-
       threshold = threshold,
       # 100 células = 1 km2
       output = "network_1km2.tif",
-      zero_background = TRUE,
-      wd = wbt_wd
-    )
+      wd = wbt_wd)
 
-    # Remove pequenos trechos da rede fluvial
-    whitebox::wbt_remove_short_streams(
-      d8_pntr =  output_d8_pntr,
-      streams = "network_1km2.tif",
-      output = "network_d8.tif",
-      min_length = min_length,
-      wd = wbt_wd
-    )
+    # # Remove pequenos trechos da rede fluvial
+    whitebox::wbt_remove_short_streams(d8_pntr = output_d8_pntr, streams = "network_1km2.tif",
+                                       output = "network_d8.tif",
+                                       min_length = min_length, wd = wbt_wd,)
 
     # Converte a rede fluvial de raster para vetor
     whitebox::wbt_raster_streams_to_vector("network_d8.tif",
@@ -161,12 +146,12 @@ gera_estacoes <-
 
     ## Gera ESTAÇÕES -----------------------------------------------------------
     ## Lê limite da area do projeto
-    area <- bases[["limite da área folha"]]
+    area <- bases_model[["limite da área folha"]]
     ## Lê massa d'água
-    massa_dagua <- bases[["massa de água"]]
+    massa_dagua <- bases_model[["massa de água"]]
 
     ## Lê área urbana
-    area_urbana <- bases[["área urbana"]]
+    area_urbana <- bases_model[["área urbana"]]
 
     ## Encontra vértices das junções
 
@@ -208,8 +193,8 @@ gera_estacoes <-
       })
 
     ## Remove área de sobreposição do buffer dos rios - suprime alertas
-    linhas <- stream_model  %>% sf::st_transform(4326)
-    outlet <- joins_area  %>% sf::st_transform(4326)
+    linhas <- stream_model  %>% sf::st_transform(EPSG)
+    outlet <- joins_area  %>% sf::st_transform(EPSG)
     suppressMessages({sf::sf_use_s2(FALSE)})
     res_ls <-
       suppressWarnings({
@@ -223,11 +208,11 @@ gera_estacoes <-
 
     # Converte tabela de coordenadas em dados espaciais
     pontos_originais <-
-      sf::st_as_sf(p, coords = c("V1", "V2"), crs = 4326)
+      sf::st_as_sf(p, coords = c("V1", "V2"), crs = EPSG)
 
     ## Pontos selecionados pelo filtro de localização --------------------------
     ## Extrair pontos dentro da carta 100 mil
-    area <- sf::st_transform(area, 4326)
+    area <- sf::st_transform(area, EPSG)
     pontos_area <-
       suppressMessages({
         suppressWarnings({
@@ -237,7 +222,7 @@ gera_estacoes <-
     pontos_area$id <- seq(1, nrow(pontos_area))
 
     ## Remover pontos dentro das áreas alagadas
-    massa_dagua <- sf::st_transform(massa_dagua, 4326)
+    massa_dagua <- sf::st_transform(massa_dagua, EPSG)
     pontos_area_remover1 <-
       suppressMessages({
         suppressWarnings({
@@ -245,7 +230,7 @@ gera_estacoes <-
         })
       })
     ## Remover pontos dentro de áreas urbanas
-    area_urbana <- sf::st_transform(area_urbana, 4326)
+    area_urbana <- sf::st_transform(area_urbana, EPSG)
     pontos_area_remover2 <-
       suppressMessages({
         suppressWarnings({

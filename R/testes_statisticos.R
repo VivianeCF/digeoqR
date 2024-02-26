@@ -2,38 +2,34 @@
 #'
 #' Testes de normalidade e de comparação das amostras
 #'
-#' @param info_bol Incormações das condições analíticas
-#' @param mylitho_max_sc Litologia dominante de cada amostra considerando sua
-#' bacia de captação
-#' @param dados_transf_sc Dados químicos valores <LD substituidos por 0,5*LD
-#' @param dados_brutos_sc Dados químicos originais
 #' @param mtd_transf Método de transformação dos dados
 #' 1 = sem transformação e 2 = logtransformados
-#' @param nbc
+#' @param nbc número mímimo de bacias por unidade
+#' @param base Lista de dados da função prepara_base
+#' @param lito_bacia Resultado da função intercecta_bacia
 #'
 #' @return
 #' @export
 #'
 #' @examples
-testes_estatisticos <- function(dados_transf_sc, dados_brutos_sc,
-                                info_bol, mylitho_max_sc, mtd_transf = 1, nbc = 10){
+testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10){
  lst_pr <- list()
  lst_el <- list()
  out <- list()
 # Lê arquivos
 ## Bacias modeladas pelo SRTM usando o projeto R MODEL_BACIAS
-mydata <- dados_transf_sc
-mydata_b <- dados_brutos_sc
-info_bol <- info_bol[!duplicated(info_bol$nome_analito), ]
-myjob <- info_bol
+mydata <-  base[[2]]
+mydata_b <-  base[[1]]
+myjob <- base[[5]]
 
 # Criar vetor das unidades
-Geo_cod <- unique(mylitho_max_sc$Geo_cod)
+mylitho_max <- lito_bacia[[2]]
+Geo_cod <- unique(mylitho_max$Geo_cod)
 
 elementos <- myjob$nome_analito
-mydata <- dplyr::left_join(mydata, mylitho_max_sc, by = "VALUE")
+mydata <- dplyr::left_join(mydata, mylitho_max, by = "VALUE")
 
-t <- data.frame(table(mylitho_max_sc$Geo_cod))
+t <- data.frame(table(mylitho_max$Geo_cod))
 un_val <- as.numeric(as.character(t[t$Freq > nbc,"Var1"]))
 
 # Ordena as Unidades pelo código das unidades (Geo_cod)

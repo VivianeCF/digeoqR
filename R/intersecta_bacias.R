@@ -5,7 +5,7 @@
 #'
 #' @param limite Limite da área do projeto
 #' @param bacias bacias obtidas a partir da função gera_bacias
-#' @param feicao polígonos de algum tema (geologia,
+#' @param feicao_rec polígonos de algum tema (geologia,
 #' solo, geofísica, geomorfologia, etc)
 #' @param estacoes Estações de coleta
 #' @param dir_out Diretório de saída onde serão gravados as planilhas .csv
@@ -14,7 +14,6 @@
 #'   corrente, 3 = rocha, 4 = solo, 5 = água
 #' @param dir_in
 #' @param nome_xml
-#' @param feicao_rec
 #'
 #' @return
 #' Bacias
@@ -23,15 +22,13 @@
 #' @examples
 #' #intersecta_bacias()
 intersecta_bacias <- function(dir_in = "inputs/campo/",
-                              dir_out = "outputs/",
-                              limite = "inputs/campo/carta_100M.shp",
+                              dir_out = "outputs/", bases_model,
                               bacias,
-                              feicao,
+                              feicao_rec,
                               tipo_leg = 2,
                               estacoes,
                               classe_am = 2,
-                              nome_xml = "geologia",
-                              feicao_rec = "geologia_area.shp")
+                              nome_xml = "geologia")
 {
   abrev <- c("cb", "sc", "solo", "rocha", "agua")
   nm_classe <- c("Concentrado de bateia",
@@ -42,7 +39,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
 
   options(encoding = "latin1")
   out <- list()
-  area <- sf::read_sf(limite)
+  area <- bases_model[["limite da área folha"]]
   centroide <-
     sf::st_coordinates(suppressWarnings({
       sf::st_centroid(area)

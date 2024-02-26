@@ -7,21 +7,19 @@
 modela_bacias(
   fase = 2,
   EPSG = 4326,
+  dem,
+  bases_model,
+  gera_est,
+  ex_campo,
+  classe_am,
   bacia_minima = 4,
   bacia_maxima = 100,
-  rios = "inputs/campo/rios_ibge.shp",
-  massa_dagua = "inputs/campo/massa_dagua.shp",
-  limite = "inputs/campo/carta_100M.shp",
-  limite_srtm = "area_srtm.shp",
   threshold = 250,
-  snap_dist = 0.02,
-  min_length = 0.02,
+  snap_dist = "0.02",
+  min_length = "0.02",
   max_ordem = 3,
-  classe_am = NULL,
-  dir_base = NULL,
-  tipo_base = NULL,
-  base_campo = NULL,
-  dir_out = "outputs/"
+  dir_out = "outputs/",
+  wbt_wd = "outputs/modelo/"
 )
 }
 \arguments{
@@ -29,17 +27,21 @@ modela_bacias(
 
 \item{EPSG}{crs da camada}
 
+\item{dem}{Modelo digital de terreno (ex. SRTM)}
+
+\item{bases_model}{Bases para a modelagem das bacias e drenagem pela
+funÃ§Ã£o gera_bases_model}
+
+\item{gera_est}{}
+
+\item{ex_campo}{Dados de campo extraÃ­dos pela funÃ§Ã£o extrai_dados_campo}
+
+\item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
+corrente, 3 = rocha, 4 = solo}
+
 \item{bacia_minima}{Ãrea mÃ­nima das bacias planejadas}
 
 \item{bacia_maxima}{Ãrea mÃ¡xima das bacias planejadas}
-
-\item{rios}{Shape dos rios obtidos por cartas digitais, fotografia aÃ©rea ou
-dados do IBGE}
-
-\item{massa_dagua}{Shape da massa d'Ã¡gua, obtidos por cartas digitais,
-fotografia aÃ©rea ou dados do IBGE}
-
-\item{limite}{PolÃ­gonono da Ã¡rea do projeto}
 
 \item{threshold}{Numero de cÃ©lulas mÃ­nimo para o traÃ§ado das drenagens}
 
@@ -49,7 +51,7 @@ fotografia aÃ©rea ou dados do IBGE}
 
 \item{max_ordem}{MÃ¡xima ordem do rio para a busca do snap point}
 
-\item{dir_out}{}
+\item{dir_out}{DiretÃ³rio de saÃ­da}
 }
 \value{
 Rasters da preparaÃ§Ã£o das imagens para a extraÃ§Ã£o do modelo de

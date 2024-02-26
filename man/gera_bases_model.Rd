@@ -5,7 +5,7 @@
 \title{Gera bases para a modelagem das bacias e estaÃ§Ãµes}
 \usage{
 gera_bases_model(
-  dir_shp = "inputs/campo/",
+  dir_in = "inputs/campo/",
   limite = "carta_100M.shp",
   limite_srtm = "area_srtm.shp",
   area_urbana = "area_urbana.shp",

@@ -5,7 +5,7 @@
 \title{Prepara imagem de SRTM para a modelagem de terreno}
 \usage{
 prepara_dem(
-  dir_shp = "inputs/campo/",
+  dir_in = "inputs/campo/",
   limite_srtm = "area_srtm.shp",
   dir_out = "outputs/",
   EPSG = 4326,

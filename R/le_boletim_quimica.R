@@ -8,6 +8,7 @@
 #' @param dir_bol Diretório dos boletins analíticos ex: "inputs/quimica/R/"
 #' @param ref_ucc Planilha com valores da Concentração Média da Crosta Superior
 #' Rudnick e Gao 2004
+#' @param dir_ucc Diretório do arquivo UCC
 #'
 #' @return Retorna uma lista com todos os dados do boletim: resultados
 #'   analíticos, condições analíticas, QA/QC, requisição das análises e
@@ -15,7 +16,7 @@
 #' @export
 #' @examples
 #' # le_boletim_quimica()
-le_boletim_quimica <- function(classe_am, dir_bol, ref_ucc) {
+le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
   # library(tidyverse)
   # require(rgr)
   options(OutDec = ",")
@@ -418,7 +419,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, ref_ucc) {
   ref <- df %>% dplyr::select(-"min")
   ref$DIG <- count_decimals(ref$MDL)
   # Lê UCC dos elementos
-  ucc <- read.csv2(ref_ucc)
+  ucc <- read.csv2(paste0(dir_ucc, ref_ucc))
   ref$nome_analito <- paste0(ref$analito,"_", ref$unidades)
   ucc$nome_analito <- paste0(ucc$Elemento,"_", ucc$Unidade)
   ref <- dplyr::left_join(ref, ucc[, c("nome_analito", "UCC")],

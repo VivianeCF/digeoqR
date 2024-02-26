@@ -5,41 +5,32 @@
 \title{Gera estaÃ§Ãµes nas confluÃªncias dos rios}
 \usage{
 gera_estacoes(
-  dir_shp = "inputs/campo/",
+  dem,
   dir_out = "outputs/",
-  limite = "carta_100M.shp",
-  limite_srtm = "area_srtm.shp",
-  area_urbana = "area_urbana.shp",
+  bases_model,
   EPSG = 4326,
-  rios = "rios_ibge.shp",
-  massa_dagua = "massa_dagua.shp",
   threshold = 250,
-  min_length = 0.02,
-  max_ordem = 4
+  min_length = "0.02",
+  max_ordem = 4,
+  wbt_wd = "outputs/modelo/"
 )
 }
 \arguments{
-\item{dir_shp}{DiretÃ³rio dos dados espaciais}
+\item{dem}{Modeolo digital do terreno (SRTM)}
 
 \item{dir_out}{DiretÃ³rio de saÃ­da}
 
-\item{limite}{nome do arquivo da Ã¡rea do projeto}
-
-\item{limite_srtm}{}
-
-\item{area_urbana}{nome do arquivo da Ã¡rea urbana}
+\item{bases_model}{Bases definidas na funÃ§Ã£o gera_bases_model}
 
 \item{EPSG}{Sistema de coordenadas}
-
-\item{rios}{nome do arquivo os rios}
-
-\item{massa_dagua}{nome do arquivo da massa d'Ã¡gua}
 
 \item{threshold}{Valor de corte da Ã¡rea das bacias modeladas}
 
 \item{min_length}{Comprimento mÃ­nimo do curso do rio}
 
 \item{max_ordem}{Ordem Strhaler mÃ¡xima para a validaÃ§Ã£on da estaÃ§Ã£o}
+
+\item{wbt_wd}{}
 }
 \value{
 Imagem (.png) do mapa de planejamento preliminar.

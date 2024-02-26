@@ -7,7 +7,7 @@
 #' de laboratório.
 #'
 #' @param tipo_base Tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
-#' @param dir_base Diretório da base de dados de campo
+#' @param dir_in Diretório da base de dados de campo
 #' @param base_campo Nome da base de dados de campo
 #' @param dir_os Diretório das planilhas de OS
 #' @param dir_out Diretório de saída
@@ -20,7 +20,7 @@
 #' @examples
 #'
 extrai_dados_campo <- function(tipo_base,
-                               dir_base,
+                               dir_in,
                                base_campo,
                                dir_os,
                                EPSG,
@@ -32,7 +32,7 @@ extrai_dados_campo <- function(tipo_base,
       RODBC::odbcDriverConnect(
         paste(
           "DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}",
-          paste0("DBQ=", dir_base, base_campo),
+          paste0("DBQ=", dir_in, base_campo),
           "Trusted_Connection=Yes" ,
           sep = ";"
         )
@@ -71,15 +71,15 @@ extrai_dados_campo <- function(tipo_base,
   if(tipo_base == 2){
     # Lê arquivos do geodatabase
     # Lista o que está na base
-    df <- sf::st_layers( paste0(dir_base, base_campo, ".gdb"))
+    df <- sf::st_layers( paste0(dir_in, base_campo, ".gdb"))
 
     # Recupera nome da layer de pontos
     pontos <- df[["name"]][1]
 
     # Lê os dados da Base (pontos e amostras)
-    pontos <- sf::st_read(paste0(dir_base, base_campo, ".gdb"),
+    pontos <- sf::st_read(paste0(dir_in, base_campo, ".gdb"),
                       layer = pontos, quiet = TRUE)
-    amostras <- sf::st_read(paste0(dir_base, base_campo, ".gdb"),
+    amostras <- sf::st_read(paste0(dir_in, base_campo, ".gdb"),
                           layer = "amostras", as_tibble = TRUE, quiet = TRUE)
     amostras <- dplyr::select(amostras, !c("globalid", "created_date",
                                            "created_user", "last_edited_date",
@@ -98,13 +98,13 @@ extrai_dados_campo <- function(tipo_base,
     if(tipo_base == 3){
       # Lê arquivo no geopackage
       # Dados das amostras
-      amostras <- sf::st_read(paste0(dir_base, base_campo, ".gpkg"),
+      amostras <- sf::st_read(paste0(dir_in, base_campo, ".gpkg"),
                           layer = "amostras", as_tibble = TRUE, quiet = TRUE)
       amostras <- dplyr::select(amostras, !c("objectid", "globalid", "created_date",
                                              "created_user", "last_edited_date",
                                              "last_edited_user"))
       # Dados espaciais
-      pontos <- sf::st_read(paste0(dir_base, base_campo, ".gpkg"),
+      pontos <- sf::st_read(paste0(dir_in, base_campo, ".gpkg"),
                                layer = "pontos_de_coleta", quiet = TRUE)
       df_base <-
         dplyr::inner_join(pontos, amostras, by = c("uniquerowid"= "parentrowid"))

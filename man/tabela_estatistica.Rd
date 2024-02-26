@@ -4,21 +4,7 @@
 \alias{tabela_estatistica}
 \title{SumÃ¡rio EstatÃ­stico das anÃ¡lises quÃ­micas}
 \usage{
-tabela_estatistica(
-  tipo_proc = 1,
-  rotulo_lito,
-  dir_bol = "inputs/quimica/S/",
-  classe_am = 2,
-  analise = 2,
-  dir_base = "inputs/campo/",
-  tipo_base = 1,
-  base_campo = "fcampo",
-  dir_out = "outputs/",
-  ref_ucc = "inputs/quimica/ucc.csv",
-  EPSG,
-  feicao_rec,
-  nome_xml = "geologia"
-)
+tabela_estatistica(tipo_proc = 1, rotulo_lito, base, lista_legenda, dir_out)
 }
 \arguments{
 \item{tipo_proc}{Modo de processamento: 1 = Todas amostras e
@@ -27,25 +13,11 @@ tabela_estatistica(
 \item{rotulo_lito}{Planilha gerada pela funÃ§Ã£o intersecta_bacias com as
 unidades litolÃ³gicas dominantes em cada bacia.}
 
-\item{dir_bol}{DiretÃ³rio dos arquivos dos boletins}
+\item{base}{Lista de dados obtidos pela funÃ§Ã£o prepara_base}
 
-\item{classe_am}{Classe de amostra}
+\item{lista_legenda}{Lista legendas obtida pela funÃ§Ã£o prepara_legenda}
 
-\item{analise}{tipo de anÃ¡lise 1 = mineralÃ³gica e 2 = quÃ­mica}
-
-\item{dir_base}{DiretÃ³rio da base de dados de campo}
-
-\item{tipo_base}{Tipo de base de campo 1 = FCAMP, 2 = SURVEY123 e 3 = QFIELD}
-
-\item{base_campo}{Nome do arquivo da base de campo (sem extenÃ§Ã£o)}
-
-\item{dir_out}{DiretÃ³rio de saÃ­da dados de campo e estaÃ§Ãµes}
-
-\item{ref_ucc}{referÃªncia UCC}
-
-\item{EPSG}{Sistema de coordenadas}
-
-\item{nome_xml}{}
+\item{dir_out}{}
 }
 \description{
 Gera planilhas cos os principais parÃ¢metros estatÃ­sticos

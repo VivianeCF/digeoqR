@@ -7,24 +7,21 @@
 intersecta_bacias(
   dir_in = "inputs/campo/",
   dir_out = "outputs/",
-  limite = "inputs/campo/carta_100M.shp",
+  bases_model,
   bacias,
-  feicao,
+  feicao_rec,
   tipo_leg = 2,
   estacoes,
   classe_am = 2,
-  nome_xml = "geologia",
-  feicao_rec = "geologia_area.shp"
+  nome_xml = "geologia"
 )
 }
 \arguments{
 \item{dir_out}{DiretÃ³rio de saÃ­da onde serÃ£o gravados as planilhas .csv}
 
-\item{limite}{Limite da Ã¡rea do projeto}
-
 \item{bacias}{bacias obtidas a partir da funÃ§Ã£o gera_bacias}
 
-\item{feicao}{polÃ­gonos de algum tema (geologia,
+\item{feicao_rec}{polÃ­gonos de algum tema (geologia,
 solo, geofÃ­sica, geomorfologia, etc)}
 
 \item{tipo_leg}{Tipo de legenda 1= pela SIGLA 2 = pelo RANGE}
@@ -34,7 +31,9 @@ solo, geofÃ­sica, geomorfologia, etc)}
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
 
-\item{feicao_rec}{}
+\item{nome_xml}{}
+
+\item{limite}{Limite da Ã¡rea do projeto}
 }
 \value{
 Bacias

@@ -6,26 +6,21 @@
 #'layout modelo nos diretórios inputs/mineral ou inputs/quimica, conforme o
 #'exemplo.
 #'
-#'@param analise Selecione o tipo de análise: 1 = mineral ou 2 = química
+#' @param analise Selecione o tipo de análise: 1 = mineral ou 2 = química
 #' @param dir_bol Diretório dos boletins analíticos ex: "inputs/qumica/R/"
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-#'   corrente, 3 = rocha, 4 = solo, 5 = água
-#' @param dir_base Diretório dos dados de campo
-#' @param base_campo Nome do arquivo das bases de campo
-#' @param tipo_base tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD
-#' @param dir_out Diretório de saída para os dados de campo
-#' @param ref_ucc Referência Concentração Média da Crosta Superior
-#' Rudnick e Gao, 2004
-#' @param EPSG Sistema de coordenadas
-#'
+#'   corrente, 3 = rocha, 4 = solo, 5 = água#'
+#' @param quimica
+#' @param mineral
+#' @param ex_campo
+
 #'@return Retorna a lista com as bases de dados em diferentes formatos
 #'  transformados ou brutos, pivotados ou não.
 #'@export
 #' @examples
-#' #prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
-#' dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
-prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
-                          tipo_base, base_campo, dir_out, ref_ucc, EPSG) {
+#'
+prepara_bases <- function(dir_bol, classe_am, analise, quimica, mineral,
+                          ex_campo) {
   out <- list()
   a <- c("mineral", "química")
   t <-
@@ -42,13 +37,7 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
                  "Água")
   r <-  EPSG
   if (analise == 2) {
-    quimica <- le_boletim_quimica(classe_am, dir_bol, ref_ucc)
-    ex_campo <- extrai_dados_campo(tipo_base,
-                                      dir_base,
-                                      base_campo,
-                                      dir_os,
-                                      EPSG,
-                                      dir_out)
+    ex_campo
     dados_campo <- ex_campo[[1]]
     dados_campo <- dados_campo[dados_campo$CLASSE ==  nm_classe[classe_am],]
     VALUE <- 1:nrow(dados_campo)
@@ -81,19 +70,10 @@ prepara_bases <- function(dir_bol, classe_am, analise, dir_base,
     out[[5]] <- quimica[[7]]
 
   } else{
-    mineral <- le_boletim_mineral(classe_am, dir_bol)
     dados_brutos <- mineral$`dados brutos`
     dados_transformados <- mineral$`dados transformados`
      dados_brutos_pivotados <- mineral$`dados brutos pivotados`
     dados_transformados_pivotados <- mineral$`dados transformados pivotados`
-
-
-    ex_campo <- extrai_dados_campo(tipo_base,
-                                   dir_base,
-                                   base_campo,
-                                   dir_os,
-                                   EPSG,
-                                   dir_out)
     dados_campo <- ex_campo[[1]]
     dados_campo <- dados_campo[dados_campo$CLASSE ==  nm_classe[classe_am],]
     VALUE <- 1:nrow(dados_campo)

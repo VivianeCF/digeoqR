@@ -4,29 +4,17 @@
 \alias{testes_estatisticos}
 \title{Testes EstatÃ­sticos}
 \usage{
-testes_estatisticos(
-  dados_transf_sc,
-  dados_brutos_sc,
-  info_bol,
-  mylitho_max_sc,
-  mtd_transf = 1,
-  nbc = 10
-)
+testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10)
 }
 \arguments{
-\item{dados_transf_sc}{Dados quÃ­micos valores <LD substituidos por 0,5*LD}
+\item{base}{Lista de dados da funÃ§Ã£o prepara_base}
 
-\item{dados_brutos_sc}{Dados quÃ­micos originais}
-
-\item{info_bol}{IncormaÃ§Ãµes das condiÃ§Ãµes analÃ­ticas}
-
-\item{mylitho_max_sc}{Litologia dominante de cada amostra considerando sua
-bacia de captaÃ§Ã£o}
+\item{lito_bacia}{Resultado da funÃ§Ã£o intercecta_bacia}
 
 \item{mtd_transf}{MÃ©todo de transformaÃ§Ã£o dos dados
 1 = sem transformaÃ§Ã£o e 2 = logtransformados}
 
-\item{nbc}{}
+\item{nbc}{nÃºmero mÃ­mimo de bacias por unidade}
 }
 \description{
 Testes de normalidade e de comparaÃ§Ã£o das amostras

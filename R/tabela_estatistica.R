@@ -6,17 +6,10 @@
 #'  2 = agrupadas por unidades
 #' @param rotulo_lito Planilha gerada pela função intersecta_bacias com as
 #' unidades litológicas dominantes em cada bacia.
-#' @param dir_bol Diretório dos arquivos dos boletins
-#' @param classe_am Classe de amostra
-#' @param analise tipo de análise 1 = mineralógica e 2 = química
-#' @param dir_base Diretório da base de dados de campo
-#' @param tipo_base Tipo de base de campo 1 = FCAMP, 2 = SURVEY123 e 3 = QFIELD
-#' @param base_campo Nome do arquivo da base de campo (sem extenção)
-#' @param dir_out Diretório de saída dados de campo e estações
-#' @param ref_ucc referência UCC
-#' @param EPSG Sistema de coordenadas
-#' @param feicao_rec
-#' @param nome_xml
+#' @param base Lista de dados obtidos pela função prepara_base
+#' @param lista_legenda Lista legendas obtida pela função prepara_legenda
+#' @param dir_bol
+#' @param dir_out
 #'
 #' @return
 #' @export
@@ -25,36 +18,23 @@
 tabela_estatistica <-
   function(tipo_proc = 1,
            rotulo_lito,
-           dir_bol = "inputs/quimica/S/",
-           classe_am = 2,
-           analise = 2,
-           dir_base = "inputs/campo/",
-           tipo_base = 1,
-           base_campo = "fcampo",
-           dir_out = "outputs/",
-           ref_ucc = "inputs/quimica/ucc.csv",
-           EPSG, feicao_rec, nome_xml = "geologia"){
+           base, lista_legenda, dir_out){
 
     # Obter dados das análises químicas
-     dados_bol <-  prepara_bases(dir_bol,
-                                 classe_am, analise,
-                                 dir_base, tipo_base,
-                                 base_campo, dir_out, ref_ucc, EPSG )
      lst_pr <- list()
      lst_el <- list()
      out <- list()
      # Lê dados brutos
-     data_b <- dados_bol[[1]]
+     data_b <- base[[1]]
 
      # Lê dados transformados
-     data <- dados_bol[[2]]
+     data <- base[[2]]
 
     mylitho <- rotulo_lito
     # mydata <- sf::read_sf(dados_campo)
     # mydata <- as.data.frame(mydata)
 
-    lista_legenda <- prepara_legenda(feicao_rec, dir_out,
-                                     dir_in = dir_base, nome_xml)
+    lista_legenda
     mylegend <- lista_legenda[[2]]
 
     mylitho <- dplyr::inner_join(data, mylitho, by= "VALUE")
@@ -107,7 +87,7 @@ for(j in s) {
 
 
   options(OutDec= ",")
-  info_bol <- dados_bol[[5]]
+  info_bol <- base[[5]]
   # seleciona elementos da planilha de dados
   # Criar vetor com sigla dos elementos
   elementos <- info_bol$analito

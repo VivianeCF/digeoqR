@@ -4,38 +4,15 @@
 \alias{prepara_bases}
 \title{Prepara a base de dados para o processamento dos dados geoquÃ­micos}
 \usage{
-prepara_bases(
-  dir_bol,
-  classe_am,
-  analise,
-  dir_base,
-  tipo_base,
-  base_campo,
-  dir_out,
-  ref_ucc,
-  EPSG
-)
+prepara_bases(dir_bol, classe_am, analise, quimica, mineral, ex_campo)
 }
 \arguments{
 \item{dir_bol}{DiretÃ³rio dos boletins analÃ­ticos ex: "inputs/qumica/R/"}
 
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua}
+corrente, 3 = rocha, 4 = solo, 5 = Ã¡gua#'}
 
 \item{analise}{Selecione o tipo de anÃ¡lise: 1 = mineral ou 2 = quÃ­mica}
-
-\item{dir_base}{DiretÃ³rio dos dados de campo}
-
-\item{tipo_base}{tipo de base de dados: 1 = FCAMPO, 2 = SURVEY123, 3 = QFIELD}
-
-\item{base_campo}{Nome do arquivo das bases de campo}
-
-\item{dir_out}{DiretÃ³rio de saÃ­da para os dados de campo}
-
-\item{ref_ucc}{ReferÃªncia ConcentraÃ§Ã£o MÃ©dia da Crosta Superior
-Rudnick e Gao, 2004}
-
-\item{EPSG}{Sistema de coordenadas}
 }
 \value{
 Retorna a lista com as bases de dados em diferentes formatos
@@ -47,8 +24,4 @@ dados fcampo. Os dados precisam estar nos diretÃ³rios gerados pela funÃ§Ã£
 estrutura_diretorio. Os boletins analÃ­ticos devem estar no formato .csv com
 layout modelo nos diretÃ³rios inputs/mineral ou inputs/quimica, conforme o
 exemplo.
-}
-\examples{
-#prepara_bases(dir_bol = "inputs/quimica/S/",classe_am = 2,analise = 2,
-dir_base = "inputs/campo/", tipo_base = 1, base_campo = "fcampo" )
 }

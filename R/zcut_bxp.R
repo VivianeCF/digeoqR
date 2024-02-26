@@ -8,7 +8,7 @@
 #' @examples
 zcut_bxp <- function (x) {
   z <- log10(x)
-  q <-quantile(z, probs = c(0.25, 0.75), na.rm = TRUE)
+  q <- quantile(z, probs = c(0.25, 0.75), na.rm = TRUE)
   zcut <- numeric(8)
   hw <- q[2] - q[1]
   zcut[1] <- q[1] - 4.5 * hw

@@ -33,9 +33,8 @@ zcut_ca <- function (x) {
   if (nrow(df_sum) < 20) {
     o.seg <- segmented::segmented(o, seg.Z =  ~ z, npsi = 1)
   }
-  os <-
-    segmented::update(o.seg, control = seg.control(it.max = 100, display =
-                                                     TRUE))
+  os <- update(o.seg, control = seg.control(it.max = 100, display = TRUE))
+
   zcut <- round(10 ^ (os[["indexU"]][["z"]]), 2)
   10 ^ zcut
 }

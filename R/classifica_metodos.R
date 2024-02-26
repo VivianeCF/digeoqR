@@ -10,7 +10,8 @@
 #' @export
 #'
 #' @examples
-classifica_metodos <- function(tipo_proc, un_val, elem_val, base, list_break = c(4,4,4)) {
+classifica_metodos <- function(tipo_proc, un_val, elem_val,
+                               base, list_break = c(4,4,4)) {
   if(tipo_proc == 1){
     unidades == "geral" } else {
     unidades <- un_val}
@@ -79,6 +80,5 @@ classifica_metodos <- function(tipo_proc, un_val, elem_val, base, list_break = c
   }
   #Criar o dataframe com a classificação
   out[[3]] <- do.call(rbind, classe)
-
 
 }

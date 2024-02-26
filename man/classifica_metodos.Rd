@@ -4,10 +4,18 @@
 \alias{classifica_metodos}
 \title{Métodos de classificação de dados geoquímicos}
 \usage{
-classifica_metodos(tipo_class, un_val, elem_val, base, list_break)
+classifica_metodos(tipo_proc, un_val, elem_val, base, list_break = c(4, 4, 4))
 }
 \arguments{
-\item{tipo_class}{}
+\item{tipo_proc}{Tipo de processamento 1 = geral 2 = por unidades}
+
+\item{un_val}{Unidades válidas}
+
+\item{elem_val}{Elementos válidos}
+
+\item{base}{Base de dados preparada}
+
+\item{list_break}{Define o número de quebra para cada classificação}
 }
 \description{
 Métodos de classificação de dados geoquímicos

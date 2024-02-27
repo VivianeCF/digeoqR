@@ -19,5 +19,6 @@ zcut_bxp <- function (x) {
   zcut[6] <- q[2] + 1.5 * hw
   zcut[7] <- q[2] + 3 * hw
   zcut[8] <- q[2] + 4.5 * hw
+  zcut <- unique(zcut)
   10^zcut
 }

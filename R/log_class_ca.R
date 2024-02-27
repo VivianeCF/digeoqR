@@ -1,4 +1,12 @@
-log_class_mad <- function (x) {
-  cutter(x, zcut_ca(x))
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#' @export
+#'
+#' @examples
+log_class_ca <- function (x, a) {
+  cutter(x, zcut_ca(x, a))
 
 }

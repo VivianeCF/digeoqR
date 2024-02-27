@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param x
+#'
+#' @return
+#' @export
+#'
+#' @examples
 zcut_mmad <- function (x) {
   z <- log10(x)
   mad <- mad(z, na.rm = TRUE)
@@ -10,5 +18,6 @@ zcut_mmad <- function (x) {
   zcut[3] <- q[1]
   zcut[2] <- m - mad
   zcut[1] <- m - 2*mad
+  zcut <- unique(zcut)
   10^zcut
 }

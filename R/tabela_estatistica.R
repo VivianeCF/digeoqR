@@ -31,10 +31,7 @@ tabela_estatistica <-
      data <- base[[2]]
 
     mylitho <- rotulo_lito
-    # mydata <- sf::read_sf(dados_campo)
-    # mydata <- as.data.frame(mydata)
 
-    lista_legenda
     mylegend <- lista_legenda[[2]]
 
     mylitho <- dplyr::inner_join(data, mylitho, by= "VALUE")
@@ -43,9 +40,6 @@ tabela_estatistica <-
 # colnames(mylitho)
 mylitho <- mylitho[,c("VALUE","N_LAB","LONG_DEC", "LAT_DEC", "NUM_CAMPO",
                       'Area_bacia', "Geo_cod")]
-
-# Configuração das condições de processamento
-
 
 data_b <-
   dplyr::inner_join(data_b,
@@ -61,6 +55,7 @@ data <-
 
 data <- dplyr::left_join(data, mylegend, by = "Geo_cod")
 
+# Configuração das condições de processamento
 unidades <- unique(data_b$SIGLA)
 
 mtds_grupos <- c("Geral", "Agrupado")
@@ -146,8 +141,8 @@ for(j in s) {
   names(MAD) <- elementos
   names(SWs) <- elementos
   names(SWp) <- elementos
-  # dig <- rep(0, nrow(select_ref))
-  dig <- select_info_bol$DIG
+
+    dig <- select_info_bol$DIG
 
   # (iv) loop para cada coluna
   # Limpeza da tabela

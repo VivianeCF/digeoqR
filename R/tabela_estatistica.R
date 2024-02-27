@@ -81,7 +81,7 @@ for(j in s) {
   }
 
 
-  options(OutDec= ",")
+  # options(OutDec= ",")
   info_bol <- base[[5]]
   # seleciona elementos da planilha de dados
   # Criar vetor com sigla dos elementos

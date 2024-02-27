@@ -7,12 +7,12 @@
 resgata_legenda_xml(dir_xml = "inputs/campo/", nome_xml = "geologia")
 }
 \arguments{
-\item{dir_xml}{DiretÃ³rio do arquivo xml}
+\item{dir_xml}{Diretório do arquivo xml}
 
 \item{nome_xml}{Nome do arquivo xml}
 }
 \description{
 No QGIS use a ferramenta Create style database from project para gerar o XML,
-da feiÃ§Ã£o pretendida, aqui usei usei o do mapa geolÃ³gico do Brasil
-ao milhonÃ©simo de 2014 do SGB-CPRM.
+da feição pretendida, aqui usei usei o do mapa geológico do Brasil
+ao milhonésimo de 2014 do SGB-CPRM.
 }

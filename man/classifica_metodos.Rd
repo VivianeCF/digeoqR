@@ -2,19 +2,19 @@
 % Please edit documentation in R/classifica_metodos.R
 \name{classifica_metodos}
 \alias{classifica_metodos}
-\title{MÃ©todos de classificaÃ§Ã£o de dados geoquÃ­micos}
+\title{Métodos de classificação de dados geoquímicos}
 \usage{
 classifica_metodos(tipo_proc, lito_bacia, elem_val, base, nbc = 10)
 }
 \arguments{
 \item{tipo_proc}{Tipo de processamento 1 = geral 2 = por unidades}
 
-\item{elem_val}{Elementos vÃ¡lidos}
+\item{elem_val}{Elementos válidos}
 
 \item{base}{Base de dados preparada}
 
 \item{nbc}{}
 }
 \description{
-MÃ©todos de classificaÃ§Ã£o de dados geoquÃ­micos
+Métodos de classificação de dados geoquímicos
 }

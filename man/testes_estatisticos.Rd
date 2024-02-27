@@ -2,20 +2,20 @@
 % Please edit documentation in R/testes_statisticos.R
 \name{testes_estatisticos}
 \alias{testes_estatisticos}
-\title{Testes EstatÃ­sticos}
+\title{Testes Estatísticos}
 \usage{
 testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10)
 }
 \arguments{
-\item{base}{Lista de dados da funÃ§Ã£o prepara_base}
+\item{base}{Lista de dados da função prepara_base}
 
-\item{lito_bacia}{Resultado da funÃ§Ã£o intercecta_bacia}
+\item{lito_bacia}{Resultado da função intercecta_bacia}
 
-\item{mtd_transf}{MÃ©todo de transformaÃ§Ã£o dos dados
-1 = sem transformaÃ§Ã£o e 2 = logtransformados}
+\item{mtd_transf}{Método de transformação dos dados
+1 = sem transformação e 2 = logtransformados}
 
-\item{nbc}{nÃºmero mÃ­mimo de bacias por unidade}
+\item{nbc}{número mímimo de bacias por unidade}
 }
 \description{
-Testes de normalidade e de comparaÃ§Ã£o das amostras
+Testes de normalidade e de comparação das amostras
 }

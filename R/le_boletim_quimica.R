@@ -19,7 +19,7 @@
 le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
   # library(tidyverse)
   # require(rgr)
-  options(OutDec = ",")
+  # options(OutDec = ",")
   # tipo <- "SEDIMENTO CORRENTE"
 
   ## Diretórios de entrada dos dados

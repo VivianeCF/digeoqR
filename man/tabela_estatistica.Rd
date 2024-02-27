@@ -2,7 +2,7 @@
 % Please edit documentation in R/tabela_estatistica.R
 \name{tabela_estatistica}
 \alias{tabela_estatistica}
-\title{SumÃ¡rio EstatÃ­stico das anÃ¡lises quÃ­micas}
+\title{Sumário Estatístico das análises químicas}
 \usage{
 tabela_estatistica(tipo_proc = 1, rotulo_lito, base, lista_legenda, dir_out)
 }
@@ -10,15 +10,15 @@ tabela_estatistica(tipo_proc = 1, rotulo_lito, base, lista_legenda, dir_out)
 \item{tipo_proc}{Modo de processamento: 1 = Todas amostras e
 2 = agrupadas por unidades}
 
-\item{rotulo_lito}{Planilha gerada pela funÃ§Ã£o intersecta_bacias com as
-unidades litolÃ³gicas dominantes em cada bacia.}
+\item{rotulo_lito}{Planilha gerada pela função intersecta_bacias com as
+unidades litológicas dominantes em cada bacia.}
 
-\item{base}{Lista de dados obtidos pela funÃ§Ã£o prepara_base}
+\item{base}{Lista de dados obtidos pela função prepara_base}
 
-\item{lista_legenda}{Lista legendas obtida pela funÃ§Ã£o prepara_legenda}
+\item{lista_legenda}{Lista legendas obtida pela função prepara_legenda}
 
 \item{dir_out}{}
 }
 \description{
-Gera planilhas cos os principais parÃ¢metros estatÃ­sticos
+Gera planilhas cos os principais parâmetros estatísticos
 }

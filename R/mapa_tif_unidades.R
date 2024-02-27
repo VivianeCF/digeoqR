@@ -23,7 +23,7 @@ mapa_tif_unidades <- function(bacias, geologia, dados_transf,
 ######################################################################
 
 # Definição do formato numérico, vírgula decimal
-options(OutDec = ",", scipen = 999)
+# options(OutDec = ",", scipen = 999)
 
 # Carrega dados
 ## Bacias modeladas pelo SRTM pela função modela_bacias

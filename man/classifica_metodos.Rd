@@ -4,16 +4,16 @@
 \alias{classifica_metodos}
 \title{Métodos de classificação de dados geoquímicos}
 \usage{
-classifica_metodos(tipo_proc, lito_bacia, elem_val, base, nbc = 10)
+classifica_metodos(tipo_proc, mtd_class, lito_bacia, elem_val, base, nbc = 10)
 }
 \arguments{
 \item{tipo_proc}{Tipo de processamento 1 = geral 2 = por unidades}
 
+\item{mtd_class}{}
+
 \item{elem_val}{Elementos válidos}
 
 \item{base}{Base de dados preparada}
-
-\item{nbc}{}
 }
 \description{
 Métodos de classificação de dados geoquímicos

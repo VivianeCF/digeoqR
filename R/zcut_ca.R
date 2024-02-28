@@ -7,13 +7,11 @@
 #'
 #' @examples
 zcut_ca <- function (x, a) {
-  # area
- # x <- mydata$Cu_ppm
- #  a <- mydata$Area_bacia
   df <- data.frame(x,a)
-  df <- df[!is.na(df$a),]
+  # df <- df[!is.na(df$a),]
+  # df <- na.omit(df)
   df <- df[order(df$x, decreasing = TRUE),]
-
+  df <- unique(df)
 
   df <- df %>%
     dplyr::mutate(cum_area = cumsum(a))
@@ -28,36 +26,25 @@ zcut_ca <- function (x, a) {
   df_sum <- dplyr::group_by(df, grupo_index) %>%
       dplyr::summarise(mean_value = mean(x), mean_area = mean(cum_area))
   df_sum <- df_sum[!duplicated(df_sum$mean_value), ]
+
+  # transformação logarítmica
   y <- round(log10(df_sum$mean_area), 3)
   x <- round(log10(df_sum$mean_value), 3)
-  # transformação logarítmica
-
-
-  # x <- round(log10(df$x), 3)
-  # y <- round(log10(df$cum_area), 3)
-  # x <- 1:100
-  # y <- 2 + 1.5 * pmax(x - 35, 0) - 1.5 * pmax(x - 70, 0) + rnorm(100)
-model <- data.frame(x,y)
-  plot(x,y)
+  model <- data.frame(x,y)
+  model <- model[!duplicated(model$x),]
   x <- model$x
   y <- model$y
   o <- lm(y ~ x)
-
+  plot(x,y)
+  if(length(x) < 20){ npsi = 3}else{ npsi =  4}
   # segmentação
-  o.seg <- segmented::segmented(o, seg.Z= ~x, npsi = 4)
+  os <- segmented::segmented(o, seg.Z= ~x, npsi = npsi,
+                                control = segmented::seg.control(it.max = 100, h = 0.1,
+                                                                 display = FALSE,
+                                                                 quant=TRUE))
 
-  if (nrow(df_sum) < 50 & nrow(df_sum) > 30) {
-    o.seg <- segmented::segmented(o, seg.Z = ~x, npsi = 3)
-  }
-  if (nrow(df_sum) <= 30 & nrow(df_sum) >= 20) {
-    o.seg <- segmented::segmented(o, seg.Z = ~x, npsi = 2)
-  }
-  if (nrow(df_sum) < 20) {
-    o.seg <- segmented::segmented(o, seg.Z = ~x, npsi = 1)
-  }
-  library(segmented)
-  os <- stats::update(o.seg, control = segmented::seg.control(it.max = 100, display = TRUE))
 
-  zcut <- unique(round(10 ^ (os[["indexU"]][["x"]]), 2))
-  10 ^ zcut
+  zcut <- unique(10 ^ (os[["indexU"]][["x"]]))
+   # if(npsi == 1){zcut <- c(-Inf, zcut, Inf)}
+  zcut
 }

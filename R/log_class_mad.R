@@ -7,6 +7,6 @@
 #'
 #' @examples
 log_class_mad <- function (x) {
-  cutter(x, zcut_mmad(x))
+  rgr::cutter(x, zcut_mmad(x))
 
 }

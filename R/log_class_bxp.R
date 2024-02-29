@@ -7,6 +7,6 @@
 #'
 #' @examples
 log_class_bxp <- function (x) {
-  cutter(x, zcut_bxp(x))
+  rgr::cutter(x, zcut_bxp(x))
 
 }

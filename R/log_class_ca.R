@@ -7,6 +7,6 @@
 #'
 #' @examples
 log_class_ca <- function (x, a) {
-  cutter(x, zcut_ca(x, a))
+  rgr::cutter(x, zcut_ca(x, a))
 
 }

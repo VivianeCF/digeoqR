@@ -2,7 +2,7 @@
 % Please edit documentation in R/gera_bases_model.R
 \name{gera_bases_model}
 \alias{gera_bases_model}
-\title{Gera bases para a modelagem das bacias e estações}
+\title{Gera bases para a modelagem das bacias e estaÃ§Ãµes}
 \usage{
 gera_bases_model(
   dir_in = "inputs/campo/",
@@ -18,5 +18,5 @@ gera_bases_model(
 }
 \description{
 Converte as bases de entrada em um alista de dados para serem carregadas nas
-funções modela_bacias e gera estações.
+funÃ§Ãµes modela_bacias e gera estaÃ§Ãµes.
 }

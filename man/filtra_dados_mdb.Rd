@@ -7,18 +7,18 @@
 filtra_dados_mdb(OS = 1723, input, output)
 }
 \arguments{
-\item{OS}{Código do projeto de levantamento geoquímico}
+\item{OS}{CÃ³digo do projeto de levantamento geoquÃ­mico}
 
-\item{input}{Arquivo de entrada onde é aplicado o filtro do código do projeto}
+\item{input}{Arquivo de entrada onde Ã© aplicado o filtro do cÃ³digo do projeto}
 
-\item{output}{Arquivo de saída para onde são gravadas as tabelas filtradas}
+\item{output}{Arquivo de saÃ­da para onde sÃ£o gravadas as tabelas filtradas}
 }
 \value{
-Arquivo de saída com as alterações
+Arquivo de saÃ­da com as alteraÃ§Ãµes
 }
 \description{
-Esta função foi desenvolvida para extrair dados de campo que estão no fcampo
-pré 2012 e gravar num arquivo fcampo vazio que deve estar no diretório
+Esta funÃ§Ã£o foi desenvolvida para extrair dados de campo que estÃ£o no fcampo
+prÃ© 2012 e gravar num arquivo fcampo vazio que deve estar no diretÃ³rio
 inputs/campo.
 }
 \examples{

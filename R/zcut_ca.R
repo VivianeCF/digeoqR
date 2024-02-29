@@ -36,7 +36,7 @@ zcut_ca <- function (x, a) {
   y <- model$y
   o <- lm(y ~ x)
   plot(x,y)
-  if(length(x) < 20){ npsi = 3}else{ npsi =  4}
+  if(length(x) <= 20){ npsi = 3}else{ npsi =  4}
   # segmentação
   os <- segmented::segmented(o, seg.Z= ~x, npsi = npsi,
                                 control = segmented::seg.control(it.max = 100, h = 0.1,

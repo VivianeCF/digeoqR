@@ -20,6 +20,7 @@ classifica_metodos <- function(tipo_proc, mtd_class, lito_bacia, elem_val,
 
     # Criar vetor das unidades
   mylitho_max <- lito_bacia[[2]]
+
   unidades <- unique(mylitho_max$Geo_cod)
 
   elementos <- elem_val
@@ -27,14 +28,15 @@ classifica_metodos <- function(tipo_proc, mtd_class, lito_bacia, elem_val,
   mydata <- dplyr::left_join(mydata, mylitho_max, by = "VALUE")
 
   t <- data.frame(table(mylitho_max$Geo_cod))
+
   un_val <- as.numeric(as.character(t[t$Freq > nbc,"Var1"]))
 
   if(tipo_proc == 1){
     un_val <- "geral"
     unidades <- "geral"
     } else {
-
-    unidades <- un_val}
+    unidades <- un_val
+    }
 classe <- list()
  ## Classificação - MAD
 if(mtd_class == 1){
@@ -54,13 +56,16 @@ if(mtd_class == 1){
         metodo <-  rep("MAD", length(el))
       }
 
-      classe[[j]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
+      classe[[i]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
     }
+      df_list[[j]] <- do.call(rbind, classe)
   }
-  #Criar o dataframe com a classificação
-  out <- do.call(rbind, classe)}
+#Criar o dataframe com a classificação
+  out <- do.call(rbind, df_list)
+  }
+
 # Método TIF
-if(mtd_class == 2) {
+if(mtd_class == 2){
   for (j in seq(elementos)) {
     for (i in seq(unidades)) {
       if(tipo_proc == 1){
@@ -76,18 +81,20 @@ if(mtd_class == 2) {
         unit <- rep(unidades[i], length(el))
         analito <- rep(elementos[j], length(el))
         metodo <-  rep("TIF", length(el))
+    }
+        classe[[i]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_bxp(el))
+
 
        }
-
-      classe[[j]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_bxp(el))
-    }
-  }
+        df_list[[j]] <- do.call(rbind, classe)
+         }
   #Criar o dataframe com a classificação
-  out <- do.call(rbind, classe)}
+  out <- do.call(rbind,  df_list)
+  }
   # Método C-A
 if(mtd_class == 3){
-  for (j in seq(elementos)) {
-    for (i in seq(unidades)) {
+  for (j in seq(elementos)){
+    for (i in seq(unidades)){
       if(tipo_proc == 1){
         el <- mydata[ !is.na(mydata$Area_bacia), elementos[j]]
         id <- mydata[!is.na(mydata$Area_bacia),"VALUE"]
@@ -106,11 +113,12 @@ if(mtd_class == 3){
 
       }
 
-      classe[[j]] <- data.frame(id, unit ,analito, area, teor = el,
-                                metodo,class=log_class_ca(el, area))
+      classe[[i]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
     }
+    df_list[[j]] <- do.call(rbind, classe)
   }
   # #Criar o dataframe com a classificação
-  out <- do.call(rbind, classe)}
+  out <- do.call(rbind, df_list)
+  }
 return(out)
 }

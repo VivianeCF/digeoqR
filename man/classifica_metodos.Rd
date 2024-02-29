@@ -2,7 +2,7 @@
 % Please edit documentation in R/classifica_metodos.R
 \name{classifica_metodos}
 \alias{classifica_metodos}
-\title{Métodos de classificação de dados geoquímicos}
+\title{MÃ©todos de classificaÃ§Ã£o de dados geoquÃ­micos}
 \usage{
 classifica_metodos(tipo_proc, mtd_class, lito_bacia, elem_val, base, nbc = 10)
 }
@@ -11,10 +11,10 @@ classifica_metodos(tipo_proc, mtd_class, lito_bacia, elem_val, base, nbc = 10)
 
 \item{mtd_class}{}
 
-\item{elem_val}{Elementos válidos}
+\item{elem_val}{Elementos vÃ¡lidos}
 
 \item{base}{Base de dados preparada}
 }
 \description{
-Métodos de classificação de dados geoquímicos
+MÃ©todos de classificaÃ§Ã£o de dados geoquÃ­micos
 }

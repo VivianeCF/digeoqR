@@ -2,7 +2,7 @@
 % Please edit documentation in R/gera_estacoes.R
 \name{gera_estacoes}
 \alias{gera_estacoes}
-\title{Gera estaÃ§Ãµes nas confluÃªncias dos rios}
+\title{Gera estações nas confluências dos rios}
 \usage{
 gera_estacoes(
   dem,
@@ -18,28 +18,28 @@ gera_estacoes(
 \arguments{
 \item{dem}{Modeolo digital do terreno (SRTM)}
 
-\item{dir_out}{DiretÃ³rio de saÃ­da}
+\item{dir_out}{Diretório de saída}
 
-\item{bases_model}{Bases definidas na funÃ§Ã£o gera_bases_model}
+\item{bases_model}{Bases definidas na função gera_bases_model}
 
 \item{EPSG}{Sistema de coordenadas}
 
-\item{threshold}{Valor de corte da Ã¡rea das bacias modeladas}
+\item{threshold}{Valor de corte da área das bacias modeladas}
 
-\item{min_length}{Comprimento mÃ­nimo do curso do rio}
+\item{min_length}{Comprimento mínimo do curso do rio}
 
-\item{max_ordem}{Ordem Strhaler mÃ¡xima para a validaÃ§Ã£on da estaÃ§Ã£o}
+\item{max_ordem}{Ordem Strhaler máxima para a validaçãon da estação}
 
 \item{wbt_wd}{}
 }
 \value{
 Imagem (.png) do mapa de planejamento preliminar.
-Arquivo da shape (shp) das estaÃ§Ãµes.
+Arquivo da shape (shp) das estações.
 }
 \description{
 Desenvolvido para automatizar o processo de escolha do locais de amostragem
-que devem ser a 100 m acima dos pontos de confluÃªncia dos rios. TambÃ©m sÃ£o
-excluÃ­dos locais nas Ã¡reas urbanas e de massa d'Ã¡gua. Todos os arquivos devem
+que devem ser a 100 m acima dos pontos de confluência dos rios. Também são
+excluídos locais nas áreas urbanas e de massa d'água. Todos os arquivos devem
 ser no formato shapefile.
 }
 \examples{

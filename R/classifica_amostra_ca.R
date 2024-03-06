@@ -14,7 +14,7 @@
 #' @examples
 classifica_amostra_ca <- function(file = "outputs/sc_tidy.csv") {
   df_new <- read.csv2(file)
-colnames(df_new)[4:5] <- c("LONGITUDE", "LATITUDE")
+colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
   # colnames(df_new) <- stringr::str_to_title(colnames(df_new))
   df_new <- df_new %>% dplyr::select(-ID)
 

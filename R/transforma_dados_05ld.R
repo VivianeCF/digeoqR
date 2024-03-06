@@ -12,9 +12,41 @@ transforma_dados_05ld <- function(data){
 out <- list()
 data$Lab_orig <- data$Lab
 data <-  data %>% dplyr::select(!Lab)
-bb_lab <- data.frame(Lab_orig = unique(data$Lab),
-                     Lab =c("EE", "AA", "AA", "AA", "AA", "AA", "IE", "COL",
-                            "CR", ""))
+Lab_orig = c(
+"Absorção Atômica - Água Régia Invertida",
+"Absorção Atômica - EDTA a Frio",
+"Absorção Atômica - HNO3 a Quente",
+"Colorimetria",
+"Absorção Atômica - H3PO4",
+"Absorção Atômica/Geração de Hidretos - Água Régia a Quente",
+"Espectrografia Ótica de Emissão",
+"Absorção Atômica - Fusão Ácida",
+"Medidor de Íon Específico - Semiquantitativa" ,
+"Medidor de Íon Específico - HCl Diluído a Frio",
+"ICP-MS - Água Régia",
+ "ICP-AES - Digestão água régia" ,
+ "Espectrofotometria de Absorção Atômica - Ácido Nítrico a quente (HN0₃)",
+"Espectrofotometria de Absorção Atômica - Ácido bromídrico (HBr)" ,
+"Abserção Atômica / Geração de Hidretos (AAGH) - Ácidos fortes em forno de microondas",
+"Absorção Atômica - HBr, Br",
+ "Medidor de Íon Específico",
+ "Absorção Atômica - HNO3, HF, HCl, HClO4",
+ "Absorção Atômica - Sublimação KI",
+ "Cromatografia - Semiquantitativa",
+ "ICP-MS - Digestão Multiácida",
+ "Fusão de 50g - Fire Assay",
+ "ICP-MS - Digestão Água Régia",
+ "Eletrodo de Íon Específico F - Fusão e Dissolução",
+ "1F",
+ "" ,
+ "ICM14B" ,
+ "FAA505",
+ "FAI515" )
+  Lab = c("AA", "AA", "AA", "COL", "AA", "AA", "EE", "AA", "IE",
+          "IE", "EE", "EE", "AA", "AA", "AA", "AA", "IE", "AA",
+          "AA", "CR", "EE", "FA", "EE", "IE", "EE", "", "EE", "FA", "FA")
+bb_lab <- data.frame(Lab_orig ,
+                     Lab)
 data <-  dplyr::left_join(bb_lab, data, by = "Lab_orig")
 data <- data %>% dplyr::relocate(c(Lab, Lab_orig), .after = CLASSE)
 data[,11: ncol(data)] <- data[,11: ncol(data)] %>%

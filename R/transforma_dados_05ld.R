@@ -47,7 +47,7 @@ Lab_orig = c(
           "AA", "CR", "EE", "FA", "EE", "IE", "EE", "", "EE", "FA", "FA")
 bb_lab <- data.frame(Lab_orig ,
                      Lab)
-data <-  dplyr::left_join(bb_lab, data, by = "Lab_orig")
+data <-  dplyr::left_join(data,bb_lab,  by = "Lab_orig")
 data <- data %>% dplyr::relocate(c(Lab, Lab_orig), .after = CLASSE)
 data[,11: ncol(data)] <- data[,11: ncol(data)] %>%
   dplyr::mutate_all(stringr::str_replace_all, " ", "")
@@ -69,11 +69,13 @@ data$ORDEM <- as.numeric(1:nrow(data))
   para_mudar$value  <- gsub( ",", ".", para_mudar$value, fixed = TRUE)
   para_mudar$value  <- gsub( "ND", NA, para_mudar$value, fixed = TRUE)
   para_mudar$value  <- gsub( "I.S.", NA, para_mudar$value, fixed = TRUE)
+  para_mudar$value  <- gsub( "I,S,", NA, para_mudar$value, fixed = TRUE)
+
   para_mudar$value <- as.numeric(para_mudar$value)*1000
   para_mudar$AU_PPB <- paste0(para_mudar$Q, para_mudar$value)
   unique(para_mudar$AU_PPB)
-  para_mudar[para_mudar$AU_PPM == "ND", "AU_PPB"] <- "ND"
-  para_mudar[para_mudar$AU_PPM == "I.S.", "AU_PPB"] <- "I.S."
+  # para_mudar[para_mudar$AU_PPM == "ND", "AU_PPB"] <- "ND"
+  # para_mudar[para_mudar$AU_PPM == "I.S.", "AU_PPB"] <- "I.S."
 
   data[data$ORDEM %in% para_mudar$ORDEM, "AU_PPB"] <- para_mudar$AU_PPB
 
@@ -83,6 +85,7 @@ data$ORDEM <- as.numeric(1:nrow(data))
   data[data == "ND"] <- NA
   data[data == "N.A."] <- NA
   data[data == "I.S."] <- NA
+  data[data == "I,S,"] <- NA
   data[data == ""] <- NA
   data[data == "0"] <- NA
   data[data == "NA"] <- NA
@@ -99,6 +102,9 @@ df_sc_transf <- data.frame(lapply(df_sc_transf, function(x) {
 df_sc_transf <- data.frame(lapply(df_sc_transf, function(x) {
   gsub(">", "", x)
 }))
+df_sc_transf <- data.frame(lapply(df_sc_transf, function(x) {
+  gsub(" ", "", x)
+}))
 
 df_sc_transf <- data.frame(data[,1:10], df_sc_transf)
 
@@ -108,13 +114,12 @@ df_sc_transf[,11:ncol(df_sc_transf)] <-
 df_sc_05ld <- rgr::ltdl.fix.df(df_sc_transf[,-1:-10])
 df_sc_05ld <- data.frame(df_sc_transf[1:10], df_sc_05ld)
 out[[3]] <- df_sc_05ld
-df_zero <- df_sc_transf
+
+df_zero <- df_sc_transf[,11:ncol(df_sc_transf)]
 df_zero[df_zero < 0] <- 0
 df_zero[is.na(df_zero)] <- 0
-
+df_zero <- data.frame(df_sc_transf[, 1:10], df_zero)
 out[[4]] <- df_zero
-
-
 
 return(out)
 }

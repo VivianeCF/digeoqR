@@ -309,11 +309,14 @@ classifica_amostra_ca <- function(file = "outputs/sc_tidy.csv") {
 
           # Cria shapes com todas as amostras e só com as que tem destaques
           # por folha
+          colnames( classifica_destaques_ordem)[3:4] <- c("LONGITUDE", "LATITUDE")
           plot_locations <- sf::st_as_sf(
             classifica_destaques_ordem,
             coords = c("LONGITUDE", "LATITUDE"),
             crs = r
           )
+          colnames( classifica)[4:5] <- c("LONGITUDE", "LATITUDE")
+
           plot_locations_todos <-
             sf::st_as_sf(classifica,
                          coords = c("LONGITUDE", "LATITUDE"),

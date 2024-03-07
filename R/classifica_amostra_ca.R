@@ -12,8 +12,7 @@
 #' @export
 #'
 #' @examples
-classifica_amostra_ca <- function(file = "outputs/sc_tidy.csv") {
-  df_new <- read.csv2(file)
+classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv")
 colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
   # colnames(df_new) <- stringr::str_to_title(colnames(df_new))
   df_new <- df_new %>% dplyr::select(-ID)
@@ -43,9 +42,9 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
   # para cada método analítico
   for (l in 1:length(lab)) {
     # Define os diretórios da saída
-    path <- paste0("outputs/Folhas/",  lab[l], "/")
-    path2 <- paste0("outputs/Classificadas/",  lab[l], "/")
-    path3 <- paste0("outputs/Dados_areas/",  lab[l], "/")
+    path <- paste0(dir_out,"Folhas/",  lab[l], "/")
+    path2 <- paste0(dir_out,"Classificadas/",  lab[l], "/")
+    path3 <- paste0(dir_out, "Dados_areas/",  lab[l], "/")
 
     # Recorta a base analítica pelo método analítico simplificado (Lab)
     data_brutos <- df_brutos[df_brutos$Lab == lab[l] ,]
@@ -597,7 +596,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
     data_originais_st[data_originais_st$FOLHA != "", ]
   sf::st_write(
     data_originais_st,
-    "outputs/Dados_areas/TODAS/dados_arrumados_brutos.shp",
+    paste0(dir_out, "Dados_areas/TODAS/dados_arrumados_brutos.shp"),
     driver = "ESRI Shapefile",
     delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
   )
@@ -609,18 +608,18 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
 
   sf::st_write(
     data_transf_st,
-    "outputs/Dados_areas/TODAS/dados_arrumados_transf.shp",
+    paste0(dir_out, "Dados_areas/TODAS/dados_arrumados_transf.shp"),
     driver = "ESRI Shapefile",
     delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
   )
 
   write.csv2(df_brutos,
-             "outputs/Dados_areas/TODAS/dados_arrumados_brutos.csv",
+             paste0(dir_out, "Dados_areas/TODAS/dados_arrumados_brutos.csv"),
              row.names = F)
 
   write.csv2(
     data_transf,
-    "outputs/Dados_areas/TODAS/dados_arrumados_transf.csv",
+    paste0(dir_out, "Dados_areas/TODAS/dados_arrumados_transf.csv"),
     row.names = F
   )
 
@@ -629,7 +628,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
   df_brutos_orig <- df_brutos_orig[df_brutos_orig$NLAB %in% data_transf$NLAB, ]
    write.csv2(
     df_brutos_orig,
-    "outputs/Dados_areas/TODAS/dados_brutos_originais.csv",
+    paste0(dir_out, "Dados_areas/TODAS/dados_brutos_originais.csv"),
     row.names = F
   )
    # Cria dados espaciais
@@ -641,7 +640,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
     # Salva dados espaciais
      sf::st_write(
      df_brutos_orig_st,
-     "outputs/Dados_areas/TODAS/dados_brutos_orig.shp",
+     paste0(dir_out, "Dados_areas/TODAS/dados_brutos_orig.shp"),
      driver = "ESRI Shapefile",
      delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
    )
@@ -649,12 +648,12 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
 
   # Unifica os resultados dos dois laboratórios -------------------------------
    ## Dados Analíticos
-   path1 <- "outputs/Dados_areas/AA/"
-   path2 <- "outputs/Dados_areas/EE/"
+   path1 <- paste0(dir_out, "Dados_areas/AA/")
+   path2 <- paste0(dir_out,"Dados_areas/EE/")
 
    ## Dados Classificados
-   path3 <- "outputs/Classificadas/AA/"
-   path4 <- "outputs/Classificadas/EE/"
+   path3 <- paste0(dir_out, "Classificadas/AA/")
+   path4 <- paste0(dir_out,"Classificadas/EE/")
 
    # Dados destaque
    dest1 <- read.csv2(paste0(path3, "destaque_LAB_AA.csv"),
@@ -662,7 +661,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
    dest2 <- read.csv2(paste0(path4, "destaque_LAB_EE.csv"),
                       colClasses = "character")
    dest = dplyr::bind_rows(dest1, dest2)
-   write.csv2(dest,"outputs/Processadas/destaque.csv", row.names = F)
+   write.csv2(dest,paste0(dir_out,"Processadas/destaque.csv"), row.names = F)
 
    # Dados destaque todos
    destt1 <- read.csv2(paste0(path3, "destaque_todas_LAB_AA.csv"),
@@ -670,7 +669,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
    destt2 <- read.csv2(paste0(path4, "destaque_todas_LAB_EE.csv"),
                        colClasses = "character")
    destt = dplyr::bind_rows(dest1, dest2)
-   write.csv2(dest,"outputs/Processadas/destaque_todas.csv", row.names = F)
+   write.csv2(dest,paste0(dir_out,"Processadas/destaque_todas.csv"), row.names = F)
 
    # Legenda
    leg1 <- read.csv2(paste0(path3, "legenda_LAB_AA.csv"),
@@ -679,7 +678,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
                      colClasses = "character")
    leg = dplyr::bind_rows(leg1, leg2)
 
-   write.csv2(leg,"outputs/Processadas/legenda.csv", row.names = F)
+   write.csv2(leg,paste0(dir_out,"Processadas/legenda.csv"), row.names = F)
 
    # Sumario
    sum1 <- read.csv2(paste0(path3, "sumario_LAB_AA.csv"),
@@ -687,21 +686,21 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
    sum2 <- read.csv2(paste0(path4, "sumario_LAB_EE.csv"),
                      colClasses = "character")
    sum = dplyr::bind_rows(sum1, sum2)
-   write.csv2(sum,"outputs/Processadas/sumario.csv")
+   write.csv2(sum,paste0(dir_out,"Processadas/sumario.csv"))
 
    ## Shapes destaques
-   path5 <- "outputs/Classificadas/AA"
-   path6 <- "outputs/Classificadas/EE"
+   path5 <- paste0(dir_out,"Classificadas/AA")
+   path6 <- paste0(dir_out,"Classificadas/EE")
    destsp1 <- sf::st_read(path5, "destaque_LAB_AA" )
    destsp2 <- sf::st_read(path6, "destaque_LAB_EE")
    destsp <- do.call(rbind, list(destsp1,destsp2))
-   sf::st_write(destsp,"outputs/Processadas/destaque.shp",
+   sf::st_write(destsp,paste0(dir_out,"Processadas/destaque.shp"),
                 append=FALSE, layer_options = "ENCODING=UTF-8" )
 
    ## Shapes destaques todas
    desttsp1 <- sf::st_read(path5, "destaque_todas_LAB_AA" )
    desttsp2 <- sf::st_read(path6, "destaque_todas_LAB_EE")
    desttsp <- do.call(rbind, list(desttsp1,desttsp2))
-   sf::st_write(desttsp,"outputs/Processadas/destaque_todas.shp",
+   sf::st_write(desttsp,paste0(dir_out,"Processadas/destaque_todas.shp"),
                 append=FALSE, layer_options = "ENCODING=UTF-8" )
 }

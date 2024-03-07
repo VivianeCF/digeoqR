@@ -542,7 +542,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
         destaques_st,
         paste0(path2, "destaque_LAB_", lab[l], ".shp"),
         driver = "ESRI Shapefile",
-        delete_layer = TRUE
+        delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
       )
 
       ## Destaques todas
@@ -559,7 +559,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
         paste0(path2, "destaque_todas_LAB_", lab[l],
                ".shp"),
         driver = "ESRI Shapefile",
-        delete_layer = TRUE
+        delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
       )
 
       dados_analiticos <-
@@ -577,7 +577,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
         paste0(path2, "dados_analiticos_LAB_", lab[l],
                ".shp"),
         driver = "ESRI Shapefile",
-        delete_layer = TRUE
+        delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
       )
 
     }
@@ -599,7 +599,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
     data_originais_st,
     "outputs/Dados_areas/TODAS/dados_arrumados_brutos.shp",
     driver = "ESRI Shapefile",
-    delete_layer = TRUE
+    delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
   )
 
   data_transf_st <-
@@ -611,7 +611,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
     data_transf_st,
     "outputs/Dados_areas/TODAS/dados_arrumados_transf.shp",
     driver = "ESRI Shapefile",
-    delete_layer = TRUE
+    delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
   )
 
   write.csv2(df_brutos,
@@ -643,7 +643,7 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
      df_brutos_orig_st,
      "outputs/Dados_areas/TODAS/dados_brutos_orig.shp",
      driver = "ESRI Shapefile",
-     delete_layer = TRUE
+     delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
    )
 
 
@@ -695,11 +695,13 @@ colnames(df_new)[c(2,4:5)] <- c("NLAB", "LONGITUDE", "LATITUDE")
    destsp1 <- sf::st_read(path5, "destaque_LAB_AA" )
    destsp2 <- sf::st_read(path6, "destaque_LAB_EE")
    destsp <- do.call(rbind, list(destsp1,destsp2))
-   sf::st_write(destsp,"outputs/Processadas/destaque.shp", append=FALSE )
+   sf::st_write(destsp,"outputs/Processadas/destaque.shp",
+                append=FALSE, layer_options = "ENCODING=UTF-8" )
 
    ## Shapes destaques todas
    desttsp1 <- sf::st_read(path5, "destaque_todas_LAB_AA" )
    desttsp2 <- sf::st_read(path6, "destaque_todas_LAB_EE")
    desttsp <- do.call(rbind, list(desttsp1,desttsp2))
-   sf::st_write(desttsp,"outputs/Processadas/destaque_todas.shp", append=FALSE )
+   sf::st_write(desttsp,"outputs/Processadas/destaque_todas.shp",
+                append=FALSE, layer_options = "ENCODING=UTF-8" )
 }

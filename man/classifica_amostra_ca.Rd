@@ -4,7 +4,7 @@
 \alias{classifica_amostra_ca}
 \title{Classificação dos dados geoquímicos para cartas de anomalias}
 \usage{
-classifica_amostra_ca(file = "outputs/sc_tidy.csv")
+classifica_amostra_ca(dir_out, file = "sc_tidy.csv")
 }
 \arguments{
 \item{file}{Arquivo dos dados analiticos brutos}

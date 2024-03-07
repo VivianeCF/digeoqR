@@ -572,7 +572,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     # Retira campos que não são minerais
     minerais <-
       minerais[!(minerais %in% c("OBSERVACAO", "P_CNC", "P_TOTAL", "P_TOTAL_G"))]
-
+    minerais <- gsub(" ", "", minerais, fixed = TRUE)
     # # Padroniza e Organiza a tabela de dados da classe
     # tables_cb <-
     #   tables_cb[, c(toupper(intersect(toupper(info), colnames(tables_cb))),
@@ -582,6 +582,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     tables_cb <- tables_cb %>%
       tidyr::unite("Lab",   LEITURA, ABERTURA, sep = " - ", na.rm = TRUE)
 
+    colnames(tables_cb) <- gsub(" ", "", colnames(tables_cb), fixed = TRUE)
     # Grava arquivo com todas as amostras da classe
     write.csv2(tables_cb, paste0(dir_out, "integrada_rigeo_cb.csv"),
                row.names = FALSE)

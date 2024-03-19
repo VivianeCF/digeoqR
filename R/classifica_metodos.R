@@ -38,6 +38,7 @@ classifica_metodos <- function(tipo_proc, mtd_class, lito_bacia, elem_val,
     unidades <- un_val
     }
 classe <- list()
+df_list <- list()
  ## Classificação - MAD
 if(mtd_class == 1){
   for (j in seq(elementos)) {

@@ -108,10 +108,10 @@ for (e in seq_along(elem_val))   {
 
   # Plota o mapa geoquímico do elemento escolhido
 
-  x1 <- round(st_bbox(bacias)[[3]],1)+0.1
-  x2 <- round(st_bbox(bacias)[[1]],1)-0.1
-  y2 <- round(st_bbox(bacias)[[2]],1)-0.1
-  y1 <- round(st_bbox(bacias)[[4]],1)+0.1
+  x1 <- round(sf::st_bbox(bacias)[[3]],1)+0.1
+  x2 <- round(sf::st_bbox(bacias)[[1]],1)-0.1
+  y2 <- round(sf::st_bbox(bacias)[[2]],1)-0.1
+  y1 <- round(sf::st_bbox(bacias)[[4]],1)+0.1
   base_dados <- base_dados[!is.na(base_dados$valor),]
   titulo_mapa <- paste0("Geochemical Map -  Stream sediment - ", "\n",
                         info_bol[info_bol$nome_analito == eq, "analito"], " - TIF")

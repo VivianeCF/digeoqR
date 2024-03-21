@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10){
+testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10, leg){
  lst_pr <- list()
  lst_el <- list()
  out <- list()
@@ -33,7 +33,7 @@ t <- data.frame(table(mylitho_max$Geo_cod))
 un_val <- as.numeric(as.character(t[t$Freq > nbc,"Var1"]))
 
 # Ordena as Unidades pelo código das unidades (Geo_cod)
-cod_unidades <- leg2
+cod_unidades <- leg
 abrev <- cod_unidades$SIGLA
 nome_unidade <- cod_unidades$SIGLA
 

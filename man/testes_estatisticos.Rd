@@ -4,7 +4,7 @@
 \alias{testes_estatisticos}
 \title{Testes Estatísticos}
 \usage{
-testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10)
+testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
 }
 \arguments{
 \item{base}{Lista de dados da função prepara_base}

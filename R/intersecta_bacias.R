@@ -47,6 +47,7 @@ intersecta_bacias <- function(dir_in = "inputs/campo/",
   zone <- as.numeric(floor((centroide[, 1] + 180) / 6) + 1)
   ## import data
   spy_grid <- bacias
+
   # sf::st_crs(spy_grid) <-
   spy_grid <- sf::st_transform(spy_grid,
                                paste0(
@@ -80,6 +81,8 @@ if(tipo_leg == 2){
 
   spy_grid <-
     dplyr::left_join(spy_grid , data.frame(mydata), by = "VALUE")
+  spy_grid <- spy_grid %>%
+    sf::st_buffer(dist = 0)
   area_lito <-
     suppressWarnings({
       sf::st_intersection(spy_poly, spy_grid)

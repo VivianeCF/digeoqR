@@ -7,6 +7,7 @@
 #' @param nbc número mímimo de bacias por unidade
 #' @param base Lista de dados da função prepara_base
 #' @param lito_bacia Resultado da função intercecta_bacia
+#' @param leg legenda da feição
 #'
 #' @return
 #' @export

@@ -15,6 +15,8 @@ testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
 1 = sem transformação e 2 = logtransformados}
 
 \item{nbc}{número mímimo de bacias por unidade}
+
+\item{leg}{legenda da feição}
 }
 \description{
 Testes de normalidade e de comparação das amostras

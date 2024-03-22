@@ -38,9 +38,7 @@ cod_unidades <- leg
 abrev <- cod_unidades$SIGLA
 nome_unidade <- cod_unidades$SIGLA
 
-## Testes de Normalidade
 ## Calcula % dos dados validos
-
 n <- 0
 ncoded <- 0
 nneg <- 0
@@ -135,10 +133,10 @@ res <- list()
 w <- 0
 df <- 0
 for(u in 1:nrow(comb_u)) {
-  for (i in seq(elementos)) {
+  for (i in seq(elem_val)) {
 
-    el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elementos[i]]
-    el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elementos[i]]
+    el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]]
+    el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]]
 
    if(length((!is.na(el1)))> 30 & length(!is.na(el2))> 30) {
    w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
@@ -149,7 +147,7 @@ for(u in 1:nrow(comb_u)) {
 }
 test <- data.frame(do.call(cbind, res))
 colnames(test) <- paste0("p-value - ", comb_u[,1],"-" ,comb_u[,2] )
-test$elemento <- elementos
+test$elemento <- elem_val
 # Elimina colunas só com NAs
 test <- test[,colSums(is.na(test))<nrow(test)]
 test <- na.omit(test)
@@ -161,9 +159,9 @@ w <- 0
 df <- 0
 res2 <- list()
 for(u in 1:nrow(comb_u)) {
-  for (i in seq(elementos)) {
-    el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elementos[i]]
-    el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elementos[i]]
+  for (i in seq(elem_val)) {
+    el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]]
+    el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]]
     if(length(!is.na(el1))> 30 & length(!is.na(el2))> 30) {
       w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
       df[i] <-  as.numeric(w$statistic)
@@ -174,7 +172,7 @@ for(u in 1:nrow(comb_u)) {
 
 test2 <- data.frame(do.call(cbind, res2))
 colnames(test2) <- paste0("W - ", comb_u[,1],"-" ,comb_u[,2] )
-test2$elemento <- elementos
+test2$elemento <- elem_val
 # Elimina colunas só com NAs
 test2 <- test2[,colSums(is.na(test2)) < nrow(test2)]
 test2 <- na.omit(test2)
@@ -186,7 +184,7 @@ write.csv2(test2, "outputs/test_Wilcoxon_statistic.csv")
 
 elementos <- myjob$nome_analito
 
-## Elementos válitos
+## Elementos válidos
 lista_sum <- lapply(mydata[, elem_val], function(x) sum(duplicated(x)))
 
 dl <- mydata[ , elem_val]
@@ -288,21 +286,17 @@ if(mtd_transf == 2){
   w <- 0
   df <- 0
   for(u in 1:nrow(comb_u)) {
-    for (i in seq(elementos)) {
-
-      el1 <- log10(mydata[mydata$Geo_cod == comb_u[u,1], elementos[i]])
-      el2 <- log10(mydata[mydata$Geo_cod == comb_u[u,2], elementos[i]])
-
-      if(length((!is.na(el1)))> 30 & length(!is.na(el2))> 30) {
-        w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  as.numeric(w$p.value)}else{ df[i] = NA
-        }
+    for (i in seq(elem_val)) {
+      el1 <- log10(mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]])
+      el2 <- log10(mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]])
+      w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
+      df[i] <-  as.numeric(w$p.value)
     }
     res[[u]] <- df
   }
   test <- data.frame(do.call(cbind, res))
   colnames(test) <- paste0("p-value - ", comb_u[,1],"-" ,comb_u[,2] )
-  test$elemento <- elementos
+  test$elemento <- elem_val
   # Elimina colunas só com NAs
   test <- test[,colSums(is.na(test))<nrow(test)]
   test <- na.omit(test)
@@ -314,20 +308,18 @@ if(mtd_transf == 2){
   df <- 0
   res2 <- list()
   for(u in 1:nrow(comb_u)) {
-    for (i in seq(elementos)) {
-      el1 <- log10(mydata[mydata$Geo_cod == comb_u[u,1], elementos[i]])
-      el2 <- log10(mydata[mydata$Geo_cod == comb_u[u,2], elementos[i]])
-      if(length(!is.na(el1))> 30 & length(!is.na(el2))> 30) {
-        w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  as.numeric(w$statistic)
-      }else{ df[i] = NA}
+    for (i in seq(elem_val)) {
+      el1 <- log10(mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]])
+      el2 <- log10(mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]])
+      w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
+      df[i] <-  as.numeric(w$statistic)
     }
     res2[[u]] <- df
   }
 
   test2 <- data.frame(do.call(cbind, res2))
   colnames(test2) <- paste0("W - ", comb_u[,1],"-" ,comb_u[,2] )
-  test2$elemento <- elementos
+  test2$elemento <- elem_val
   # Elimina colunas só com NAs
   test2 <- test2[,colSums(is.na(test2)) < nrow(test2)]
   test2 <- na.omit(test2)

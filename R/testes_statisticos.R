@@ -100,7 +100,6 @@ write.table(res_sw, paste0(dir_out, "test_norm_ShapiroWilk",
 out[[2]] <- res_sw
 ## Teste Lilefors
 lf <- list()
-un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
 for(un in un_val){
   dl <- mydata[mydata$Geo_cod == un ,elem_val]
   pl <- as.data.frame(do.call(rbind, lapply(dl, function(x)
@@ -184,7 +183,6 @@ write.csv2(test2, "outputs/test_Wilcoxon_statistic.csv")
 
 #Teste Shapiro Wilker##########################################################
 #Todas as amostras
-un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
 
 elementos <- myjob$nome_analito
 
@@ -256,7 +254,6 @@ if(mtd_transf == 2){
   out[[2]] <- res_sw
   ## Teste Lilefors
   lf <- list()
-  un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
   for(un in un_val){
     dl <- log10(mydata[mydata$Geo_cod == un ,elem_val])
     pl <- as.data.frame(do.call(rbind, lapply(dl, function(x)
@@ -339,7 +336,6 @@ if(mtd_transf == 2){
 
   #Teste Shapiro Wilker##########################################################
   #Todas as amostras
-  un_val <- as.numeric(as.character(t[t$Freq>4,"Var1"]))
   elementos <- myjob$nome_analito
 
   ## Filtra elementos válidos

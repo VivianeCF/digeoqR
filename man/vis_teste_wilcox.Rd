@@ -4,12 +4,16 @@
 \alias{vis_teste_wilcox}
 \title{Visual do Teste Wilcoxon}
 \usage{
-vis_teste_wilcox(base, lito_bacia, nbc)
+vis_teste_wilcox(dir_out, elem_val, base, lito_bacia, nbc)
 }
 \arguments{
+\item{dir_out}{diretório de saída}
+
+\item{elem_val}{elementos válidados}
+
 \item{base}{bases de dados}
 
-\item{lito_bacia}{bacias enriquecidas}
+\item{lito_bacia}{bacias rotuladas}
 
 \item{nbc}{número de bacias por unidade}
 }

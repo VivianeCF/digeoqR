@@ -138,7 +138,7 @@ testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
         el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]]
         el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]]
         w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  round(as.numeric(w$p.value, 3))}else{ df[i] = NA
+        df[i] <-  round(as.numeric(w$p.value, 3))
 
       }
       res[[u]] <- df

@@ -45,14 +45,14 @@ for(i in seq(elem_val)) {
   p <- data.frame(test$p.value) %>% tibble::rownames_to_column() %>%
     tidyr::pivot_longer(-rowname) %>%
     dplyr::mutate( Test = dplyr::case_when(value < 0.05 ~ 'Significant', TRUE ~ '')) %>%
-    ggplot() + geom_tile(aes(factor(rowname,levels = SIGLA ),
+    ggplot2::ggplot() + geom_tile(ggplot2::aes(factor(rowname,levels = SIGLA ),
                              factor(name, levels= rev(SIGLA)), fill = Test)) +
-    ggtitle(eq) +
-    scale_fill_manual(name = "Wilcoxon Test", values = c('white', 'red')) +
-    coord_equal() + theme_bw() +
+    ggplot2::ggtitle(eq) +
+    ggplot2::scale_fill_manual(name = "Wilcoxon Test", values = c('white', 'red')) +
+    ggplot2::coord_equal() + ggplot2::theme_bw() +
     # guides(fill="none") +
     xlab("") + ylab("")+
-    theme(plot.title = element_text(hjust = 0.5),
+    ggplot2::theme(plot.title = element_text(hjust = 0.5),
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
   legenda <- ggpubr::get_legend(p)

@@ -94,7 +94,12 @@ prepara_bases <- function(dir_bol, classe_am, analise, quimica, mineral,
 
   }
 
+
+
+
  dados_campo <- dados_campo[dados_campo$CLASSE == nm_classe[classe_am],]
+ dados_campo$LONG_DEC <- round(as.numeric(gsub(",", ".", dados_campo$LONG_DEC, fixed = TRUE)), 5)
+ dados_campo$LAT_DEC <- round(as.numeric(gsub(",", ".", dados_campo$LAT_DEC, fixed = TRUE)), 5)
  out[[6]] <- dados_campo
 
 

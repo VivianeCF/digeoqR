@@ -62,7 +62,11 @@ extrai_dados_campo <- function(tipo_base,
     df_base <-
       dplyr::left_join(df_base, am_lote_amostra, by = "AMOSTRA")
     colnames(df_base)[1] <- "N_LAB"
+    df_base$LONG_DEC <- round(as.numeric(gsub(",", ".", df_base$LONG_DEC, fixed = TRUE)), 5)
+    df_base$LAT_DEC <- round(as.numeric(gsub(",", ".", df_base$LAT_DEC, fixed = TRUE)), 5)
+
     out <- data.frame()
+
     out <- df_base
   }
   RODBC::odbcCloseAll()
@@ -90,7 +94,7 @@ extrai_dados_campo <- function(tipo_base,
 
     xy <- sf::st_coordinates(df_base)
     df_base <- data.frame(xy, df_base)
-    colnames(df_base)[1:2] <- c("longitude", "latitude" )
+    colnames(df_base)[1:2] <- c("LONG_DEC", "LAT_DEC" )
     df_base <- dplyr::select(df_base, -"shape")
 
 }

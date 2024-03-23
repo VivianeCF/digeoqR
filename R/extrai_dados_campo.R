@@ -62,12 +62,6 @@ extrai_dados_campo <- function(tipo_base,
     df_base <-
       dplyr::left_join(df_base, am_lote_amostra, by = "AMOSTRA")
     colnames(df_base)[1] <- "N_LAB"
-    df_base$LONG_DEC <- round(as.numeric(gsub(",", ".", df_base$LONG_DEC, fixed = TRUE)), 5)
-    df_base$LAT_DEC <- round(as.numeric(gsub(",", ".", df_base$LAT_DEC, fixed = TRUE)), 5)
-
-    out <- data.frame()
-
-    out <- df_base
   }
   RODBC::odbcCloseAll()
   out <- list()
@@ -157,14 +151,13 @@ extrai_dados_campo <- function(tipo_base,
     df_base <- data.frame(rbind(df_base1, df_base2))
     df_base <-  df_base[, -ncol(df_base)]
   }
+  df_base$LONG_DEC <- round(as.numeric(gsub(",", ".", df_base$LONG_DEC, fixed = TRUE)), 5)
+  df_base$LAT_DEC <- round(as.numeric(gsub(",", ".", df_base$LAT_DEC, fixed = TRUE)), 5)
+
   out[[1]] <- df_base
 
   # Cria dados espaciais
   r <-  EPSG
-
-  df_base$LONG_DEC <- as.numeric(gsub(",", ".", df_base$LONG_DEC, fixed = TRUE))
-  df_base$LAT_DEC <- as.numeric(gsub(",", ".", df_base$LAT_DEC, fixed = TRUE))
-
   # df_base <- df_base[df_base$CLASSE == nm_classe[classe_am],]
 
     dados_campo_st <-

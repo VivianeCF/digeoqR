@@ -46,11 +46,11 @@ for(i in seq(elem_val)) {
 
   p <- data.frame(test$p.value) %>% tibble::rownames_to_column() %>%
     tidyr::pivot_longer(-rowname) %>%
-    dplyr::mutate( Test = dplyr::case_when(value < 0.05 ~ 'Significant', TRUE ~ '')) %>%
+    dplyr::mutate( Test = dplyr::case_when(value < 0.05 ~ 'p-value < 0,05', TRUE ~ '')) %>%
     ggplot2::ggplot() + ggplot2::geom_tile(ggplot2::aes(factor(rowname,levels = SIGLA ),
                              factor(name, levels= rev(SIGLA)), fill = Test)) +
     ggplot2::ggtitle(eq) +
-    ggplot2::scale_fill_manual(name = "Wilcoxon Test", values = c('white', 'red')) +
+    ggplot2::scale_fill_manual(name = "Teste Wilcoxon", values = c('white', 'red')) +
     ggplot2::coord_equal() + ggplot2::theme_bw() +
     # guides(fill="none") +
     ggplot2::xlab("") + ggplot2::ylab("")+
@@ -62,14 +62,6 @@ for(i in seq(elem_val)) {
   t[[i]] <- p + ggplot2::guides(fill="none")
 }
 t[[(length(elem_val)+1)]] <- l1
-png(paste0(dir_out, "test_wilcoxon.png"),
-    units = "cm", width = 25,
-    height = 25, res = 300)
-
-gridExtra::grid.arrange(grobs = t[1:16],  ncol = 4,
-                        top = grid::textGrob(""),
-                        gp=gpar(fontsize=12,font=3))
-dev.off()
 out <- t
 return(out)
 }

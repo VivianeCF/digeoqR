@@ -138,7 +138,7 @@ testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
         el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]]
         el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]]
         w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  round(as.numeric(w$p.value, 3))
+        df[i] <-  round(w$p.value, 3)
 
       }
       res[[u]] <- df
@@ -161,7 +161,7 @@ testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
         el1 <- mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]]
         el2 <- mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]]
         w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  round(as.numeric(w$statistic), 3)
+        df[i] <-  round(w$statistic, 3)
 
       }
       res2[[u]] <- df
@@ -287,7 +287,7 @@ testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
         el1 <- log10(mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]])
         el2 <- log10(mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]])
         w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  round(as.numeric(w$p.value), 3)
+        df[i] <-  round(w$p.value, 3)
       }
       res[[u]] <- df
     }
@@ -309,7 +309,7 @@ testes_estatisticos <- function(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
         el1 <- log10(mydata[mydata$Geo_cod == comb_u[u,1], elem_val[i]])
         el2 <- log10(mydata[mydata$Geo_cod == comb_u[u,2], elem_val[i]])
         w  <- wilcox.test(el1, el2, correct = TRUE, paired=FALSE,exact=FALSE)
-        df[i] <-  round(as.numeric(w$statistic), 3)
+        df[i] <-  round(w$statistic, 3)
       }
       res2[[u]] <- df
     }

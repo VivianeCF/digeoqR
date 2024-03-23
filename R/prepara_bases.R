@@ -117,6 +117,7 @@ sf::st_write(
   delete_layer = TRUE
 )
  out [[7]] <- dados_campo_st
+ out [[8]] <- quimica[[6]]
  names(out) <-  c(
     "dados brutos",
     "dados transformados",
@@ -124,7 +125,8 @@ sf::st_write(
     "dados transformados pivotados",
     "condições analíticas",
     "dados de campo",
-    "dados campo sf"
+    "dados campo sf",
+    "dados qaqc transformados"
   )
   return(out)
 }

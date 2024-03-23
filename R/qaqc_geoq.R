@@ -12,7 +12,7 @@ qaqc_gq <- function(dir_out, base){
 # Define variáveis
 data_bol <- base[[ "dados transformados"]]
 duplicatas <- base[[ "duplicatas"]]
-replicatas <- base[[ "replicatas"]]
+replicatas <- base[[ "dados qaqc transformados"]]
 ref <- base[[ "condições analíticas"]]
 
 duplicatas <- data_bol[data_bol$cod_am == "DUP",]
@@ -159,4 +159,5 @@ png(paste0(dir_out, "tabela_precisao.png"),
 grid.table(tabela_precisao, rows = NULL)
 dev.off()
 
-grid.table(tb2[[2]], rows = NULL)}
+grid.table(tb2[[2]], rows = NULL)
+}

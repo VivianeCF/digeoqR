@@ -221,8 +221,11 @@ qaqc_gq <- function(dir_out, base, tipo_am){
   g2 <- gridExtra::grid.table(tabela_precisao, rows = NULL)
   dev.off()
   out[[6]] <- g2
-  names(out) <- c("dados de precisão calc", "dados de precisao statDA" ,
-                  "df tabela de precisão", "fig tabela de precisao",
-                  "grafico sem texto", "gráfico com texto")
+  names(out) <- c("grafico sem texto",
+                  "gráfico com texto",
+                  "dados de precisão calc",
+                  "dados de precisao statDA",
+                  "df tabela de precisão",
+                  "fig tabela de precisao")
   return(out)
 }

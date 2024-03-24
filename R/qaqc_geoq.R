@@ -218,14 +218,13 @@ qaqc_gq <- function(dir_out, base, tipo_am){
     height = 6,
     res = 300
   )
-  g2 <- gridExtra::grid.table(tabela_precisao, rows = NULL)
+  gridExtra::grid.table(tabela_precisao, rows = NULL)
   dev.off()
-  out[[6]] <- g2
+
   names(out) <- c("grafico sem texto",
                   "gráfico com texto",
                   "dados de precisão calc",
                   "dados de precisao statDA",
-                  "df tabela de precisão",
-                  "fig tabela de precisao")
+                  "df tabela de precisão")
   return(out)
 }

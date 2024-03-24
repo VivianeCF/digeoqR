@@ -9,6 +9,7 @@
 #' @examples
 qaqc_gq <- function(dir_out, base){
   # Define variáveis
+  options(scipen = 999, OutDec = ",")
   data_bol <- base[[ "dados transformados"]]
   replicatas <- base[[ "dados qaqc transformados"]]
   ref <- base[[ "condições analíticas"]]
@@ -46,7 +47,8 @@ qaqc_gq <- function(dir_out, base){
 
 
   res2 = rep(NA, length(elementos))
-
+  p <- list()
+  g <- list()
   for (i in 1:length(elementos)) {
     el <- elementos[i]
     el1 <- paste0(el,".x")
@@ -113,21 +115,25 @@ qaqc_gq <- function(dir_out, base){
       ggplot2::scale_x_continuous(name =paste0("Média das Duplicatas" ),
                                   trans='log10') +
       ggplot2::scale_y_continuous(name =paste0("Diferença Absoluta entre Duplicatas"), trans='log10') +
-      ggplot2::geom_line(data = line, ggplot2::aes(x,y))
+      ggplot2::geom_line(data = line, ggplot2::aes(x,y)) +
+      ggplot2::ggtitle(paste0(ref$analito[i], " (",  ref$unidades[i], ")"))
 
-    gridExtra::grid.arrange(p1, nrow = 1,
-                            top = grid::textGrob(paste0("Duplicatas de Campo - ", el ),
-                                                 gp= grid::gpar(fontsize=12,font=3)),
-                            bottom = grid::textGrob(label_res,
-                                                    gp = grid::gpar(font = 3, fontsize = 9),
-                                                    hjust = 1,x = 1))
+    g1 <-   gridExtra::grid.arrange(p1, nrow = 1,
+                                    bottom = grid::textGrob(label_res,
+                                                            gp = grid::gpar(font = 3,fontsize = 9),hjust = 1,x = 1))
 
     dev.off ()
 
     precisao <- rbind(precisao, c(elementos[i], rsd_pct))
-
+    p[[i]] <- p1
+    g[[i]] <- g1
   }
+  names(p) <- ref$analito
 
+  names(g) <- ref$analito
+  # gridExtra::grid.arrange(grobs=p[3], ncol = 1)
+  out[[1]] <- p
+  out[[2]] <- g
   precisao <- as.data.frame(precisao[-1,])
   colnames(precisao) <- c("Elemento","RSD %")
   rownames(precisao) <- NULL
@@ -135,8 +141,9 @@ qaqc_gq <- function(dir_out, base){
 
   res2r <- round(res2,1)
   write.csv2(precisao, paste0(dir_out, "dados_precisao2.csv"), row.names = FALSE)
+  out[[3]] <- precisao
   write.csv2(res2r,file= paste0(dir_out, "dados_precisao_stada2.csv"))
-
+  out[[4]] <- res2r
   colnames(ref)[1:3] <- c("Elemento", "Unidade", "Limite de detecção")
   ref$Analito <- paste0(ref$Elemento,"_", ref$Unidade)
   precisao <- precisao[!is.na(precisao$`RSD %` ) & precisao$`RSD %` != "0",]
@@ -144,11 +151,6 @@ qaqc_gq <- function(dir_out, base){
   tb <- dplyr::inner_join(ref[,c("Elemento", "Unidade", "Limite de detecção", "Analito")], precisao, by = "Analito")
   tb$`RSD %` <- as.numeric(tb$`RSD %`)
   tb <- tb[order(tb$`RSD %`),]
-
-  tb1 <- tb[1:24,]
-  tb2 <- tb[25:48,]
-
-  tb_final <- data.frame(tb1,tb2,check.names = FALSE)
 
   ## Tabela por faixa de precisão
   # limiares: 10, 30, 50, 100
@@ -165,11 +167,14 @@ qaqc_gq <- function(dir_out, base){
 
   tabela_precisao <- unique(tb2[, c("Classe", "Elementos")])
   colnames(tabela_precisao)[1] <- "Precisão (RSD %)"
-  tabela_precisao$Elementos = str_wrap(tabela_precisao$Elementos, 40)
+  tabela_precisao$Elementos = stringr::str_wrap(tabela_precisao$Elementos, 40)
+  out[[5]] <- tabela_precisao
+
+  # Salva figura
   png(paste0(dir_out, "tabela_precisao.png"),
       units = "cm", width = 17, height = 6, res = 300)
-  gridExtra::grid.table(tabela_precisao, rows = NULL)
+  g2 <- gridExtra::grid.table(tabela_precisao, rows = NULL)
   dev.off()
-
-  gridExtra::grid.table(tb2[[2]], rows = NULL)
+  out[[6]] <- g2
+  return(out)
 }

@@ -10,6 +10,7 @@
 qaqc_gq <- function(dir_out, base){
   # Define variáveis
   options(scipen = 999, OutDec = ",")
+  out <- list()
   data_bol <- base[[ "dados transformados"]]
   replicatas <- base[[ "dados qaqc transformados"]]
   ref <- base[[ "condições analíticas"]]

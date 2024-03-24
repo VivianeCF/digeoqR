@@ -431,7 +431,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
   out[[7]] <- ref # dados de informação do boletim
   out[[8]] <- lab_bol # dados da relação boletim e laboratório
   out[[1]] <- dpivo # dados analíticos brutos
-  out[[6]] <- QAQC_transf # dados de qaqc transformados
+  out[[6]] <- QAQC_05ld # dados de qaqc transformados
   out[[5]] <- QAQC_orig # dados de qaqc bruto
   out[[3]] <- df_bruto_pivo # dados analíticos brutos pivotados
   names(out) <- c(

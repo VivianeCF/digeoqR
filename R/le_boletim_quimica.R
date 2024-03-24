@@ -263,7 +263,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
   df_sd <- df[df$classe_am == "STD",]
 
   QAQC_orig <- rbind(df_rp, df_bk, df_sd)
-  QAQC_orig <- QAQC_orig[, c(-4:-11)]
+  # QAQC_orig <- QAQC_orig[, c(-4:-11)]
 
 
   # transformação < para -

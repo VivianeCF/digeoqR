@@ -11,29 +11,34 @@ qaqc_gq <- function(dir_out, base){
 
 # Define variáveis
 data_bol <- base[[ "dados transformados"]]
-duplicatas <- base[[ "duplicatas"]]
+d  # Define variáveis
+data_bol <- base[[ "dados transformados"]]
+# unique(data_bol$cod_am)
+# duplicatas <- base[[ "duplicatas"]]
 replicatas <- base[[ "dados qaqc transformados"]]
-ref <- base[[ "condições analíticas"]]
+colnames(data_bol)
+ref <- base[[ "informação do boletim"]]
+elementos <- paste0(ref$analito, "_", ref$unidades)
 
-duplicatas <- data_bol[data_bol$cod_am == "DUP",]
-data_qaqc <- data_bol[data_bol$N_campo %in% duplicatas$N_campo,]
-amostras <- data_qaqc[data_qaqc$cod_am == "SMP",]
-replicatas <- replicatas[replicatas$classe_am == "REP" &
-                           replicatas$N_LAB != "BRANCO_PREP",]
-replicatas$cod_am <- replicatas$classe_am
-colnames(replicatas) <- gsub("_ICM40B", "", colnames(replicatas))
-colnames(duplicatas)[15:64] <- paste0(colnames(duplicatas)[15:64],2)
-colnames(amostras)[15:64] <- paste0(colnames(amostras)[15:64],1)
-replicatas <- replicatas[, c(1,10:59)]
+data_bol[duplicated(paste0(data_bol$UTM_LESTE, data_bol$UTM_NORTE)), "cod_am"] <- "DUP"
 
-dup <- dplyr::left_join(amostras[,c(4,15:64)],
-                        duplicatas[,c(4,15:64)], by = "N_campo")
+dup1 <- data_bol[data_bol$cod_am == "DUP","NUM_CAMPO"]
+dup2 <- stringi::stri_sub(dup1, 1, 6)
+
+
+rep_lab <- replicatas[replicatas$cod_am == "REP" &
+                        replicatas$N_LAB != "BRANCO_PREP",c("N_LAB", elementos)]
+smp_lab <- data_bol[data_bol$N_LAB %in% rep_lab$N_LAB,c("N_LAB", elementos)]
+dup_campo <- data_bol[data_bol$NUM_CAMPO %in% dup1, c("NUM_CAMPO", elementos)]
+
+smp_campo <-  data_bol[data_bol$NUM_CAMPO %in% dup2,elementos]
+dup_campo$NUM_CAMPO <- dup2
+dup <- dplyr::left_join(smp_campo, dup_campo, by = "NUM_CAMPO")
+rep <- dplyr::left_join(smp_lab, rep_lab, by = "N_LAB")
 
 precisao <- 0
 ptile = 95
 rsd = 5
-
-elementos <- gsub(1, "",  colnames(dup)[2:51])
 
 res2 = rep(NA, length(elementos))
 

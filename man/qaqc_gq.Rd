@@ -2,15 +2,18 @@
 % Please edit documentation in R/qaqc_geoq.R
 \name{qaqc_gq}
 \alias{qaqc_gq}
-\title{Controle de qualidade analitico e amostral}
+\title{Controle de qualidade analítico e amostral}
 \usage{
-qaqc_gq(dir_out, base)
+qaqc_gq(dir_out, base, tipo_am)
 }
 \arguments{
 \item{dir_out}{Diretório de saída}
 
-\item{base}{base de dados analíticos}
+\item{base}{Base de dados analíticos}
+
+\item{tipo_am}{Tipo de amostragem  1 = duplicata de campo
+2 = replicata de laboratório}
 }
 \description{
-Controle de qualidade analitico e amostral
+Controle de qualidade analítico e amostral
 }

@@ -1,7 +1,9 @@
-#' Controle de qualidade analitico e amostral
+#' Controle de qualidade analítico e amostral
 #'
 #' @param dir_out Diretório de saída
-#' @param base base de dados analíticos
+#' @param base Base de dados analíticos
+#' @param tipo_am Tipo de amostragem  1 = duplicata de campo
+#' 2 = replicata de laboratório
 #'
 #' @return
 #' @export
@@ -219,5 +221,8 @@ qaqc_gq <- function(dir_out, base, tipo_am){
   g2 <- gridExtra::grid.table(tabela_precisao, rows = NULL)
   dev.off()
   out[[6]] <- g2
+  names(out) <- c("dados de precisão calc", "dados de precisao statDA" ,
+                  "df tabela de precisão", "fig tabela de precisao",
+                  "grafico sem texto", "gráfico com texto")
   return(out)
 }

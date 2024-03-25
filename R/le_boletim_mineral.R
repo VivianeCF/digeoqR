@@ -1,7 +1,5 @@
 #' Lê boletins de análises mineralométricas
 #'
-#' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-#'   corrente, 3 = rocha, 4 = solo
 #' @param dir_bol Diretório dos boletins analíticos ex: "inputs/mineral/B/"
 #'
 #' @return Retorna uma lista com todos os dados do boletim: resultados
@@ -11,7 +9,7 @@
 #'
 #' @examples
 #' #le_boletim_mineral()
-le_boletim_mineral <- function(classe_am, dir_bol) {
+le_boletim_mineral <- function(dir_bol) {
   #Ler Dados na planilha csv
   #as planilhas da GEOSOL vem com formato numérico com decimal . e separador ;
   #substitui no editor-MS antes . por , e  salva csv separados por virguala

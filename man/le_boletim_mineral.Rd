@@ -4,12 +4,9 @@
 \alias{le_boletim_mineral}
 \title{Lê boletins de análises mineralométricas}
 \usage{
-le_boletim_mineral(classe_am, dir_bol)
+le_boletim_mineral(dir_bol)
 }
 \arguments{
-\item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-corrente, 3 = rocha, 4 = solo}
-
 \item{dir_bol}{Diretório dos boletins analíticos ex: "inputs/mineral/B/"}
 }
 \value{

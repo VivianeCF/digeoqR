@@ -4,9 +4,19 @@
 \alias{testes_estatisticos}
 \title{Testes Estatísticos}
 \usage{
-testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
+testes_estatisticos(
+  dir_out,
+  base,
+  lito_bacia,
+  mtd_transf = 1,
+  nbc = 10,
+  leg,
+  elem_val
+)
 }
 \arguments{
+\item{dir_out}{Diretório de saída}
+
 \item{base}{Lista de dados da função prepara_base}
 
 \item{lito_bacia}{Resultado da função intercecta_bacia}
@@ -14,9 +24,11 @@ testes_estatisticos(base, lito_bacia, mtd_transf = 1, nbc = 10, leg)
 \item{mtd_transf}{Método de transformação dos dados
 1 = sem transformação e 2 = logtransformados}
 
-\item{nbc}{número mímimo de bacias por unidade}
+\item{nbc}{Número mímimo de bacias por unidade}
 
 \item{leg}{legenda da feição}
+
+\item{elem_val}{Elementos validados}
 }
 \description{
 Testes de normalidade e de comparação das amostras

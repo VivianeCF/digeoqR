@@ -14,7 +14,7 @@ validacao_elementos <- function(dir_out, base, corte_val){
 mydata_b <- base[["dados brutos"]]
 ref <- base[["condições analíticas"]]
 elementos <- paste0(ref$analito, "_", ref$unidades)
-out <- 0
+out <- list()
 n <- 0
 ncoded <- 0
 nneg <- 0

@@ -320,7 +320,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
     as.data.frame(apply(QAQC_transf, 2, function(x)
       gsub(",", "\\.", x)))
   QAQC_transf <-
-    QAQC_transf %>% dplyr::mutate(dplyr::across(4:ncol(QAQC_transf),
+    QAQC_transf %>% dplyr::mutate(dplyr::across(8:ncol(QAQC_transf),
                                                 ~ as.numeric(.)))
   QAQC_05ld <- rgr::ltdl.fix.df(QAQC_transf)
 

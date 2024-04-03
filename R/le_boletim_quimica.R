@@ -395,6 +395,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
   # Lê condições analíticas
   ref =  ca
   ref = unique(ref[, c("analito", "unidades", "MDL")])
+  ref$MDL <- gsub("<", "",  ref$MDL)
   ref$MDL <- as.numeric(gsub(",", ".",  ref$MDL))
     count_decimals = function(x) {
     #length zero input

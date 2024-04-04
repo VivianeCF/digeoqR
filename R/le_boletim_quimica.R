@@ -222,7 +222,7 @@ le_boletim_quimica <- function(classe_am, dir_bol, dir_ucc, ref_ucc) {
 
   # Tirar registros de branco de preparação
   df_sc <-
-    df[df$classe_am == nome_bol[classe_am] & df$N_LAB != "BRANCO_PREP",]
+    df[df$cod_am == "SMP" & df$N_LAB != "BRANCO_PREP",]
 
 
   ## Retira linhas sem N_LAB

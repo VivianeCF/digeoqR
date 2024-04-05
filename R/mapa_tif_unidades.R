@@ -97,7 +97,7 @@ for (e in seq_along(elem_val))   {
   base_dados <- do.call(rbind, ls)
 
   # Configura gráficos
-  map_Theme <- ggplot2::theme(legend.position = "none",
+  map_Theme <- ggplot2::theme(panel.background = NULL,legend.position = "none",
                      axis.text.x = ggplot2::element_text(size = 4),
                      axis.text.y = ggplot2::element_text(size = 4),
                      axis.title.x = ggplot2::element_blank(),
@@ -291,7 +291,7 @@ if(tipo_leg == 1){
     dados4 <- dplyr::arrange(dados4, teor)
 
     #Tema ggplot do boxplot
-    bp_Theme <- ggplot2::theme(
+    bp_Theme <- ggplot2::theme(panel.background = NULL,
                       axis.title.x = ggplot2::element_blank(),
                       axis.title.y = ggplot2::element_blank(),
                       axis.text.x = ggplot2::element_blank(),

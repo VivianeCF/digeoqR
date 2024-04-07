@@ -58,7 +58,8 @@ if(mtd_class == 1){
         metodo <-  rep("MAD", length(el))
       }
 
-      classe[[i]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
+      df <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
+      classe[[i]] <- df[!is.na(df$id),]
     }
       df_list[[j]] <- do.call(rbind, classe)
   }
@@ -84,7 +85,8 @@ if(mtd_class == 2){
         analito <- rep(elementos[j], length(el))
         metodo <-  rep("TIF", length(el))
     }
-        classe[[i]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_bxp(el))
+        df <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_bxp(el))
+        classe[[i]] <- df[!is.na(df$id), ]
 
 
        }
@@ -115,7 +117,8 @@ if(mtd_class == 3){
 
       }
 
-      classe[[i]] <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
+      df <- data.frame(id, unit ,analito, teor= el, metodo, class=log_class_mad(el))
+      classe[[i]] <- df[!is.na(df$id),]
     }
     df_list[[j]] <- do.call(rbind, classe)
   }

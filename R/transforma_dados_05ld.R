@@ -55,6 +55,9 @@ Lab <- c("AA", "AA", "AA", "COL", "AA", "AA", "EE", "AA", "IE", "IE", "EE",
          "EE", "AA", "AA", "AA", "AA", "IE", "AA", "AA", "CR", "EE", "FA",
          "EE", "IE", "EE", "EE", "EE", "FA", "FA", "AA", "EE", "EE", "EE",
          "GV", "EE", "EE", "AA")
+
+bb_lab <- data.frame(Lab_orig ,
+                     Lab)
 data <-  dplyr::left_join(data,bb_lab,  by = "Lab_orig")
 data <- data %>% dplyr::relocate(c(Lab, Lab_orig), .after = CLASSE)
 data[,11: ncol(data)] <- data[,11: ncol(data)] %>%

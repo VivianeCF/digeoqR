@@ -53,8 +53,8 @@ Lab_orig <-  c("Absorção Atômica - Água Régia Invertida",
 
 Lab <- c("AA", "AA", "AA", "COL", "AA", "AA", "EE", "AA", "IE", "IE", "EE",
          "EE", "AA", "AA", "AA", "AA", "IE", "AA", "AA", "CR", "EE", "FA",
-         "EE", "IE", "EE", "EE", "EE", "FA", "FA", "AA", "EE", "EE", "EE",
-         "GV", "EE", "EE", "AA")
+         "EE", "IE", "EE", "", "EE", "FA", "FA", "AA", "EE", "EE", "EE",
+         "EE", "EE", "EE", "AA")
 
 bb_lab <- data.frame(Lab_orig ,
                      Lab)

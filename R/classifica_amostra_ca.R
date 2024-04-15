@@ -516,8 +516,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
         filenames,
         FUN = function(files)
         {
-          read.csv2(files,
-                    sep = ";", dec = ",")
+          read.csv2(files, fileEncoding = "latin1")
         }
       ))
 

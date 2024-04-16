@@ -338,7 +338,6 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
             sep = ";",
             dec = "," ,
             row.names = FALSE,
-            fileEncoding = "latin1",
             na = ""
           )
           write.table(
@@ -354,7 +353,6 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
             sep = ";",
             dec = "," ,
             row.names = FALSE,
-            fileEncoding = "latin1" ,
             na = ""
           )
           write.table(
@@ -370,7 +368,6 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
             sep = ";",
             dec = "," ,
             row.names = FALSE,
-            fileEncoding = "latin1" ,
             na = ""
           )
           write.table(
@@ -386,7 +383,6 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
             sep = ";",
             dec = "," ,
             row.names = FALSE,
-            fileEncoding = "latin1",
             na = ""
           )
 
@@ -402,8 +398,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
             ),
             sep = ";",
             dec = "," ,
-            row.names = FALSE ,
-            fileEncoding = "latin1",
+            row.names = FALSE,
             na = ""
           )
 
@@ -421,7 +416,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
       dataset <- do.call("rbind", lapply(
         filenames,
         FUN = function(files) {
-          read.csv2(files, fileEncoding = "latin1")
+          read.csv2(files)
         }
       ))
 
@@ -444,8 +439,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
       dataset <- do.call("rbind", lapply(
         filenames,
         FUN = function(files) {
-          read.csv2(files,
-                    fileEncoding = "latin1")
+          read.csv2(files)
         }
       ))
 
@@ -468,7 +462,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
         filenames,
         FUN = function(files)
         {
-          read.csv2(files, fileEncoding = "latin1")
+          read.csv2(files)
         }
       ))
 
@@ -494,8 +488,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
         FUN = function(files)
         {
           read.csv2(files,
-                    sep = ";", dec = ",",
-                    fileEncoding = "latin1")
+                    sep = ";", dec = ",")
         }
       ))
 
@@ -518,7 +511,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
         filenames,
         FUN = function(files)
         {
-          read.csv2(files, fileEncoding = "latin1")
+          read.csv2(files)
         }
       ))
 
@@ -550,8 +543,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
       ## Destaques todas
       destaques_todas <-
         read.csv2(paste0(path2, "destaque_todas_LAB_",
-                         lab[l], ".csv"),
-                  fileEncoding = "latin1")
+                         lab[l], ".csv"))
       destaques_todas_st <-
         sf::st_as_sf(destaques_todas,
                      coords = c("LONGITUDE", "LATITUDE"),
@@ -567,8 +559,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
 
       dados_analiticos <-
         read.csv2(paste0(path2, "dados_analiticos_LAB_",
-                         lab[l], ".csv"),
-                  fileEncoding = "latin1")
+                         lab[l], ".csv"))
       dados_analiticos_st <-
         sf::st_as_sf(
           dados_analiticos,
@@ -661,8 +652,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
 
    # Dados destaque
    dest1 <- read.csv2(paste0(path3, "destaque_LAB_AA.csv"),
-                      colClasses = "character",
-                      fileEncoding = "latin1")
+                      colClasses = "character")
    dest2 <- read.csv2(paste0(path4, "destaque_LAB_EE.csv"),
                       colClasses = "character")
    dest = dplyr::bind_rows(dest1, dest2)

@@ -147,7 +147,7 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
 
           # Cria tabela de classificação para os elementos
           for (i in 1:4) {
-            if (n_val[i] > 0) {
+            if (n_val[i] > 1) {
               tab[i] <- round(10 ^ summary(log10(data_analise[, i]))[1:6],
                               dig[i])
             } else{

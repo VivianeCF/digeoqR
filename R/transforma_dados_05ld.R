@@ -31,13 +31,13 @@ df_sc_transf[,11:ncol(df_sc_transf)] <-
 
 df_sc_05ld <- rgr::ltdl.fix.df(df_sc_transf[,-1:-10])
 df_sc_05ld <- data.frame(df_sc_transf[1:10], df_sc_05ld)
-out[[3]] <- df_sc_05ld
+out[[1]] <- df_sc_05ld
 
 df_zero <- df_sc_transf[,11:ncol(df_sc_transf)]
 df_zero[df_zero < 0] <- 0
 df_zero[is.na(df_zero)] <- 0
 df_zero <- data.frame(df_sc_transf[, 1:10], df_zero)
-out[[4]] <- df_zero
+out[[2]] <- df_zero
 
 return(out)
 }

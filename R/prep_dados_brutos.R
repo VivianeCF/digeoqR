@@ -89,7 +89,7 @@ prep_dados_brutos <- function(data){
   data[data$ORDEM %in% para_mudar$ORDEM, "AU_PPB"] <- para_mudar$AU_PPB
 
   data <- data %>% dplyr::select(-"ORDEM")
-  out[[1]] <- data
+
 
   data[data == "ND"] <- NA
   data[data == "N.A."] <- NA
@@ -98,12 +98,14 @@ prep_dados_brutos <- function(data){
   data[data == ""] <- NA
   data[data == "0"] <- NA
   data[data == "NA"] <- NA
-  out[[2]] <- data
+
   data_b <- data
   data_b_pivo <- data_b %>% tidyr::pivot_longer(cols=11:ncol(data_b),
                                                 names_to = "Analito",
                                                 values_to = "Valor")
-  # data_b_pivo$Valor <- gsub(",", ".", data_b_pivo$Valor, fix=TRUE)
+## Corrige nome dos analitos
+  data_b_pivo$Analito <- gsub(".", "", data_b_pivo$Analito, fixed = TRUE)
+
   df_m <- as.data.frame(data_b_pivo)
   df_m <- df_m[!is.na(df_m$Valor),]
   df_m$Q <- as.character(stringr::str_extract(df_m$Valor,
@@ -134,9 +136,11 @@ prep_dados_brutos <- function(data){
   df_q <- df_q[,-13]
 
   df_long <- rbind(df_q, df_n)
-  out[[3]] <- df_long[order(df_long$NLAB),]
-  out[[4]] <- tidyr::pivot_wider(out[[3]], names_from = "Analito",
+  df_long <- df_long[order(df_long$NLAB),]
+  out[[1]] <- tidyr::pivot_wider(df_long, names_from = "Analito",
                      values_from = "Valor", values_fn = max)
+  out[[2]] <- tidyr::pivot_wider(data_b_pivo, names_from = "Analito",
+                                 values_from = "Valor", values_fn = max)
 
   return(out)
 }

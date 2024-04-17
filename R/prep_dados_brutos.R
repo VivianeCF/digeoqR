@@ -110,7 +110,6 @@ prep_dados_brutos <- function(data){
                                               pattern = "<"))
 
   df_m <- df_m[!is.na(df_m$Q), ]
-  str(df_a)
   df_a <- aggregate(df_m[, c( "Valor")],
                     by = list(Lab=df_m$Lab, FOLHA=df_m$FOLHA, Analito=df_m$Analito),
                     FUN = min)
@@ -134,7 +133,10 @@ prep_dados_brutos <- function(data){
   df_n <- data_b_pivo[data_b_pivo$NLAB %in% df_q$NLAB,]
   df_q <- df_q[,-13]
 
-  out <- rbind(df_q, df_n)
-  out <- arrumada[order(arrumada$NLAB),]
+  df_long <- rbind(df_q, df_n)
+  out[[3]] <- df_long[order(df_long$NLAB),]
+  out[[4]] <- tidyr::pivot_wider(out[[3]], names_from = "Analito",
+                     values_from = "Valor", values_fn = max)
+
   return(out)
 }

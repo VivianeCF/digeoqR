@@ -100,7 +100,7 @@ prep_dados_brutos <- function(data){
   data[data == "NA"] <- NA
   out[[2]] <- data
   data_b <- data
-  data_b_pivo <- data_b %>% tidyr::pivot_longer(cols=11:77,
+  data_b_pivo <- data_b %>% tidyr::pivot_longer(cols=11:ncol(data_b),
                                                 names_to = "Analito",
                                                 values_to = "Valor")
   # data_b_pivo$Valor <- gsub(",", ".", data_b_pivo$Valor, fix=TRUE)

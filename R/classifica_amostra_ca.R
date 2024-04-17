@@ -30,11 +30,9 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
 
   # Prepara os dataframes de dados analíticos
   df_list <- transforma_dados_05ld(df_new)
-  df_brutos_orig <- df_list[[1]]
-  df_brutos_orig <- df_brutos_orig[!is.na(df_brutos_orig$FOLHA),]
-  df_brutos <- df_list[[2]]
+  df_brutos <- df_new
   df_brutos <- df_brutos[!is.na(df_brutos$FOLHA),]
-  data_transf <- df_list[[3]]
+  data_transf <- df_list[[1]]
   data_transf <- data_transf[!is.na(data_transf$FOLHA),]
 
   ## Gera planilhas com resultados da classificação-----------------------------
@@ -614,29 +612,6 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
     paste0(dir_out, "Dados_areas/TODAS/dados_arrumados_transf.csv"),
     row.names = F
   )
-
-  # Dados brutos originais
-  # Filtra só linhas com amostras
-  df_brutos_orig <- df_brutos_orig[df_brutos_orig$NLAB %in% data_transf$NLAB, ]
-   write.csv2(
-    df_brutos_orig,
-    paste0(dir_out, "Dados_areas/TODAS/dados_brutos_originais.csv"),
-    row.names = F
-  )
-   # Cria dados espaciais
-   df_brutos_orig_st <-
-     sf::st_as_sf(df_brutos_orig,
-                  coords = c("LONGITUDE", "LATITUDE"),
-                  crs = r)
-
-    # Salva dados espaciais
-     sf::st_write(
-     df_brutos_orig_st,
-     paste0(dir_out, "Dados_areas/TODAS/dados_brutos_orig.shp"),
-     driver = "ESRI Shapefile",
-     delete_layer = TRUE, layer_options = "ENCODING=UTF-8"
-   )
-
 
   # Unifica os resultados dos dois laboratórios -------------------------------
    ## Dados Analíticos

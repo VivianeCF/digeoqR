@@ -114,7 +114,7 @@ prep_dados_brutos <- function(data){
   df_m <- df_m[!is.na(df_m$Q), ]
   df_a <- aggregate(df_m[, c( "Valor")],
                     by = list(Lab=df_m$Lab, FOLHA=df_m$FOLHA, Analito=df_m$Analito),
-                    FUN = min)
+                    FUN = max)
 
   colnames(df_a)[4] <- "Valor"
 

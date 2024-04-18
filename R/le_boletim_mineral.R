@@ -248,9 +248,7 @@ le_boletim_mineral <- function(dir_bol) {
   dfp <- do.call(plyr::rbind.fill, datalist5)
 
   # Retira colunas
-  # df <- df %>% dplyr::select(-"NUM_CAMPO")
-colnames(df)[!(colnames(df) %in% c("NA.2", "NUM_CAMPO"))]
-  # df <- df %>% dplyr::select(-"NA.2")
+  df <- df[,colnames(df)[!(colnames(df) %in% c("NA.2", "NUM_CAMPO"))]]
 
   # Coloca Boletim na última coluna
   df <- df %>% dplyr::relocate(BOLETIM, .after = last_col())

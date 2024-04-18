@@ -430,7 +430,7 @@ le_boletim_mineral <- function(dir_bol) {
   # Pivoteia os dados para forma de linhas extendidas
   dfpct_pivo <-  dfpct %>%
     tidyr::pivot_longer(
-      cols = 5:ncol(dfpct),
+      cols = 4:ncol(dfpct),
       names_to = "analito",
       values_to = "valor"
     )

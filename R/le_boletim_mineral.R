@@ -269,7 +269,7 @@ le_boletim_mineral <- function(dir_bol) {
 
   # Pivoteia a tabela do boletim
   df1 <- df %>%
-    tidyr::pivot_longer(cols = 4:(ncol(df) - 1),
+    tidyr::pivot_longer(cols = 3:(ncol(df) - 1),
                         names_to = "analito",
                         values_to = "valor")
 

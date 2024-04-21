@@ -140,7 +140,7 @@ prep_dados_brutos <- function(data){
   # Agrupa valores qualificados e e retém valor máximo no campo Valor
   df_a <- aggregate(df_m[, c( "Valor")],
                     by = list(Lab=df_m$Lab, FOLHA=df_m$FOLHA, Analito=df_m$Analito),
-                    FUN = max)
+                    FUN = min)
 
   # Atibui nome da coluna Valor
   colnames(df_a)[4] <- "Valor"

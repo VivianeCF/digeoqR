@@ -162,8 +162,6 @@ prep_dados_brutos <- function(data){
   df_q <- do.call(rbind,df)
   # Seleciona linhas dos dados não qualificados
 
-  #df_n <- data_b_pivo[data_b_pivo$NLAB %in% df_q$NLAB,] # deveria ser !
-
   # Une linhas com dados qualificados e não qualificados
   df_long <- rbind(df_q, df_n)
 
@@ -177,9 +175,9 @@ prep_dados_brutos <- function(data){
   df_long$Count <- 1
 
   # Retira dados agrupados pelo número de dados >5
-  df_long <- df_long %>% group_by(c(FOLHA, Lab, Analito)) %>%
-    mutate(Var=sum(Count)) %>%
-    filter(Var>5) %>% select(c(-Var, -Count))
+  df_long <- df_long %>% dplyr::group_by(FOLHA, Lab, Analito) %>%
+    dplyr::mutate(Var=sum(Count)) %>%
+    dplyr::filter(Var>5) %>% dplyr::select(c(-Var, -Count))
 
   # Ordena pelo NLAB
   df_long <- df_long[order(df_long$NLAB),]

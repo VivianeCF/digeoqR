@@ -62,8 +62,8 @@ prep_dados_brutos <- function(data){
 
   # Códigos simplificados de cada método
   Lab <- c("AA", "AA", "AA", "COL", "AA", "AA", "EE", "AA", "IE", "IE", "EE",
-           "EE", "AA", "AA", "AA", "AA", "IE", "AA", "AA", "CR", "EE", "FA",
-           "EE", "IE", "EE", "", "EE", "FA", "FA", "AA", "EE", "EE", "EE",
+           "EE", "AA", "AA", "AA", "AA", "IE", "AA", "AA", "CR", "EE", "EE",
+           "EE", "IE", "EE", "", "EE", "EE", "EE", "AA", "EE", "EE", "EE",
            "EE", "EE", "EE", "AA")
   # Lista da relação método original e código simplificado
   bb_lab <- data.frame(Lab_orig, Lab)

@@ -672,10 +672,10 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
                 delete_layer = TRUE, layer_options = "ENCODING=UTF-8" )
 
    # Dados analiticos shapes
-   daessp1 <- st_read(path5, "dados_analiticos_LAB_AA")
-   daessp2 <- st_read(path6, "dados_analiticos_LAB_EE")
+   daessp1 <- sf::st_read(path5, "dados_analiticos_LAB_AA")
+   daessp2 <- sf::st_read(path6, "dados_analiticos_LAB_EE")
    daessp <- do.call(rbind, list(daessp1,daessp2))
-   st_write(daessp,"outputs/CA1/Processadas/dados_quimicos_sc.shp",
+   sf::st_write(daessp,"outputs/CA1/Processadas/dados_quimicos_sc.shp",
             delete_layer = TRUE, layer_options = "ENCODING=UTF-8" )
 
    # Dados Analiticos processados

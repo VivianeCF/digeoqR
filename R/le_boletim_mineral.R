@@ -181,7 +181,7 @@ le_boletim_mineral <- function(dir_bol) {
     colnames(condicoes_analiticas) <- nome2
     colnames(condicoes_preparacao) <- nome2
 
-
+  analito <- analito[!is.na(analito)]
 
     nome <-
       c("SEQ", "NUM_CAMPO", "N_LAB", fracao, analito, "SEQ", "BOLETIM")

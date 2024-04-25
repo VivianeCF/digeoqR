@@ -184,7 +184,7 @@ le_boletim_mineral <- function(dir_bol) {
 
 
     nome <-
-      c("SEQ", "NUM_CAMPO", "N_LAB", fracao, analito,  "BOLETIM")
+      c("SEQ", "NUM_CAMPO", "N_LAB", fracao, analito, "SEQ", "BOLETIM")
 
     nome <- toupper(nome)
 
@@ -195,6 +195,8 @@ le_boletim_mineral <- function(dir_bol) {
             2, as.numeric)
 
     boletim <- boletim[,-4:-(length(fracao) + 3)]
+
+    boletim <- boletim[,c("SEQ", "NUM_CAMPO", "N_LAB", analito,"BOLETIM") ]
 
     # Cria tabela com informações do boletim
     info_boletim <- data.frame(

@@ -146,7 +146,7 @@ le_boletim_mineral <- function(dir_bol) {
     numero_po <- stringr::str_split(numero_po, " ", simplify = TRUE)
     lote <-  numero_po[1]
     ra <- numero_po[length(numero_po)]
-    analito <- as.character(t(df_tudo[17, (17 + ad):n - 1]))
+    analito <- as.character(t(df_tudo[17, (17 + ad):(n - 1)]))
     analito[1:3] <- c("OURO_05", "OURO_05_1", "OURO_1")
     metodo <- as.character(rep(analise, length(analito)))
     metodo_prep <- rep("", length(fracao))

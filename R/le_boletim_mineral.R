@@ -162,6 +162,13 @@ le_boletim_mineral <- function(dir_bol) {
 
     boletim <- boletim[!is.na(boletim[, 3]),]
 
+    nome <-
+      c("SEQ", "NUM_CAMPO", "N_LAB", fracao, analito, "SEQ", "BOLETIM")
+
+    nome <- toupper(nome)
+
+    colnames(boletim) <- nome
+
     job_boletim <- as.character(rep(n_job, nrow(boletim)))
 
     boletim <- cbind(boletim, job_boletim)
@@ -184,12 +191,6 @@ le_boletim_mineral <- function(dir_bol) {
 
 
 
-    nome <-
-      c("SEQ", "NUM_CAMPO", "N_LAB", fracao, analito, "SEQ", "BOLETIM")
-
-    nome <- toupper(nome)
-
-    colnames(boletim) <- nome
     preparacao <- boletim[, 1:(14 + ad)]
     preparacao[, 4:ncol(preparacao)] <-
       apply(preparacao[, 4:ncol(preparacao)],

@@ -148,6 +148,7 @@ le_boletim_mineral <- function(dir_bol) {
     ra <- numero_po[length(numero_po)]
     analito <- as.character(t(df_tudo[17, (17 + ad):(n - 1)]))
     analito[1:3] <- c("OURO_05", "OURO_05_1", "OURO_1")
+    analito <- analito[!is.na(analito)]
     metodo <- as.character(rep(analise, length(analito)))
     metodo_prep <- rep("", length(fracao))
     unidades <- rep("pct", length(analito))
@@ -181,7 +182,7 @@ le_boletim_mineral <- function(dir_bol) {
     colnames(condicoes_analiticas) <- nome2
     colnames(condicoes_preparacao) <- nome2
 
-  analito <- analito[!is.na(analito)]
+
 
     nome <-
       c("SEQ", "NUM_CAMPO", "N_LAB", fracao, analito, "SEQ", "BOLETIM")

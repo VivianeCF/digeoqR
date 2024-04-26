@@ -279,6 +279,7 @@ modela_bacias <- function(fase = 2,
   bacias_area$Area_sqm <-
     as.numeric(round(sf::st_area(bacias_area) / 1000000, 0))
   # Calcula área
+  sf::st_crs(bacias_area) <- EPSG
   sf::write_sf(bacias_area,
                paste0(dir_out,
                       "bacias_area", "_", abrev_classe[classe_am],".shp"),
@@ -305,6 +306,7 @@ modela_bacias <- function(fase = 2,
     # Arruma a sequência do campo VALUE
     pontos$VALUE <- seq(1:nrow(pontos))
     bacias_area$VALUE <- seq(1:nrow(bacias_area))
+    sf::st_crs(bacias_area) <- EPSG
     sf::write_sf(bacias_area,
                  paste0(dir_out, "bacias_area_plan.shp"),
                  delete_layer = TRUE)
@@ -341,6 +343,7 @@ modela_bacias <- function(fase = 2,
     out[[3]] <- bacias_area
     output_bacias <- "bacias"
     bacias <- sf::read_sf(paste0(wbt_wd, output_bacias, ".shp"))
+    sf::st_crs(bacias) <- EPSG
     sf::write_sf(bacias, paste0(dir_out, output_bacias, "_", abrev_classe[classe_am], ".shp"), delete_layer = TRUE)
     out[[4]] <- bacias
   }

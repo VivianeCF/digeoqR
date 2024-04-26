@@ -12,6 +12,8 @@ modela_bacias(
   gera_est,
   ex_campo,
   classe_am,
+  fonte_shp = FALSE,
+  arquivo_shp,
   bacia_minima = 4,
   bacia_maxima = 100,
   threshold = 250,
@@ -32,12 +34,16 @@ modela_bacias(
 \item{bases_model}{Bases para a modelagem das bacias e drenagem pela
 função gera_bases_model}
 
-\item{gera_est}{}
+\item{gera_est}{Objeto da saída da função gera_estacoes}
 
 \item{ex_campo}{Dados de campo extraídos pela função extrai_dados_campo}
 
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo}
+
+\item{fonte_shp}{Valor lógico se oas esstações forem shapefile}
+
+\item{arquivo_shp}{Caso for shape fornecer o caminho do arquivo}
 
 \item{bacia_minima}{Área mínima das bacias planejadas}
 
@@ -52,6 +58,8 @@ corrente, 3 = rocha, 4 = solo}
 \item{max_ordem}{Máxima ordem do rio para a busca do snap point}
 
 \item{dir_out}{Diretório de saída}
+
+\item{wbt_wd}{diretório onde estão salvos os dados da modelagem do DEM}
 }
 \value{
 Rasters da preparação das imagens para a extração do modelo de

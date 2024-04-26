@@ -19,7 +19,10 @@
 #' @param bases_model Bases para a modelagem das bacias e drenagem pela
 #' função gera_bases_model
 #' @param ex_campo Dados de campo extraídos pela função extrai_dados_campo
-#' @param gera_est
+#' @param gera_est Objeto da saída da função gera_estacoes
+#' @param fonte_shp Valor lógico se oas esstações forem shapefile
+#' @param arquivo_shp Caso for shape fornecer o caminho do arquivo
+#' @param wbt_wd diretório onde estão salvos os dados da modelagem do DEM
 #'
 #' @return Rasters da preparação das imagens para a extração do modelo de
 #' drenagem. Shapes e rasters das drenagens e trechos drenagems com as ordens
@@ -32,6 +35,7 @@
 modela_bacias <- function(fase = 2,
                           EPSG = 4326, dem, bases_model, gera_est,
                           ex_campo, classe_am,
+                          fonte_shp = FALSE, arquivo_shp,
                           bacia_minima = 4,
                           bacia_maxima = 100,
                           threshold = 250,
@@ -174,17 +178,21 @@ modela_bacias <- function(fase = 2,
 # }
   ### GERA BACIAS A PARTIR DOS PONTOS ------------------------------
  ## Lê estaçoes da área do projeto
- if(fase == 1){
-   wbt_wd <- gera_est[[5]]
-   sf::write_sf(gera_est[["estacoes geradas"]],
-                paste0(wbt_wd,  "estacoes.shp"))
+  if (fase == 1) {
+    wbt_wd <- gera_est[[5]]
+    sf::write_sf(gera_est[["estacoes geradas"]],
+                 paste0(wbt_wd,  "estacoes.shp"))
+  } else{
+    if (fonte_shp == FALSE) {
+      pontos <- ex_campo[["estações"]]
+    } else {
+      pontos <-  sf::read_sf(arquivo_shp)
+      sf::st_transform(pontos, crs = EPSG)
+    }
+    pontos <- pontos[pontos$CLASSE == nm_classe[classe_am],]
+    sf::write_sf(pontos, paste0(wbt_wd,  "estacoes.shp"))
+  }
 
- } else{
-  pontos <- ex_campo[["estações"]]
-  pontos <- pontos[pontos$CLASSE == nm_classe[classe_am], ]
-  sf::write_sf(pontos, paste0(wbt_wd,  "estacoes.shp"))
-
-}
   # Desloca pontos para a drenagem
   ## Snap metodo Jenson
   stream <- "network_d8.tif"

@@ -40,6 +40,8 @@ prepara_legenda <- function(feicao_rec, dir_out,
   # Arruma campo col_hex
   legenda_geo[nchar(legenda_geo$col_hex) == 6, "col_hex"] <-
     gsub("#", "#0", legenda_geo[nchar(legenda_geo$col_hex) == 6, "col_hex"])
+  legenda_geo[nchar(legenda_geo$col_hex) == 5, "col_hex"] <-
+    gsub("#", "#00", legenda_geo[nchar(legenda_geo$col_hex) == 5, "col_hex"], fixed = TRUE)
 
   # Ordena pela idade mínima
   legenda_geo <- legenda_geo[order(legenda_geo$"IDADE_MIN"), ]

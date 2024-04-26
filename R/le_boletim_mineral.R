@@ -167,11 +167,11 @@ le_boletim_mineral <- function(dir_bol) {
 
     nome <- toupper(nome)
 
-    colnames(boletim) <- nome
-
     job_boletim <- as.character(rep(n_job, nrow(boletim)))
 
     boletim <- cbind(boletim, job_boletim)
+
+    colnames(boletim) <- nome
 
     # Cria tabela das condições analíticas
     condicoes_analiticas <-
@@ -198,7 +198,7 @@ le_boletim_mineral <- function(dir_bol) {
 
     boletim <- boletim[,-4:-(length(fracao) + 3)]
 
-    boletim <- boletim[,c("SEQ", "NUM_CAMPO", "N_LAB", analito,"BOLETIM") ]
+    boletim <- boletim[,toupper(c("SEQ", "NUM_CAMPO", "N_LAB", analito,"BOLETIM")) ]
 
     # Cria tabela com informações do boletim
     info_boletim <- data.frame(

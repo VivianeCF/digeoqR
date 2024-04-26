@@ -34,6 +34,9 @@ prepara_legenda <- function(feicao_rec, dir_out,
                              legenda,
                              by = "SIGLA")
 
+  # Retira valores nulos
+  legenda_geo <- legenda_geo[!is.na(legenda_geo$col_hex),]
+
   # Arruma campo col_hex
   legenda_geo[nchar(legenda_geo$col_hex) == 6, "col_hex"] <-
     gsub("#", "#0", legenda_geo[nchar(legenda_geo$col_hex) == 6, "col_hex"])

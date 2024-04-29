@@ -10,6 +10,7 @@ intersecta_bacias(
   bases_model,
   bacias,
   feicao_rec,
+  lista_legenda,
   tipo_leg = 2,
   estacoes,
   classe_am = 2,
@@ -17,12 +18,18 @@ intersecta_bacias(
 )
 }
 \arguments{
+\item{dir_in}{diretório de entrada}
+
 \item{dir_out}{Diretório de saída onde serão gravados as planilhas .csv}
+
+\item{bases_model}{Saída da função gera_bases_model}
 
 \item{bacias}{bacias obtidas a partir da função gera_bacias}
 
 \item{feicao_rec}{polígonos de algum tema (geologia,
 solo, geofísica, geomorfologia, etc)}
+
+\item{lista_legenda}{Saída da função prepara_legenda}
 
 \item{tipo_leg}{Tipo de legenda 1= pela SIGLA 2 = pelo RANGE}
 
@@ -31,9 +38,7 @@ solo, geofísica, geomorfologia, etc)}
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 corrente, 3 = rocha, 4 = solo, 5 = água}
 
-\item{nome_xml}{}
-
-\item{limite}{Limite da área do projeto}
+\item{nome_xmlnome}{do arquivo xml}
 }
 \value{
 Bacias

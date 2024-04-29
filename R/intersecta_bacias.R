@@ -3,7 +3,6 @@
 #' Cada bacia é recortada pelos polígonos da geologia. Esta função está
 #' configurada para a shape do mapa geológico ao milhonésimo 2014 do SGB-CPRM.
 #'
-#' @param limite Limite da área do projeto
 #' @param bacias bacias obtidas a partir da função gera_bacias
 #' @param feicao_rec polígonos de algum tema (geologia,
 #' solo, geofísica, geomorfologia, etc)
@@ -12,8 +11,10 @@
 #' @param tipo_leg Tipo de legenda 1= pela SIGLA 2 = pelo RANGE
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
 #'   corrente, 3 = rocha, 4 = solo, 5 = água
-#' @param dir_in
-#' @param nome_xml
+#' @param dir_in diretório de entrada
+#' @param nome_xmlnome do arquivo xml
+#' @param bases_model Saída da função gera_bases_model
+#' @param lista_legenda Saída da função prepara_legenda
 #'
 #' @return
 #' Bacias
@@ -24,7 +25,7 @@
 intersecta_bacias <- function(dir_in = "inputs/campo/",
                               dir_out = "outputs/", bases_model,
                               bacias,
-                              feicao_rec,
+                              feicao_rec, lista_legenda,
                               tipo_leg = 2,
                               estacoes,
                               classe_am = 2,
@@ -73,9 +74,7 @@ if(tipo_leg == 2){
     dplyr::summarize()
 }
 
-  legenda <- prepara_legenda(feicao_rec, dir_out,
-                             dir_in , nome_xml)
-  codlito <- legenda[[tipo_leg]]
+  codlito <- lista_legenda[[tipo_leg]]
 
   mydata <- estacoes
 

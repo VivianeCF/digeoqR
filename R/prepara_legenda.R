@@ -49,7 +49,7 @@ prepara_legenda <- function(feicao_rec, dir_out,
   # Gera códigos para cada SIGLA
   legenda_geo$Geo_Reg <- 1:nrow(legenda_geo)
   # Arruma nomes das colunas
-  df <- legenda_geo[, c("SIGLA", "NOME", "ERA_MIN", "col_hex", "Geo_Reg")]
+  df <- legenda_geo[, c("SIGLA", "NOME", "ERA_MAX", "col_hex", "Geo_Reg")]
   colnames(df)[2:5] <- c("DESCRICAO", "IDADE", "RGB", "Geo_cod")
   out[[1]] <- df
 
@@ -79,7 +79,7 @@ prepara_legenda <- function(feicao_rec, dir_out,
     dplyr::group_by(RANGE) %>%
     dplyr::mutate(LITOTIPOS = paste0(LITOTIPOS, collapse = ", "))
 
-  df <- df[, c("RANGE", "LITOTIPOS", "ERA_MIN", "col_hex2", "Geo_Reg2")]
+  df <- df[, c("RANGE", "LITOTIPOS", "ERA_MAX", "col_hex2", "Geo_Reg2")]
   df <- unique(df)
 
   colnames(df)[c(1,2:5)] <- c("SIGLA","DESCRICAO", "IDADE", "RGB", "Geo_cod")

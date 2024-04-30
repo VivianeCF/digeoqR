@@ -47,7 +47,7 @@ recorta_feicao_area <- function(dir_in = "inputs/campo/",
     sf_geo <- dplyr::left_join(nc_dissolve,df_geo, by= chave)
     # ggplot2::ggplot(nc_dissolve) + ggplot2::geom_sf(fill = "grey")
 
-    sf::write_sf(sf_geo, paste0(dir_out, feicao_out,"_", chave, ".shp"),
+    sf::write_sf(sf_geo, paste0(dir_out, feicao_out,"_", "area", ".shp"),
                   delete_layer = TRUE)
 
     return(sf_geo)

@@ -87,6 +87,7 @@ prepara_legenda <- function(feicao_rec, dir_out,
   # Retira nomes de litotipos iguais da descrição em cada RANGE
   df$DESCRICAO <- sapply(strsplit(df$DESCRICAO, ", "),
                          function(x) paste(unique(x), collapse = ", "))
+  df <- df[!is.na(df$SIGLA),]
   out[[2]] <- df
 
   return(out)

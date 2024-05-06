@@ -656,32 +656,30 @@ classifica_amostra_ca <- function(dir_out, file = "sc_tidy.csv"){
    write.csv2(sum,paste0(dir_out,"Processadas/sumario.csv"))
 
    ## Shapes destaques
-   path5 <- paste0(dir_out,"Classificadas/AA")
-   path6 <- paste0(dir_out,"Classificadas/EE")
-   destsp1 <- sf::st_read(path5, "destaque_LAB_AA" )
-   destsp2 <- sf::st_read(path6, "destaque_LAB_EE")
+   destsp1 <- sf::st_read(path3, "destaque_LAB_AA" )
+   destsp2 <- sf::st_read(path4, "destaque_LAB_EE")
    destsp <- do.call(rbind, list(destsp1,destsp2))
    sf::st_write(destsp,paste0(dir_out,"Processadas/destaque.shp"),
                 append=FALSE, layer_options = "ENCODING=UTF-8" )
 
    ## Shapes destaques todas
-   desttsp1 <- sf::st_read(path5, "destaque_todas_LAB_AA" )
-   desttsp2 <- sf::st_read(path6, "destaque_todas_LAB_EE")
+   desttsp1 <- sf::st_read(path3, "destaque_todas_LAB_AA" )
+   desttsp2 <- sf::st_read(path4, "destaque_todas_LAB_EE")
    desttsp <- do.call(rbind, list(desttsp1,desttsp2))
    sf::st_write(desttsp,paste0(dir_out,"Processadas/destaque_todas.shp"),
                 delete_layer = TRUE, layer_options = "ENCODING=UTF-8" )
 
    # Dados analiticos shapes
-   daessp1 <- sf::st_read(path5, "dados_analiticos_LAB_AA")
-   daessp2 <- sf::st_read(path6, "dados_analiticos_LAB_EE")
+   daessp1 <- sf::st_read(path3, "dados_analiticos_LAB_AA")
+   daessp2 <- sf::st_read(path4, "dados_analiticos_LAB_EE")
    daessp <- do.call(rbind, list(daessp1,daessp2))
-   sf::st_write(daessp,"outputs/CA1/Processadas/dados_quimicos_sc.shp",
+   sf::st_write(daessp,paste0(dir_out,"Processadas/dados_quimicos_sc.shp"),
             delete_layer = TRUE, layer_options = "ENCODING=UTF-8" )
 
    # Dados Analiticos processados
    daes1 <- read.csv2(paste0(path3, "dados_analiticos_LAB_AA.csv"), colClasses = "character")
    daes2 <- read.csv2(paste0(path4, "dados_analiticos_LAB_EE.csv"), colClasses = "character")
    daes = rbind(daes1, daes2)
-   write.csv2(daes,"outputs/CA1/Processadas/dados_quimicos_sc.csv", row.names = F)
+   write.csv2(daes,paste0(dir_out, "Processadas/dados_quimicos_sc.csv"), row.names = F)
 
 }

@@ -58,13 +58,28 @@ prep_dados_brutos <- function(data){
                  "SCR33",
                  "ICM40B",
                  "ICP-AES",
-                 "AAS19V")
+                 "AAS19V",
+                 "Absorção Atômica - Água Régia a Quente",
+                 "Ultratrace - Água régia",
+                 "ICP/AES - Quantitativa/Pre-Concentração",
+                 "Absorção Atômica - HNO3 a quente",
+                 "Absorção Atômica/Geração de Hidretos - Água régia a quente",
+                 "Fluorescência de raio X - Fusão metaborato",
+                 "Infravermelho via LECO - Enxofre total via LECO",
+                 "Volumetria - Quantitativo",
+                 "Gravimetria",
+                 "Determinador LECO - Pastilha prensada",
+                 "Medidor de Íon Específico - EDTA a frio",
+                 "Absorção Atômica - Semiquantitativa",
+                 "Colorimetria - Semiquantitativa",
+                 "ICP-MS - Digestão água régia")
 
   # Códigos simplificados de cada método
   Lab <- c("AA", "AA", "AA", "COL", "AA", "AA", "EE", "AA", "IE", "IE", "EE",
            "EE", "AA", "AA", "AA", "AA", "IE", "AA", "AA", "CR", "EE", "EE",
            "EE", "IE", "EE", "", "EE", "EE", "EE", "AA", "EE", "EE", "EE",
-           "EE", "EE", "EE", "AA")
+           "EE", "EE", "EE", "AA", "AA", "EE", "EE", "AA", "AA", "FX", "IL",
+           "VQ", "GV", "IL", "IE", "AA", "COL", "EE")
   # Lista da relação método original e código simplificado
   bb_lab <- data.frame(Lab_orig, Lab)
   # Une dados a lista acima pelo método original

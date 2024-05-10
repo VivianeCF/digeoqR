@@ -2,13 +2,15 @@
 % Please edit documentation in R/zcut_ca.R
 \name{zcut_ca}
 \alias{zcut_ca}
-\title{Title}
+\title{Gera os limiares C-A}
 \usage{
 zcut_ca(x, a)
 }
 \arguments{
-\item{x}{}
+\item{x}{vetor numérico}
+
+\item{a}{vetor com áreas das bacias}
 }
 \description{
-Title
+Gera os limiares C-A
 }

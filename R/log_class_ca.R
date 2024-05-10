@@ -1,6 +1,7 @@
-#' Title
+#' Classifica pela C-A
 #'
-#' @param x
+#' @param x vetor numérico
+#' @param a vetor com áreas das bacias
 #'
 #' @return
 #' @export

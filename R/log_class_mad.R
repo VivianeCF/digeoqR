@@ -1,6 +1,6 @@
-#' Title
+#' Classifica pelo MAD
 #'
-#' @param x
+#' @param x vetor numérico > 0
 #'
 #' @return
 #' @export

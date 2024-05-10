@@ -2,13 +2,13 @@
 % Please edit documentation in R/log_class_mmad.R
 \name{log_class_mmad}
 \alias{log_class_mmad}
-\title{Title}
+\title{Classifica pelo MAD}
 \usage{
 log_class_mmad(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{vetor numérico > 0}
 }
 \description{
-Title
+Classifica pelo MAD
 }

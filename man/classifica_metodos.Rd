@@ -9,11 +9,15 @@ classifica_metodos(tipo_proc, mtd_class, lito_bacia, elem_val, base, nbc = 10)
 \arguments{
 \item{tipo_proc}{Tipo de processamento 1 = geral 2 = por unidades}
 
-\item{mtd_class}{}
+\item{mtd_class}{Método de classificação 1 = MAD 2 = TIF 3 = C-A}
+
+\item{lito_bacia}{Saída do intersecta_bacias}
 
 \item{elem_val}{Elementos válidos}
 
 \item{base}{Base de dados preparada}
+
+\item{nbc}{Número mínimo de bacias por litologia}
 }
 \description{
 Métodos de classificação de dados geoquímicos

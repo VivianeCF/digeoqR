@@ -1,6 +1,7 @@
-#' Title
+#' Gera os limiares C-A
 #'
-#' @param x
+#' @param x vetor numérico
+#' @param a vetor com áreas das bacias
 #'
 #' @return
 #' @export
@@ -8,15 +9,13 @@
 #' @examples
 zcut_ca <- function (x, a) {
   df <- data.frame(x,a)
-  # df <- df[!is.na(df$a),]
-  # df <- na.omit(df)
   df <- df[order(df$x, decreasing = TRUE),]
   df <- unique(df)
 
   df <- df %>%
     dplyr::mutate(cum_area = cumsum(a))
 
-  # # condição de redução
+  # Condição de redução
   f = nrow(df)
   if (nrow(df) > 200) {
     f = 55
@@ -27,7 +26,7 @@ zcut_ca <- function (x, a) {
       dplyr::summarise(mean_value = mean(x), mean_area = mean(cum_area))
   df_sum <- df_sum[!duplicated(df_sum$mean_value), ]
 
-  # transformação logarítmica
+  # Transformação logarítmica
   y <- round(log10(df_sum$mean_area), 3)
   x <- round(log10(df_sum$mean_value), 3)
   model <- data.frame(x,y)
@@ -37,7 +36,8 @@ zcut_ca <- function (x, a) {
   o <- lm(y ~ x)
   plot(x,y)
   if(length(x) <= 20){ npsi = 3}else{ npsi =  4}
-  # segmentação
+
+  # Segmentação
   os <- segmented::segmented(o, seg.Z= ~x, npsi = npsi,
                                 control = segmented::seg.control(it.max = 100, h = 0.1,
                                                                  display = FALSE,
@@ -45,6 +45,5 @@ zcut_ca <- function (x, a) {
 
 
   zcut <- unique(10 ^ (os[["indexU"]][["x"]]))
-   # if(npsi == 1){zcut <- c(-Inf, zcut, Inf)}
   zcut
 }

@@ -2,13 +2,15 @@
 % Please edit documentation in R/log_class_ca.R
 \name{log_class_ca}
 \alias{log_class_ca}
-\title{Title}
+\title{Classifica pela C-A}
 \usage{
 log_class_ca(x, a)
 }
 \arguments{
-\item{x}{}
+\item{x}{vetor numérico}
+
+\item{a}{vetor com áreas das bacias}
 }
 \description{
-Title
+Classifica pela C-A
 }

@@ -1,6 +1,6 @@
-#' Calcula as quebras do booxplot
+#' Gera limiares TIF
 #'
-#' @param x
+#' @param x vetor numérico > 0
 #'
 #' @return
 #' @export

@@ -2,13 +2,13 @@
 % Please edit documentation in R/zcut_bxp.R
 \name{zcut_bxp}
 \alias{zcut_bxp}
-\title{Calcula as quebras do booxplot}
+\title{Gera limiares TIF}
 \usage{
 zcut_bxp(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{vetor numérico > 0}
 }
 \description{
-Calcula as quebras do booxplot
+Gera limiares TIF
 }

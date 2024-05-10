@@ -2,13 +2,13 @@
 % Please edit documentation in R/zcut_mmad.R
 \name{zcut_mmad}
 \alias{zcut_mmad}
-\title{Title}
+\title{Gera os limiares MAD}
 \usage{
 zcut_mmad(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{vetor numérico > 0}
 }
 \description{
-Title
+Gera os limiares MAD
 }

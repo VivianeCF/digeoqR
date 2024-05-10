@@ -3,9 +3,9 @@
 #' @param tipo_proc Tipo de processamento 1 = geral 2 = por unidades
 #' @param elem_val Elementos válidos
 #' @param base Base de dados preparada
-#' @param lito_bacia
-#' @param nbc
-#' @param mtd_class
+#' @param lito_bacia Saída do intersecta_bacias
+#' @param nbc Número mínimo de bacias por litologia
+#' @param mtd_class Método de classificação 1 = MAD 2 = TIF 3 = C-A
 #'
 #' @return
 #' @export

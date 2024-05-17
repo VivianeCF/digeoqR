@@ -85,7 +85,7 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
   # ## Remove duplicatas, mantendo o valor máximo
   df <- df_lbx %>%
     dplyr::group_by(log_teor) %>%
-    dplyr::summarise_at(vars(matches("id")), list(~max(., na.rm = TRUE)))
+    dplyr::summarise_at(dplyr::vars(matches("id")), list(~max(., na.rm = TRUE)))
 
   df_lbx <- data.frame(df)
 

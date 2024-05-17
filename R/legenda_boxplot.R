@@ -210,7 +210,7 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
     ggplot2::stat_boxplot(data = dados2, geom ='errorbar', width = 0.1, lwd = 0.2) +
     ggplot2::geom_boxplot(data = dados2, width = 0.2, position = "dodge",
                  outlier.size=0.5, lwd = 0.2) +
-    theme_void() +
+    ggplot2::theme_void() +
     ln_ucc +
     bp_Theme +
     ggplot2::geom_point(data = dados1, cex = 2.8, pch = 22, bg = pal_cod[sby_id-1]) +

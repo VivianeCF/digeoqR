@@ -1,4 +1,4 @@
-#' Title
+#' Legenda boxplot para o mapa TIF
 #'
 #' @param data Dados analíticos em csv
 #' @param job_info Informações das condições analíticas

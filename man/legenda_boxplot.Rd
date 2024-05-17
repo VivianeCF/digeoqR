@@ -2,7 +2,7 @@
 % Please edit documentation in R/legenda_boxplot.R
 \name{legenda_boxplot}
 \alias{legenda_boxplot}
-\title{Title}
+\title{Legenda boxplot para o mapa TIF}
 \usage{
 legenda_boxplot(data = "mydata.csv", job_info = "myjob.csv", eq = "Ni")
 }
@@ -14,5 +14,5 @@ legenda_boxplot(data = "mydata.csv", job_info = "myjob.csv", eq = "Ni")
 \item{eq}{Elemento químico}
 }
 \description{
-Title
+Legenda boxplot para o mapa TIF
 }

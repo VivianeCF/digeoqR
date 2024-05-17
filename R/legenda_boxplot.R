@@ -172,9 +172,9 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
   #Controle UCC
   eq <- eq
   if(myjob[eq, "UCC"] > 0.001 & myjob[eq, "UCC"] <= 10^lmax ){
-    lb_ucc <- geom_text(aes(label = paste0(myjob[eq,1], ": UCC*"), x = 0.7,
+    lb_ucc <- ggplot2::geom_text(ggplot2::aes(label = paste0(myjob[eq,1], ": UCC*"), x = 0.7,
                             y = myjob[eq,1]), size = 3, colour="red")
-    ln_ucc <- geom_segment(aes(x=0,xend=0.5, y=myjob[eq, "UCC"],
+    ln_ucc <- ggplot2::geom_segment(ggplot2::aes(x=0,xend=0.5, y=myjob[eq, "UCC"],
                                yend = myjob[eq, "UCC"]),
                            colour = "red", linetype = "dotdash")
     pos <- c(pos,0.5)
@@ -183,16 +183,16 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
     rot_teor <- c(rot_teor, myjob[eq, "UCC"])
   }else
   {
-    ln_ucc <- geom_segment(aes(x = 0,xend = 0.5,y = 10^lmax, yend = 10^lmax),
+    ln_ucc <- ggplot2::geom_segment(ggplot2::aes(x = 0,xend = 0.5,y = 10^lmax, yend = 10^lmax),
                            colour = "transparent", linetype = "dotdash")
   }
 
 
   dados4 <- data.frame(pos, teor, rot_teor, rotulo_lim)
-  dados4 <- arrange(dados4, teor)
+  dados4 <- dplyr::arrange(dados4, teor)
 
   #Tema ggplot do boxplot
-  bp_Theme <- theme(axis.title.x = element_blank(),
+  bp_Theme <- ggplot2::theme(axis.title.x = element_blank(),
                     axis.title.y = element_blank(),
                     axis.text.x = element_blank(),
                     axis.text.y = element_blank(),
@@ -204,21 +204,21 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
 
 
 
-  bx  <- ggplot(NULL, aes(x= pos, y = teor)) +
-    geom_text(data=dados4, size= 3, aes(label = paste0(rot_teor, " ", rotulo_lim)),
+  bx  <- ggplot2::ggplot(NULL, ggplot2::aes(x= pos, y = teor)) +
+    ggplot2::geom_text(data=dados4, size= 3, ggplot2::aes(label = paste0(rot_teor, " ", rotulo_lim)),
               hjust = 0, check_overlap = TRUE) +
-    stat_boxplot(data = dados2, geom ='errorbar', width = 0.1, lwd = 0.2) +
-    geom_boxplot(data = dados2, width = 0.2, position = "dodge",
+    ggplot2::stat_boxplot(data = dados2, geom ='errorbar', width = 0.1, lwd = 0.2) +
+    ggplot2::geom_boxplot(data = dados2, width = 0.2, position = "dodge",
                  outlier.size=0.5, lwd = 0.2) +
     theme_void() +
     ln_ucc +
     bp_Theme +
-    geom_point(data = dados1, cex = 2.8, pch = 22, bg = pal_cod[sby_id-1]) +
-    # geom_point(data = dados1, cex = df_sb$cex1_cod, pch = df_sb$pch_cod,
+    ggplot2::geom_point(data = dados1, cex = 2.8, pch = 22, bg = pal_cod[sby_id-1]) +
+    # ggplot2::geom_point(data = dados1, cex = df_sb$cex1_cod, pch = df_sb$pch_cod,
     # col = "black", stroke = df_sb$lwd1_cod ) +
     xlim(-0.02, 1) +
-    scale_y_log10(limit = c(min(el_org), max(el_org))) +
-    ggtitle(myjob[eq, "UN"])
+    ggplot2::scale_y_log10(limit = c(min(el_org), max(el_org))) +
+    ggplot2::ggtitle(myjob[eq, "UN"])
 
   # bxg <- as.grob(bx)
   # pg <-as.grob(p2)

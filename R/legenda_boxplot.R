@@ -77,15 +77,15 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
 
   # Elimina a mediana
   df_lbx <- df_lbx %>%
-    filter(id != 0)
+    dplyr::filter(id != 0)
 
   # Ordena pelo id
-  df_lbx <- arrange( df_lbx, id)
+  df_lbx <- dplyr::arrange( df_lbx, id)
 
   # ## Remove duplicatas, mantendo o valor máximo
   df <- df_lbx %>%
-    group_by(log_teor) %>%
-    summarise_at(vars(matches("id")), list(~max(., na.rm = TRUE)))
+    dplyr::group_by(log_teor) %>%
+    dplyr::summarise_at(vars(matches("id")), list(~max(., na.rm = TRUE)))
 
   df_lbx <- data.frame(df)
 

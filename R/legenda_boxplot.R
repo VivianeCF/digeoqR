@@ -192,13 +192,13 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
   dados4 <- dplyr::arrange(dados4, teor)
 
   #Tema ggplot do boxplot
-  bp_Theme <- ggplot2::theme(axis.title.x = element_blank(),
-                    axis.title.y = element_blank(),
-                    axis.text.x = element_blank(),
-                    axis.text.y = element_blank(),
+  bp_Theme <- ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                    axis.title.y = ggplot2::element_blank(),
+                    axis.text.x = ggplot2::element_blank(),
+                    axis.text.y = ggplot2::element_blank(),
                     legend.position = "none",
-                    axis.ticks = element_blank(),
-                    plot.title = element_text(color="black",
+                    axis.ticks = ggplot2::element_blank(),
+                    plot.title = ggplot2::element_text(color="black",
                                               size=10, hjust = 0.5))
 
 

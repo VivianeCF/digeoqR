@@ -216,7 +216,7 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
     ggplot2::geom_point(data = dados1, cex = 2.8, pch = 22, bg = pal_cod[sby_id-1]) +
     # ggplot2::geom_point(data = dados1, cex = df_sb$cex1_cod, pch = df_sb$pch_cod,
     # col = "black", stroke = df_sb$lwd1_cod ) +
-    xlim(-0.02, 1) +
+    ggplot2::xlim(-0.02, 1) +
     ggplot2::scale_y_log10(limit = c(min(el_org), max(el_org))) +
     ggplot2::ggtitle(myjob[eq, "UN"])
 

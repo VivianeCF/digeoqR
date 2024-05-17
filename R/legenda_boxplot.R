@@ -218,7 +218,7 @@ legenda_boxplot <- function(data = "mydata.csv", job_info = "myjob.csv", eq = "N
     # col = "black", stroke = df_sb$lwd1_cod ) +
     ggplot2::xlim(-0.02, 1) +
     ggplot2::scale_y_log10(limit = c(min(el_org), max(el_org))) +
-    ggplot2::ggtitle(myjob[eq, "UN"])
+    ggplot2::ggtitle(paste0(eq," (", myjob[eq, "UN"], ")"))
 
   # bxg <- as.grob(bx)
   # pg <-as.grob(p2)

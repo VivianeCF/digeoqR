@@ -3,6 +3,7 @@
 export("%>%")
 export(arruma_boletins)
 export(arruma_dados_rigeo)
+export(arruma_os)
 export(classifica_amostra_ca)
 export(classifica_metodos)
 export(digits)

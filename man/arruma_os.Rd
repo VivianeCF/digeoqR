@@ -4,15 +4,10 @@
 \alias{arruma_os}
 \title{Arruma dados da OS}
 \usage{
-arruma_os(
-  dir_os = "Data/PG2024/Rocha/os_solicitada/",
-  doc_lab = "sgs-geosol_metodos-analiticos-03_2024.xlsx"
-)
+arruma_os(dir_os = "Data/PG2024/Rocha/os_solicitada/")
 }
 \arguments{
 \item{dir_os}{Diretório dos documentos de solicitação das OS}
-
-\item{doc_lab}{Documento das metodologias de análise do laboratório}
 }
 \description{
 Arruma dados da OS

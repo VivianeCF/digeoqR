@@ -1,7 +1,6 @@
 #' Arruma dados da OS
 #'
 #' @param dir_os Diretório dos documentos de solicitação das OS
-#' @param doc_lab Documento das metodologias de análise do laboratório
 #'
 #' @return
 #' @export

@@ -551,6 +551,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
       gsub("__", "_", colnames(tables_cb), fixed = TRUE)
     colnames(tables_cb) <- gsub("COL_TAN_", "COL_TAN", colnames(tables_cb),
                                 fixed = TRUE)
+    colnames(tables_cb) <- gsub("SILLIMANITA", "SILLIMAN", colnames(tables_cb),
+                                fixed = TRUE)
+    colnames(tables_cb) <- gsub("SILLIMAN", "SILLIMANITA", colnames(tables_cb),
+                                fixed = TRUE)
+    colnames(tables_cb) <- gsub("N_IDENT_", "N_IDENT", colnames(tables_cb),
+                                fixed = TRUE)
     colnames(tables_cb) <- gsub("CENTRO_CUS", "CENTRO_CUSTO",
                                 colnames(tables_cb),
                                 fixed = TRUE)
@@ -568,6 +574,12 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     minerais <- gsub("__", "_", minerais, fixed = TRUE)
     minerais <- gsub(",", "_", minerais, fixed = TRUE)
     minerais <- gsub("COL_TAN_", "COL_TAN", minerais, fixed = TRUE)
+    minerais <- gsub("SILLIMANITA", "SILLIMAN", minerais,
+                     fixed = TRUE)
+    minerais <- gsub("SILLIMAN", "SILLIMANITA", minerais,
+                     fixed = TRUE)
+    minerais <- gsub("N_IDENT_", "N_IDENT", minerais,
+                     fixed = TRUE)
     minerais <- unique(minerais)
 
     # Retira campos que não são minerais

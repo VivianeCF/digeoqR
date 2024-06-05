@@ -629,7 +629,7 @@ arruma_dados_rigeo <- function(folhas = "inputs/campo/folhas.shp",
     # Remodela para dados dos minerais ficar nas colunas
     df_cb_tidy <- dfp %>%
       tidyr::pivot_wider(names_from = Mineral,
-                         values_from = value)
+                         values_from = value, values_fn = max)
 
     # Cria uma chave única para cada amostra
     ID <- seq(1, nrow(df_cb_tidy))

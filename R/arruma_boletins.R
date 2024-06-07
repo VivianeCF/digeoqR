@@ -70,7 +70,7 @@ for (i in 1:length(list_bol)) {
       )
 
       df_adm <- df_tudo[1:10,]
-      df_an <- df[11:nrow(df),]
+      df_an <- df_tudo[11:nrow(df_tudo),]
       df_s <- df_an %>% tidyr::separate(V1, c("NLAB", "COD"), sep = " ") %>%
         dplyr::relocate(COD, .before = NLAB)
       df_s[!is.na(df_s$COD), "NLAB"]<- df_s[!is.na(df_s$COD), "COD"]

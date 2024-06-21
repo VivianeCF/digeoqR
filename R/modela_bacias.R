@@ -276,10 +276,11 @@ modela_bacias <- function(fase = 2,
 
   # # Salva bacias com os cálculos da área
   sf::sf_use_s2(FALSE)
-  bacias_area$Area_sqm <-
-    as.numeric(round(sf::st_area(bacias_area) / 1000000, 0))
   # Calcula área
   sf::st_crs(bacias_area) <- EPSG
+  bacias_area$Area_sqm <-
+    as.numeric(round(sf::st_area(bacias_area) / 1000000, 0))
+
   sf::write_sf(bacias_area,
                paste0(dir_out,
                       "bacias_area", "_", abrev_classe[classe_am],".shp"),

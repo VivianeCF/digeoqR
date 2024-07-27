@@ -38,7 +38,8 @@ gera_estacoes <-
     # dir.create(wbt_wd)
     stars::write_stars(dem,
                        file.path( wbt_wd, "srtm.tif"))
-    sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"\\","rios.shp"))
+    sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"\\","rios.shp"),
+                 delete_layer = TRUE )
     options("rgdal_show_exportToProj4_warnings" = "none")
 
     whitebox::wbt_rasterize_streams(
@@ -275,7 +276,7 @@ gera_estacoes <-
     out[[4]] <- pontos_area
     sf::write_sf(pontos_area,
                  paste0(dir_out, "estacoes_geradas.shp"),
-                 overwrite = TRUE)
+                 delete_layer = TRUE)
     out[[5]] <- wbt_wd
     names(out) <- c("stream sthraler", "stream model",
                     "mapa", "estacoes geradas")

@@ -199,7 +199,7 @@ modela_bacias <- function(fase = 2,
   output_snap <- "snappoints.shp"
 
   r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
-  # r[r > max_ordem] = NA
+  r <- r >= max_ordem
   stars::write_stars(r[r <= max_ordem], paste0(wbt_wd, "strahler_order_1_4.tif"))
 
   whitebox::wbt_jenson_snap_pour_points("estacoes.shp",

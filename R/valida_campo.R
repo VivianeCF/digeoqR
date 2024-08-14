@@ -158,7 +158,7 @@ pt_survey$geometry <- pt_survey$Shape
 merge_estacao <- dplyr::bind_rows(pt_survey, pt_ctr)
 
 dist_ctr <- merge_estacao %>%
-  arrange(nm_estacao, desc(layer)) %>%
+  dplyr:arrange(nm_estacao, desc(layer)) %>%
   dplyr::group_by(nm_estacao) %>%
   dplyr::mutate(
     study_coord = geometry[1],

@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-valida_campo <- function(path_ctr, path_base, base, layer_base, 
+valida_campo <- function(path_ctr, path_base, base, layer_base,
                          amostras, threshold, buffer ){
 out <- list()
   # Fonte de dados
@@ -23,8 +23,8 @@ df <- as.data.frame(sf)
 df <- df[!is.na(df$nu_ponto),]
 
 # Tem estações faltantes numa sequência
-df_miss <- df %>% mutate(vol=1) %>% group_by(id_coletor) %>% 
-  complete(nu_ponto = min(nu_ponto):max(nu_ponto), fill = list(vol = 0))
+df_miss <- df %>% dplyr::mutate(vol=1) %>% group_by(id_coletor) %>%
+  tidyr::complete(nu_ponto = min(nu_ponto):max(nu_ponto), fill = list(vol = 0))
 
 ## Mostre as estações faltantes
 faltantes <- df_miss[df_miss$vol == 0, c("nu_ponto", "id_coletor")]
@@ -51,7 +51,7 @@ if(nrow(estacao_dup) > 0){
 dist_points <-  sf::st_distance(sf)
 dist_points <- apply(dist_points, 2, as.numeric)
 colnames(dist_points) <- sf$nm_estacao
-rownames(dist_points) <- sf$nm_estacao  
+rownames(dist_points) <- sf$nm_estacao
 res_dist <- which(dist_points<=threshold & dist_points>0, arr.ind = T)
 res_dist[,"row"]
 estacao1 <- as.data.frame(sf[res_dist[,"col"],"nm_estacao"])[, "nm_estacao"]
@@ -96,7 +96,7 @@ if(nrow(amostras_dup) > 0){
 # out[[6]] <- estacoes_dup
 
 ## Conta numero de amostras por estações
-unida <- dplyr::full_join(df, am, by = join_by(uniquerowid == parentrowid))
+unida <- dplyr::full_join(df, am, by = dplyr::join_by(uniquerowid == parentrowid))
 contagem_amostras <- unida %>% group_by(nm_estacao) %>% count()
 out[[6]] <- contagem_amostras[!is.na(contagem_amostras$nm_estacao),]
 
@@ -109,14 +109,14 @@ if(length(am_sem_estacao) > 0){
   out[[7]] <- "Todas validadas"
 }
 ## Conta o número de amostras duplicadas
-am_repetidas <- am %>% group_by(cd_numero_campo) %>% count()
+am_repetidas <- am %>% dplyr::group_by(cd_numero_campo) %>% count()
 
 if(nrow(am_repetidas) > 0){
   out[[8]] <- am_repetidas[am_repetidas$n >1,]
 }else{
   out[[8]] <- "Todas validadas"
 }
-## Pontos de controle 
+## Pontos de controle
 # Importa feição de pontos
 sf_ctr <- sf::st_read(paste0(path_ctr, base_ctr), quiet = TRUE)
 
@@ -134,9 +134,9 @@ if(length(filtro) > 0){
   res_dist <- as.data.frame(do.call(rbind, sel))
   res_dist <- unique(res_dist)
   rownames(res_dist) <- paste("Conjunto", 1:nrow(res_dist))
-  colnames(res_dist) <- paste("nm_estacao", 1:ncol(res_dist))  
+  colnames(res_dist) <- paste("nm_estacao", 1:ncol(res_dist))
 }
-} else{ 
+} else{
   res_dist <- "Todas validadas"
     }
 
@@ -179,7 +179,7 @@ if(length(res_dist_ctr) > 0){
 
 # Amostras duplicatas sem registro
 estacoes_sel <- contagem_amostras[contagem_amostras$n>1,"nm_estacao"]
-am_dup <- unida[unida$nu_ncampo_duplicata == 1 & is.na(unida$nm_amostra_extra) |  
+am_dup <- unida[unida$nu_ncampo_duplicata == 1 & is.na(unida$nm_amostra_extra) |
                   unida$nm_estacao %in% estacoes_sel , "cd_numero_campo" ]
 if(length(am_dup) > 0){
   out[[11]] <- am_dup
@@ -197,7 +197,7 @@ if(length(dupli_erro_nome) > 0){
 }
 
 # Sem anotar que é duplicata na base (nu_ncampo_duplicata = 0)
-sem_anotar_dup <- unida[!is.na(unida$nm_amostra_extra) & 
+sem_anotar_dup <- unida[!is.na(unida$nm_amostra_extra) &
                           unida$nu_ncampo_duplicata == 0,"cd_numero_campo"]
 
 if(length(sem_anotar_dup) > 0){
@@ -207,11 +207,11 @@ if(length(sem_anotar_dup) > 0){
 }
 
 
-names(out) <- c("Estações ausentes", "Estações duplicadas", 
-                "Estações muito próxima da vizinha", "Estações sem registros", 
-                "Amostras duplicadas",  
-                "Contagem de amostras por estações","Amostras sem estação",  "Número de campo repetido", 
-                "Estações dentro do buffer do ponto de controle", 
+names(out) <- c("Estações ausentes", "Estações duplicadas",
+                "Estações muito próxima da vizinha", "Estações sem registros",
+                "Amostras duplicadas",
+                "Contagem de amostras por estações","Amostras sem estação",  "Número de campo repetido",
+                "Estações dentro do buffer do ponto de controle",
                 "Estações com distância entre ponto controle e survey123 maior do que o limiar",
                 "Amostras duplicatas de campo sem registro", "Nome da duplicata com erro", "Amostras sem registro da duplicata")
 return(out)

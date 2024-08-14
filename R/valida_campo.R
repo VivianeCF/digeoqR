@@ -160,7 +160,7 @@ merge_estacao <- dplyr::bind_rows(pt_survey, pt_ctr)
 dist_ctr <- merge_estacao %>%
   arrange(nm_estacao, desc(layer)) %>%
   dplyr::group_by(nm_estacao) %>%
-  mutate(
+  dplyr::mutate(
     study_coord = geometry[1],
     dist = sf::st_distance(geometry, study_coord, by_element = T)
   )

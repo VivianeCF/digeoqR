@@ -97,7 +97,7 @@ if(nrow(amostras_dup) > 0){
 
 ## Conta numero de amostras por estações
 unida <- dplyr::full_join(df, am, by = dplyr::join_by(uniquerowid == parentrowid))
-contagem_amostras <- unida %>% dplyr::group_by(nm_estacao) %>% count()
+contagem_amostras <- unida %>% dplyr::group_by(nm_estacao) %>% dplyr::count()
 out[[6]] <- contagem_amostras[!is.na(contagem_amostras$nm_estacao),]
 
 ## Amostras sem estação
@@ -109,7 +109,7 @@ if(length(am_sem_estacao) > 0){
   out[[7]] <- "Todas validadas"
 }
 ## Conta o número de amostras duplicadas
-am_repetidas <- am %>% dplyr::group_by(cd_numero_campo) %>% count()
+am_repetidas <- am %>% dplyr::group_by(cd_numero_campo) %>% dplyr::count()
 
 if(nrow(am_repetidas) > 0){
   out[[8]] <- am_repetidas[am_repetidas$n >1,]

@@ -23,7 +23,7 @@ df <- as.data.frame(sf)
 df <- df[!is.na(df$nu_ponto),]
 
 # Tem estações faltantes numa sequência
-df_miss <- df %>% dplyr::mutate(vol=1) %>% group_by(id_coletor) %>%
+df_miss <- df %>% dplyr::mutate(vol=1) %>% dplyr::group_by(id_coletor) %>%
   tidyr::complete(nu_ponto = min(nu_ponto):max(nu_ponto), fill = list(vol = 0))
 
 ## Mostre as estações faltantes
@@ -97,7 +97,7 @@ if(nrow(amostras_dup) > 0){
 
 ## Conta numero de amostras por estações
 unida <- dplyr::full_join(df, am, by = dplyr::join_by(uniquerowid == parentrowid))
-contagem_amostras <- unida %>% group_by(nm_estacao) %>% count()
+contagem_amostras <- unida %>% dplyr::group_by(nm_estacao) %>% count()
 out[[6]] <- contagem_amostras[!is.na(contagem_amostras$nm_estacao),]
 
 ## Amostras sem estação
@@ -159,7 +159,7 @@ merge_estacao <- dplyr::bind_rows(pt_survey, pt_ctr)
 
 dist_ctr <- merge_estacao %>%
   arrange(nm_estacao, desc(layer)) %>%
-  group_by(nm_estacao) %>%
+  dplyr::group_by(nm_estacao) %>%
   mutate(
     study_coord = geometry[1],
     dist = sf::st_distance(geometry, study_coord, by_element = T)

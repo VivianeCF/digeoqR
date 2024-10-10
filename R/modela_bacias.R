@@ -187,7 +187,7 @@ modela_bacias <- function(fase = 2,
       pontos <- ex_campo[["estações"]]
     } else {
       pontos <-  sf::read_sf(arquivo_shp)
-      sf::st_transform(pontos, crs = EPSG)
+      pontos <- sf::st_transform(pontos, crs = EPSG)
     }
     # pontos <- pontos[pontos$CLASSE == nm_classe[classe_am],]
     sf::write_sf(pontos, paste0(wbt_wd,  "estacoes.shp"))

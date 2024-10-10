@@ -338,6 +338,7 @@ modela_bacias <- function(fase = 2,
     whitebox::wbt_raster_to_vector_polygons(output_ws,
                                             output_bacias, wd = wbt_wd)
     bacias <- sf::read_sf(paste0(wbt_wd, output_bacias))
+    sf::st_crs(bacias) <- EPSG
     sf::write_sf(bacias, paste0(dir_out, "bacias_plan.shp"), delete_layer = TRUE)
     out[[5]] <- bacias
   } else{

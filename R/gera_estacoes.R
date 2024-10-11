@@ -238,9 +238,9 @@ gera_estacoes <-
           sf::st_intersection(pontos_area, area_urbana)
         })
       })
-    pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
+    #pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
     if ((nrow(pontos_area_remover2) + nrow(pontos_area_remover1)) > 0) {
-      pontos_remover <- rbind(pontos_area_remover1, pontos_area_remover2)
+      pontos_remover <- dplyr::bind_rows(pontos_area_remover1, pontos_area_remover2)
       pontos_area <-
         pontos_area[!(pontos_area$id %in% pontos_remover$id),]
     }

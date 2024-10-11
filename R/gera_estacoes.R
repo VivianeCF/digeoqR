@@ -60,13 +60,15 @@ gera_estacoes <-
       quiet = TRUE
     )
 
-    whitebox::wbt_burn_streams_at_roads(
-      dem = "srtm.tif",
-      streams = "rios.shp",
-      roads = "roads.shp",
-      output = "dem_100m_burn.tif",
-      wd = wbt_wd
-    )
+    # whitebox::wbt_burn_streams_at_roads(
+    #   dem = "srtm.tif",
+    #   streams = "rios.shp",
+    #   roads = "roads.shp",
+    #   output = "dem_100m_burn.tif",
+    #   wd = wbt_wd
+    # )
+    whitebox::wbt_fill_burn(dem = "srtm.tif", streams = "rios.shp",
+                            output = "dem_100m_burn.tif", wd = wbt_wd)
     # Remove as depressões no DEM
     whitebox::wbt_fill_depressions(dem = "dem_100m_burn.tif",
                                    output = "dem_fill.tif",

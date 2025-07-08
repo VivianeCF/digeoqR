@@ -256,11 +256,7 @@ gera_estacoes <-
           sf::st_intersection(pontos_area, area_impeditiva)
         })
       })
-<<<<<<< HEAD:R/modela_terreno.R
-    # pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
-=======
-    #pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
->>>>>>> 5b0d5493b916a510ed9324f34b00a540a91f697e:R/gera_estacoes.R
+
     if ((nrow(pontos_area_remover2) + nrow(pontos_area_remover1)) > 0) {
       pontos_remover <- dplyr::bind_rows(pontos_area_remover1, pontos_area_remover2)
       pontos_area <-

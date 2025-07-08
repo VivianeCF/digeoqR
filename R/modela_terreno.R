@@ -171,7 +171,7 @@ modela_terreno <-
     # unidade_protecao_ambiental <- bases_model[["unidade de protecao ambiental"]]
 
     ## Cria area impeditiva
-    areas_impeditivas <- sf::st_union(massa_dagua, area_urbana, pantanal,terra_indigena)
+    area_impeditiva <- sf::st_union(massa_dagua, area_urbana, pantanal,terra_indigena)
 
     ## Encontra vértices das junções
 

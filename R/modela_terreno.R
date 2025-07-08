@@ -63,13 +63,15 @@ gera_estacoes <-
       quiet = TRUE
     )
 
-    whitebox::wbt_burn_streams_at_roads(
-      dem = "srtm.tif",
-      streams = "rios.shp",
-      roads = "roads.shp",
-      output = "dem_100m_burn.tif",
-      wd = wbt_wd
-    )
+    # whitebox::wbt_burn_streams_at_roads(
+    #   dem = "srtm.tif",
+    #   streams = "rios.shp",
+    #   roads = "roads.shp",
+    #   output = "dem_100m_burn.tif",
+    #   wd = wbt_wd
+    # )
+    whitebox::wbt_fill_burn(dem = "srtm.tif", streams = "rios.shp",
+                            output = "dem_100m_burn.tif", wd = wbt_wd)
     # Remove as depressões no DEM
     whitebox::wbt_fill_depressions(dem = "dem_100m_burn.tif",
                                    output = "dem_fill.tif",
@@ -254,7 +256,11 @@ gera_estacoes <-
           sf::st_intersection(pontos_area, area_impeditiva)
         })
       })
+<<<<<<< HEAD:R/modela_terreno.R
     # pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
+=======
+    #pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
+>>>>>>> 5b0d5493b916a510ed9324f34b00a540a91f697e:R/gera_estacoes.R
     if ((nrow(pontos_area_remover2) + nrow(pontos_area_remover1)) > 0) {
       pontos_remover <- dplyr::bind_rows(pontos_area_remover1, pontos_area_remover2)
       pontos_area <-

@@ -12,16 +12,17 @@
 #'@param min_length Comprimento mínimo do curso do rio
 #'@param max_ordem Ordem Strhaler máxima para a validaçãon da estação
 #'@param bases_model Bases definidas na função gera_bases_model
+#'@param dist_buffer
 #'@param dir_out Diretório de saída
 #'@param wbt_wd
-
+#'@param gera_estacoes TRUE ou FALSE
 #'
 #'@return Imagem (.png) do mapa de planejamento preliminar.
 #'Arquivo da shape (shp) das estações.
 #'@export
 #'
 #' @examples
-#' #gera_estacoes()
+#' #modela_terreno()
 #'
 gera_estacoes <-
   function(dem, dir_out = "outputs/",
@@ -29,7 +30,9 @@ gera_estacoes <-
            EPSG = 4326,
            threshold = 250,
            min_length = "0.02",
-           max_ordem = 4,  wbt_wd = "outputs/modelo/")
+           max_ordem = 4,
+           dist_buffer = 0.01/10,
+           wbt_wd = "outputs/modelo/")
   {
 ### GERA DRENAGENS--------------------------------------------------------------
     # Cria objeto lista para a saída
@@ -88,6 +91,7 @@ gera_estacoes <-
       wd = wbt_wd
     )
 
+
     # Extrai uma rede de fluxo (limite = número de células) consistente
     # com a direção do fluxo
     whitebox::wbt_extract_streams(
@@ -96,18 +100,18 @@ gera_estacoes <-
       # 100 células = 1 km2
       output = "network_1km2.tif",
       wd = wbt_wd)
-
-    # # Remove pequenos trechos da rede fluvial
-    whitebox::wbt_remove_short_streams(d8_pntr = output_d8_pntr, streams = "network_1km2.tif",
+    # Remove pequenos trechos da rede fluvial
+    whitebox::wbt_remove_short_streams(d8_pntr = output_d8_pntr,
+                                       streams = "network_1km2.tif",
                                        output = "network_d8.tif",
                                        min_length = min_length, wd = wbt_wd,)
-
     # Converte a rede fluvial de raster para vetor
     whitebox::wbt_raster_streams_to_vector("network_d8.tif",
                                            output_d8_pntr,
                                            output = "network_d8.shp",
                                            wd = wbt_wd)
     stream_model <- sf::read_sf(file.path(wbt_wd, "network_d8.shp"))
+
 
     # Estabelece o sistema de coordenadas
     sf::st_crs(stream_model) <- EPSG
@@ -144,7 +148,7 @@ gera_estacoes <-
     sf::write_sf(stream_model, paste0(dir_out, "stream_model.shp"),
                  delete_layer = TRUE)
     out[[2]] <- stream_model
-
+ if(gera_estacoes == TRUE){
     ## Gera ESTAÇÕES -----------------------------------------------------------
     ## Lê limite da area do projeto
     area <- bases_model[["limite da área folha"]]
@@ -153,6 +157,18 @@ gera_estacoes <-
 
     ## Lê área urbana
     area_urbana <- bases_model[["área urbana"]]
+
+    ## Lê área urbana
+    pantanal <- bases_model[["pantanal"]]
+
+    ## Lê área urbana
+    terra_indigena <- bases_model[["terra indígena"]]
+
+    ## Lê área urbana
+    unidade_protecao_ambiental <- bases_model[["unidade de protecao ambiental"]]
+
+    ## Cria area impeditiva
+    areas_impeditivas <- sf::st_union(massa_dagua, area_urbana, pantanal,terra_indigena)
 
     ## Encontra vértices das junções
 
@@ -189,7 +205,7 @@ gera_estacoes <-
     joins_area <-
       suppressMessages({
         suppressWarnings({
-          sf::st_buffer(river_joins, dist = 0.01 / 10)
+          sf::st_buffer(river_joins, dist = dist_buffer)
         })
       })
 
@@ -231,16 +247,16 @@ gera_estacoes <-
         })
       })
     ## Remover pontos dentro de áreas urbanas
-    area_urbana <- sf::st_transform(area_urbana, EPSG)
+    area_impeditiva <- sf::st_transform(area_impeditiva, EPSG)
     pontos_area_remover2 <-
       suppressMessages({
         suppressWarnings({
-          sf::st_intersection(pontos_area, area_urbana)
+          sf::st_intersection(pontos_area, area_impeditiva)
         })
       })
-    pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
+    # pontos_area_remover1 <- pontos_area_remover1[, colnames(pontos_area_remover2)]
     if ((nrow(pontos_area_remover2) + nrow(pontos_area_remover1)) > 0) {
-      pontos_remover <- rbind(pontos_area_remover1, pontos_area_remover2)
+      pontos_remover <- dplyr::bind_rows(pontos_area_remover1, pontos_area_remover2)
       pontos_area <-
         pontos_area[!(pontos_area$id %in% pontos_remover$id),]
     }
@@ -280,5 +296,10 @@ gera_estacoes <-
     out[[5]] <- wbt_wd
     names(out) <- c("stream sthraler", "stream model",
                     "mapa", "estacoes geradas")
+ } else {
+
+   names(out) <- c("stream sthraler", "stream model")
+}
+
     return(out)
   }

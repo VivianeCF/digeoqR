@@ -24,7 +24,7 @@
 #' @examples
 #' #modela_terreno()
 #'
-gera_estacoes <-
+gera_base_model <-
   function(dem, dir_out = "outputs/",
            bases_model,
            EPSG = 4326,
@@ -32,7 +32,8 @@ gera_estacoes <-
            min_length = "0.02",
            max_ordem = 4,
            dist_buffer = 0.01/10,
-           wbt_wd = "outputs/modelo/")
+           wbt_wd = "outputs/modelo/",
+           gera_estacoes=TRUE)
   {
 ### GERA DRENAGENS--------------------------------------------------------------
     # Cria objeto lista para a saída

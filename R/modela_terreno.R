@@ -24,7 +24,7 @@
 #' @examples
 #' #modela_terreno()
 #'
-gera_base_model <-
+modela_terreno <-
   function(dem, dir_out = "outputs/",
            bases_model,
            EPSG = 4326,
@@ -167,8 +167,8 @@ gera_base_model <-
     ## Lê área urbana
     terra_indigena <- bases_model[["terra indígena"]]
 
-    ## Lê área urbana
-    unidade_protecao_ambiental <- bases_model[["unidade de protecao ambiental"]]
+    # ## Lê área urbana
+    # unidade_protecao_ambiental <- bases_model[["unidade de protecao ambiental"]]
 
     ## Cria area impeditiva
     areas_impeditivas <- sf::st_union(massa_dagua, area_urbana, pantanal,terra_indigena)

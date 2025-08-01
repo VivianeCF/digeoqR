@@ -62,120 +62,12 @@ modela_bacias <- function(fase = 2,
   ## Lê massa d'água
   massa_dagua <- bases_model[["massa de água"]]
 
-  ## Lê área urbana
-  area_urbana <- bases_model[["área urbana"]]
-
   ## Lê rios da área do projeto
   rios_ibge = bases_model[["rios"]]
 
     ## Lê rios e grava no temp
   sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"rios.shp"))
 
-
-
-#  if(fase == 2){
-#    ## Lê DEM e grava no temp
-#    stars::write_stars(dem,
-#                       file.path( wbt_wd, "srtm.tif"))
-#
-#    options("rgdal_show_exportToProj4_warnings" = "none")
-#    whitebox::wbt_rasterize_streams(
-#     "rios.shp",
-#     base = "srtm.tif",
-#     output = "network_topage.tif",
-#     nodata = 0,
-#     wd = wbt_wd
-#   )
-#
-#   # Burn this river network on the DEM
-#   # We will neglect the effect of the road embankments at this DEM resolution of 100m
-#   # by creating an empty shapefile for roads
-#   sf::write_sf(
-#     sf::st_sfc(sf::st_multilinestring(), crs = EPSG),
-#     file.path(wbt_wd, "roads.shp"),
-#     delete_layer = TRUE,
-#     quiet = TRUE
-#   )
-#
-#   whitebox::wbt_burn_streams_at_roads(
-#     dem = "srtm.tif",
-#     streams = "rios.shp",
-#     roads = "roads.shp",
-#     output = "dem_100m_burn.tif",
-#     wd = wbt_wd
-#   )
-#   # Remove the depressions on the DEM
-#   whitebox::wbt_fill_depressions(dem = "dem_100m_burn.tif",
-#                                  output = "dem_fill.tif",
-#                                  wd = wbt_wd)
-#
-#   # Flow direction raster
-#   whitebox::wbt_d8_pointer(dem = "dem_fill.tif",
-#                            output = "d8.tif",
-#                            wd = wbt_wd)
-#
-#   # Compute flow accumulation
-#   whitebox::wbt_d8_flow_accumulation(
-#     input = "d8.tif",
-#     pntr = TRUE,
-#     output = "facc.tif",
-#     wd = wbt_wd
-#   )
-#
-#   # Extract a stream network (threshold = 1 km2) consistent with flow direction
-#   whitebox::wbt_extract_streams(
-#     flow_accum =  "facc.tif",
-#     threshold = threshold,
-#     # 100 cells for 1 km2
-#     output = "network_1km2.tif",
-#     zero_background = TRUE,
-#     wd = wbt_wd
-#   )
-#
-#   whitebox::wbt_remove_short_streams(
-#     d8_pntr = "d8.tif",
-#     streams = "network_1km2.tif",
-#     output = "network_d8.tif",
-#     min_length = min_length,
-#     wd = wbt_wd
-#   )
-#
-#   output_d8_pntr <- "d8.tif"
-#   #
-#   whitebox::wbt_raster_streams_to_vector("network_d8.tif",
-#                                          "d8.tif",
-#                                          output = "network_d8.shp",
-#                                          wd = wbt_wd)
-#   stream_model <- sf::read_sf(file.path(wbt_wd, "network_d8.shp"))
-#   # class(crs_wgs84)
-#
-#   # cat(crs_wgs84$wkt)
-#   sf::st_crs(stream_model) <- EPSG
-#
-#   # Gera drenagem classificada strahler
-#   output_order <- "strahler_order.tif"
-#   whitebox::wbt_strahler_stream_order("d8.tif",
-#                                       "network_d8.tif",
-#                                       output_order,
-#                                       wd = wbt_wd)
-#   output_drenagem_ord <- "stream_strahler.shp"
-#   whitebox::wbt_raster_streams_to_vector(output_order,
-#                                          "d8.tif",
-#                                          output_drenagem_ord,
-#                                          wd = wbt_wd)
-#   stream_strahler <-
-#     sf::read_sf(file.path(wbt_wd, "stream_strahler.shp"))
-#   sf::st_crs(stream_strahler) <- EPSG
-#
-#   sf::write_sf(stream_strahler,
-#                "outputs/stream_strahler.shp",
-#                delete_layer = TRUE)
-#   out[[1]] <- stream_strahler
-#
-#   sf::write_sf(stream_model, "outputs/stream_model.shp",
-#                delete_layer = TRUE)
-#   out[[2]] <- stream_model
-# }
   ### GERA BACIAS A PARTIR DOS PONTOS ------------------------------
  ## Lê estaçoes da área do projeto
   if (fase == 1) {
@@ -268,11 +160,7 @@ modela_bacias <- function(fase = 2,
 
   # Salva o arquivo mesclado das bacias
 
-  # wbt_wd <- paste0("outputs/")
-
   # Calcula a área das bacias não aninhadas
-
-
 
   # # Salva bacias com os cálculos da área
   sf::sf_use_s2(FALSE)

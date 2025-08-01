@@ -32,7 +32,7 @@ prepara_dem <- function(dir_in = "inputs/campo/",
 
   # Recupera os dados de elevação como raster
   dem_raw <-
-    elevatr::get_elev_raster(area_loc,  z = z, clip = "locations") # ~30m resolução
+    elevatr::get_elev_raster(area,  z = z, clip = "locations") # ~30m resolução
 
   # Projeta e define a resolução espacial
    dem_raw <- stars::st_as_stars(dem_raw)

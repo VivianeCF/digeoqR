@@ -19,7 +19,10 @@ gera_bases_model <- function(dir_in = "inputs/campo/",
                              limite_srtm = "area_srtm.shp",
                              area_urbana = "area_urbana.shp",
                              rios = "rios_ibge.shp",
-                             massa_dagua = "massa_dagua.shp"
+                             massa_dagua = "massa_dagua.shp",
+                             pantanal = "pantanal.shp",
+                             terra_indigena = "terra_indigena.shp"
+
                              )
 {
   out <- list()
@@ -29,8 +32,10 @@ gera_bases_model <- function(dir_in = "inputs/campo/",
   out[[3]] <- sf::read_sf(paste0(dir_in, area_urbana))
   out[[4]] <- sf::read_sf(paste0(dir_in, rios))
   out[[5]] <- sf::read_sf(paste0(dir_in, massa_dagua))
+  out[[6]] <- sf::read_sf(paste0(dir_in, pantanal))
+  out[[7]] <- sf::read_sf(paste0(dir_in, terra_indigena))
    names(out) <-
     c("limite da área srtm", "limite da área folha", "área urbana",
-      "rios", "massa de água")
+      "rios", "massa de água", "pantanal", "terra indígena")
   return(out)
 }

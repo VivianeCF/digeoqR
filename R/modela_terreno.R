@@ -41,7 +41,7 @@ modela_terreno <-
     # wbt_wd <- tempfile()
     # dir.create(wbt_wd)
     # Salva srtm no diretório escolhido
-    terra::writeRaster(dem_raw, paste0(wbt_wd, "srtm.tif"), overwrite=TRUE)
+    terra::writeRaster(dem, paste0(wbt_wd, "srtm.tif"), overwrite=TRUE)
 
     sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"\\","rios.shp"),
                  delete_layer = TRUE )

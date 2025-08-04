@@ -40,8 +40,9 @@ modela_terreno <-
     out <- list()
     # wbt_wd <- tempfile()
     # dir.create(wbt_wd)
-    stars::write_stars(dem,
-                       file.path( wbt_wd, "srtm.tif"))
+    # Salva srtm no diretório escolhido
+    terra::writeRaster(dem_raw, paste0(wbt_wd, "srtm.tif"), overwrite=TRUE)
+
     sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"\\","rios.shp"),
                  delete_layer = TRUE )
     options("rgdal_show_exportToProj4_warnings" = "none")

@@ -37,7 +37,7 @@ prepara_dem <- function(dir_in = "inputs/campo/",
 
 
   # Salva srtm no diretório escolhido
-   terra::writeRaster(dem_raw, dir_out, overwrite=TRUE)
+   terra::writeRaster(dem_raw, paste0(dir_out, "srtm.tif"), overwrite=TRUE)
 
   return(dem_raw)
 

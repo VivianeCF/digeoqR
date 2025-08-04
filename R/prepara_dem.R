@@ -35,6 +35,7 @@ prepara_dem <- function(dir_in = "inputs/campo/",
     elevatr::get_elev_raster(area_loc,  z = z,
                              src = "aws", clip = "bbox") %>% terra::rast() # ~30m resolução
 
+  dem_raw <- terra::crop(dem_raw, area_loc, mask=TRUE)
 
   # Salva srtm no diretório escolhido
    terra::writeRaster(dem_raw, paste0(dir_out, "srtm.tif"), overwrite=TRUE)

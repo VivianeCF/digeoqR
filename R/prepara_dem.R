@@ -26,16 +26,16 @@ prepara_dem <- function(dir_in = "inputs/campo/",
   area <- sf::st_transform(area, crs = EPSG)
 
  # Define os vértices (bbox) que irá abranger as bacias da área de estudo
-  area_bbox <- sf::st_bbox(area,
-                           crs = st_crs(EPSG))
-  area_loc <- sf::st_as_sfc(area_bbox, crs = EPSG) |> sf::st_sf()
+  # area_bbox <- sf::st_bbox(area,
+  #                          crs = st_crs(EPSG))
+  area_loc <- sf::st_as_sfc(area, crs = EPSG) |> sf::st_sf()
 
   # Recupera os dados de elevação como raster
   dem_raw <-
     elevatr::get_elev_raster(area_loc,  z = z,
-                             src = "aws", clip = "bbox") %>% terra::rast() # ~30m resolução
+                             src = "aws", clip = "locations") %>% terra::rast() # ~30m resolução
 
-  dem_raw <- terra::crop(dem_raw, area_loc, mask=TRUE)
+  # dem_raw <- terra::crop(dem_raw, area_loc, mask=TRUE)
 
   # Salva srtm no diretório escolhido
    terra::writeRaster(dem_raw, paste0(dir_out, "srtm.tif"), overwrite=TRUE)

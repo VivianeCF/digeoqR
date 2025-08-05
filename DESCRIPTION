@@ -1,6 +1,6 @@
 Package: digeoqR
 Title: Ferramentas de trabalho para o geoquímico
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: 
     person("Viviane", "Carillo Ferrari", , "viviane.ferrari@sgb.gov.br", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2755-9181"))

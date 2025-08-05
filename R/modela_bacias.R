@@ -4,7 +4,6 @@
 #'    A densidade de drenagem é dada pelo valor de threshold, quanto maior
 #'este valor, menor a densidade dos cursos dos rios.
 #'
-#' @param threshold Numero de células mínimo para o traçado das drenagens
 #' @param fase Fase do levantamento geoquímico (1= Planejamento, 2 = Pós campo)
 #' @param bacia_minima Área mínima das bacias planejadas
 #' @param bacia_maxima Área máxima das bacias planejadas
@@ -38,7 +37,6 @@ modela_bacias <- function(fase = 2,
                           fonte_shp = FALSE, arquivo_shp,
                           bacia_minima = 4,
                           bacia_maxima = 100,
-                          threshold = 250,
                           snap_dist = "0.02",
                           min_length = "0.02",
                           max_ordem = 3, dir_out = "outputs/", wbt_wd = "outputs/modelo/")

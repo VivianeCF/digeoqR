@@ -16,7 +16,6 @@ modela_bacias(
   arquivo_shp,
   bacia_minima = 4,
   bacia_maxima = 100,
-  threshold = 250,
   snap_dist = "0.02",
   min_length = "0.02",
   max_ordem = 3,
@@ -48,8 +47,6 @@ corrente, 3 = rocha, 4 = solo}
 \item{bacia_minima}{Área mínima das bacias planejadas}
 
 \item{bacia_maxima}{Área máxima das bacias planejadas}
-
-\item{threshold}{Numero de células mínimo para o traçado das drenagens}
 
 \item{snap_dist}{Deslocamento máximo do ponto até a drenagem}
 

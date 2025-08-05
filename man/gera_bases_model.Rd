@@ -10,7 +10,9 @@ gera_bases_model(
   limite_srtm = "area_srtm.shp",
   area_urbana = "area_urbana.shp",
   rios = "rios_ibge.shp",
-  massa_dagua = "massa_dagua.shp"
+  massa_dagua = "massa_dagua.shp",
+  pantanal = "pantanal.shp",
+  terra_indigena = "terra_indigena.shp"
 )
 }
 \arguments{

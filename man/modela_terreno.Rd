@@ -11,7 +11,6 @@ modela_terreno(
   EPSG = 4326,
   threshold = 250,
   min_length = "0.02",
-  max_ordem = 4,
   dist_buffer = 0.01/10,
   wbt_wd = "outputs/modelo/",
   gera_estacoes = TRUE
@@ -29,8 +28,6 @@ modela_terreno(
 \item{threshold}{Valor de corte da área das bacias modeladas}
 
 \item{min_length}{Comprimento mínimo do curso do rio}
-
-\item{max_ordem}{Ordem Strhaler máxima para a validaçãon da estação}
 
 \item{gera_estacoes}{TRUE ou FALSE}
 }

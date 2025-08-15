@@ -10,7 +10,6 @@
 #'@param EPSG Sistema de coordenadas
 #'@param threshold Valor de corte da área das bacias modeladas
 #'@param min_length Comprimento mínimo do curso do rio
-#'@param max_ordem Ordem Strhaler máxima para a validaçãon da estação
 #'@param bases_model Bases definidas na função gera_bases_model
 #'@param dist_buffer
 #'@param dir_out Diretório de saída
@@ -30,7 +29,6 @@ modela_terreno <-
            EPSG = 4326,
            threshold = 250,
            min_length = "0.02",
-           max_ordem = 4,
            dist_buffer = 0.01/10,
            wbt_wd = "outputs/modelo/",
            gera_estacoes=TRUE)

@@ -8,7 +8,6 @@
 #' @param bacia_minima Área mínima das bacias planejadas
 #' @param bacia_maxima Área máxima das bacias planejadas
 #' @param snap_dist Deslocamento máximo do ponto até a drenagem
-#' @param min_length Comprimento mínimo da drenagem
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
 #' @param EPSG crs da camada
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
@@ -38,7 +37,6 @@ modela_bacias <- function(fase = 2,
                           bacia_minima = 4,
                           bacia_maxima = 100,
                           snap_dist = "0.02",
-                          min_length = "0.02",
                           max_ordem = 3, dir_out = "outputs/", wbt_wd = "outputs/modelo/")
 {
   ### GERA DRENAGENS--------------------------------------------------------------
@@ -88,17 +86,22 @@ modela_bacias <- function(fase = 2,
   stream <- "network_d8.tif"
   output_snap <- "snappoints.shp"
 
-  r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
-  r <- r <= max_ordem
-  stars::write_stars(r, paste0(wbt_wd, "strahler_order_1_4.tif"))
+  # r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
+  # r <- r <= max_ordem
+  # stars::write_stars(r, paste0(wbt_wd, "strahler_order_1_4.tif"))
 
-  whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
-                                        "strahler_order_1_4.tif",
-                                        output_snap,
-                                        snap_dist,
-                                        wd = wbt_wd)
+  # whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
+  #                                       "strahler_order_1_4.tif",
+  #                                       output_snap,
+  #                                       snap_dist,
+  #                                       wd = wbt_wd)
 
-
+  source("R/jenson_snap_priorizando_ordem.R")
+  jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
+                                strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
+                                output_snap_path = paste0(wbt_wd, "snappoints.shp"),
+                                snap_dist_max = snap_dist,
+                                wbt_wd=wbt_wd )
   # Cria bacias a partir dos pontos deslocados
 
   output_ws <-  "bacias.tif"
@@ -165,7 +168,7 @@ modela_bacias <- function(fase = 2,
   # Calcula área
   sf::st_crs(bacias_area) <- EPSG
   bacias_area$Area_sqm <-
-    as.numeric(round(sf::st_area(bacias_area) / 1000000, 0))
+    as.numeric(round(sf::st_area(bacias_area) / 1000000, 3))
 
   sf::write_sf(bacias_area,
                paste0(dir_out,

@@ -90,7 +90,7 @@ modela_bacias <- function(fase = 2,
   # r <- r <= max_ordem
   # stars::write_stars(r, paste0(wbt_wd, "strahler_order_1_4.tif"))
 
-  if(snap_dist == 0){
+  if(snap_dist != 0){
   output_snap <- "snappoints.shp"
   source("R/jenson_snap_priorizando_ordem.R")
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),

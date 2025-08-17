@@ -84,24 +84,28 @@ modela_bacias <- function(fase = 2,
   # Desloca pontos para a drenagem
   ## Snap metodo Jenson
   stream <- "network_d8.tif"
-  output_snap <- "snappoints.shp"
+
 
   # r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
   # r <- r <= max_ordem
   # stars::write_stars(r, paste0(wbt_wd, "strahler_order_1_4.tif"))
 
-  # whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
-  #                                       "strahler_order_1_4.tif",
-  #                                       output_snap,
-  #                                       snap_dist,
-  #                                       wd = wbt_wd)
-
+  if(snap_dist == 0){
+  output_snap <- "snappoints.shp"
   source("R/jenson_snap_priorizando_ordem.R")
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
                                 strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
                                 output_snap_path = paste0(wbt_wd, "snappoints.shp"),
                                 snap_dist_max = snap_dist,
                                 wbt_wd=wbt_wd )
+  # whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
+  #                                       "strahler_order_1_4.tif",
+  #                                       output_snap,
+  #                                       snap_dist,
+  #                                       wd = wbt_wd)
+  }else{
+    output_snap = "estacoes.shp"
+    }
   # Cria bacias a partir dos pontos deslocados
 
   output_ws <-  "bacias.tif"

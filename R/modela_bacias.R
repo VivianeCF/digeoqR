@@ -99,7 +99,7 @@ modela_bacias <- function(fase = 2,
                                 strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
                                 output_snap_path = paste0(wbt_wd, "snappoints.shp"),
                                 snap_dist_max = snap_dist,
-                                wbt_wd=wbt_wd )
+                                wbt_wd=wbt_wd , decrescente = decrescente)
   # whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
   #                                       "strahler_order_1_4.tif",
   #                                       output_snap,

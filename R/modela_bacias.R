@@ -8,6 +8,7 @@
 #' @param bacia_minima Área mínima das bacias planejadas
 #' @param bacia_maxima Área máxima das bacias planejadas
 #' @param snap_dist Deslocamento máximo do ponto até a drenagem
+#' @param decrescente Logico TRUE para ordem decrecente e FALSE para ordem crescente.#'
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
 #' @param EPSG crs da camada
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
@@ -34,9 +35,10 @@ modela_bacias <- function(fase = 2,
                           EPSG = 4326, dem, bases_model, gera_est,
                           ex_campo, classe_am,
                           fonte_shp = FALSE, arquivo_shp,
+
                           bacia_minima = 4,
                           bacia_maxima = 100,
-                          snap_dist = "0.02",
+                          snap_dist = "0.02", decrescente = FALSE,
                           max_ordem = 3, dir_out = "outputs/", wbt_wd = "outputs/modelo/")
 {
   ### GERA DRENAGENS--------------------------------------------------------------

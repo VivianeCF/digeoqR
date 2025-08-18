@@ -6,14 +6,14 @@
 #' @param output_snap_path Caminho para o arquivo de saída dos pontos ajustados.
 #' @param snap_dist_max Distância máxima de encaixe (em metros).
 #' @param wbt_wd Diretório de trabalho do Whitebox.
-#'
+#' @param decrescente Logico TRUE para ordem decrecente e FALSE para ordem crescente.#'
 #' @return Retorna o caminho para o arquivo de saída dos pontos ajustados.
 #'
 jenson_snap_priorizando_ordem <- function(input_points_path,
                                           strahler_raster_path,
                                           output_snap_path,
                                           snap_dist_max,
-                                          wbt_wd) {
+                                          wbt_wd, decrescente) {
 
   # Certifica-se de que o diretório de trabalho está definido
   wbt_wd(wd = wbt_wd)
@@ -24,7 +24,7 @@ jenson_snap_priorizando_ordem <- function(input_points_path,
 
   # Obtém as ordens de Strahler únicas e as ordena de forma crescente
   # A lógica agora prioriza a menor ordem, mudando 'decreasing' para FALSE.
-  ordens <- sort(unique(values(strahler_raster)), decreasing = FALSE)
+  ordens <- sort(unique(values(strahler_raster)), decreasing = decrescente)
 
   # Cria um objeto para armazenar os pontos não encaixados
   pontos_nao_encaixados <- pontos

@@ -17,6 +17,7 @@ modela_bacias(
   bacia_minima = 4,
   bacia_maxima = 100,
   snap_dist = "0.02",
+  decrescente = FALSE,
   max_ordem = 3,
   dir_out = "outputs/",
   wbt_wd = "outputs/modelo/"
@@ -48,6 +49,8 @@ corrente, 3 = rocha, 4 = solo}
 \item{bacia_maxima}{Área máxima das bacias planejadas}
 
 \item{snap_dist}{Deslocamento máximo do ponto até a drenagem}
+
+\item{decrescente}{Logico TRUE para ordem decrecente e FALSE para ordem crescente.#'}
 
 \item{max_ordem}{Máxima ordem do rio para a busca do snap point}
 

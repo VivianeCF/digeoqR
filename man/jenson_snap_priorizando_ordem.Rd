@@ -9,7 +9,8 @@ jenson_snap_priorizando_ordem(
   strahler_raster_path,
   output_snap_path,
   snap_dist_max,
-  wbt_wd
+  wbt_wd,
+  decrescente
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ jenson_snap_priorizando_ordem(
 \item{snap_dist_max}{Distância máxima de encaixe (em metros).}
 
 \item{wbt_wd}{Diretório de trabalho do Whitebox.}
+
+\item{decrescente}{Logico TRUE para ordem decrecente e FALSE para ordem crescente.#'}
 }
 \value{
 Retorna o caminho para o arquivo de saída dos pontos ajustados.

@@ -91,7 +91,7 @@ modela_bacias <- function(fase = 2,
   ## Snap metodo Jenson
   stream <- "network_d8.tif"
 
-
+  output_snap =  paste0(wbt_wd, "snappoints.shp")
   if(tipo == 1){
   whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
                                         "strahler_order.tif",
@@ -105,7 +105,7 @@ modela_bacias <- function(fase = 2,
   source("R/jenson_snap_priorizando_ordem.R")
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
                                 strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
-                                output_snap_path = paste0(wbt_wd, "snappoints.shp"),
+                                output_snap_path = output_snap,
                                 snap_dist_max = snap_dist,
                                 wbt_wd=wbt_wd , decrescente = decrescente)
 

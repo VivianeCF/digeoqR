@@ -101,7 +101,6 @@ modela_bacias <- function(fase = 2,
   }
 
   if(tipo == 2){
-  output_snap <- "snappoints.shp"
   source("R/jenson_snap_priorizando_ordem.R")
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
                                 strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),

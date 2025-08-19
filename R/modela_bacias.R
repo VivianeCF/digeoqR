@@ -7,8 +7,13 @@
 #' @param fase Fase do levantamento geoquímico (1= Planejamento, 2 = Pós campo)
 #' @param bacia_minima Área mínima das bacias planejadas
 #' @param bacia_maxima Área máxima das bacias planejadas
+#' @param tipo Tipo de processamento do deslocamento 1: Deslocamento sem controle,
+#' 2: controlado pela ordem da drenagem e 3: sem deslocamento.
+#' Para o tipo 1 informar o snap_disp.
+#' Para o tipo 2 informar o snap_dist e o valoer lógico decrescente.
+#'
 #' @param snap_dist Deslocamento máximo do ponto até a drenagem
-#' @param decrescente Logico TRUE para ordem decrecente e FALSE para ordem crescente.#'
+#' @param decrescente Logico TRUE para ordem decrecente e FALSE para ordem crescente.
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
 #' @param EPSG crs da camada
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
@@ -35,9 +40,8 @@ modela_bacias <- function(fase = 2,
                           EPSG = 4326, dem, bases_model, gera_est,
                           ex_campo, classe_am,
                           fonte_shp = FALSE, arquivo_shp,
-
                           bacia_minima = 4,
-                          bacia_maxima = 100,
+                          bacia_maxima = 100, tipo = 1,
                           snap_dist = "0.02", decrescente = FALSE,
                           max_ordem = 3, dir_out = "outputs/", wbt_wd = "outputs/modelo/")
 {
@@ -88,11 +92,15 @@ modela_bacias <- function(fase = 2,
   stream <- "network_d8.tif"
 
 
-  # r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
-  # r <- r <= max_ordem
-  # stars::write_stars(r, paste0(wbt_wd, "strahler_order_1_4.tif"))
+  if(tipo == 1){
+  whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
+                                        "strahler_order.tif",
+                                         output_snap,
+                                         snap_dist,
+                                         wd = wbt_wd)
+  }
 
-  if(snap_dist != 0){
+  if(tipo == 2){
   output_snap <- "snappoints.shp"
   source("R/jenson_snap_priorizando_ordem.R")
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
@@ -100,12 +108,10 @@ modela_bacias <- function(fase = 2,
                                 output_snap_path = paste0(wbt_wd, "snappoints.shp"),
                                 snap_dist_max = snap_dist,
                                 wbt_wd=wbt_wd , decrescente = decrescente)
-  # whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
-  #                                       "strahler_order_1_4.tif",
-  #                                       output_snap,
-  #                                       snap_dist,
-  #                                       wd = wbt_wd)
-  }else{
+
+  }
+
+  if(tipo == 3){
     output_snap = "estacoes.shp"
     }
   # Cria bacias a partir dos pontos deslocados

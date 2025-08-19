@@ -16,6 +16,7 @@ modela_bacias(
   arquivo_shp,
   bacia_minima = 4,
   bacia_maxima = 100,
+  tipo = 1,
   snap_dist = "0.02",
   decrescente = FALSE,
   max_ordem = 3,
@@ -48,9 +49,14 @@ corrente, 3 = rocha, 4 = solo}
 
 \item{bacia_maxima}{Área máxima das bacias planejadas}
 
+\item{tipo}{Tipo de processamento do deslocamento 1: Deslocamento sem controle,
+2: controlado pela ordem da drenagem e 3: sem deslocamento.
+Para o tipo 1 informar o snap_disp.
+Para o tipo 2 informar o snap_dist e o valoer lógico decrescente.}
+
 \item{snap_dist}{Deslocamento máximo do ponto até a drenagem}
 
-\item{decrescente}{Logico TRUE para ordem decrecente e FALSE para ordem crescente.#'}
+\item{decrescente}{Logico TRUE para ordem decrecente e FALSE para ordem crescente.}
 
 \item{max_ordem}{Máxima ordem do rio para a busca do snap point}
 

@@ -70,6 +70,9 @@ modela_bacias <- function(fase = 2,
     ## Lê rios e grava no temp
   sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"rios.shp"))
 
+    ## Lê stream order
+  out[[1]] <- gera_est[["stream sthraler"]]
+
   ### GERA BACIAS A PARTIR DOS PONTOS ------------------------------
  ## Lê estaçoes da área do projeto
   if (fase == 1) {
@@ -211,13 +214,13 @@ modela_bacias <- function(fase = 2,
     sf::write_sf(bacias_area,
                  paste0(dir_out, "bacias_area_plan.shp"),
                  delete_layer = TRUE)
-    out[[3]] <- bacias_area
+    out[[2]] <- bacias_area
 
     sf::write_sf(pontos[, c("VALUE")],
                  paste0(dir_out,  "estacoes_plan.shp"),
                  delete_layer =
                    TRUE)
-    out[[4]] <- pontos[, c("VALUE")]
+    out[[3]] <- pontos[, c("VALUE")]
 
     sf::write_sf(pontos[, c("VALUE")],
                  paste0(wbt_wd, "estacoes_plan.shp"),
@@ -240,8 +243,11 @@ modela_bacias <- function(fase = 2,
     bacias <- sf::read_sf(paste0(wbt_wd, output_bacias))
     sf::st_crs(bacias) <- EPSG
     sf::write_sf(bacias, paste0(dir_out, "bacias_plan.shp"), delete_layer = TRUE)
-    out[[5]] <- bacias
+    out[[4]] <- bacias
   } else{
+    # Lê pontos  deslocados
+    out[[2]] = sf::read_sf(paste0(wbt_wd, "snappoints.shp"))
+
     out[[3]] <- bacias_area
     output_bacias <- "bacias"
     bacias <- sf::read_sf(paste0(wbt_wd, output_bacias, ".shp"))
@@ -286,12 +292,12 @@ modela_bacias <- function(fase = 2,
   print(m)
   dev.off()
 if(fase == 1){
-  out[[6]] <- m
-  names(out) <- c("stream strahler", "stream model",
+  out[[5]] <- m
+  names(out) <- c("stream strahler",
                   "bacias area plan", "estacoes plan", "bacias plan", "mapa plan")
   }else{
     out[[5]] <- m
-    names(out) <- c("stream strahler", "stream model", "bacias area", "bacias", "mapa amostragem")
+    names(out) <- c("stream strahler", "estacoes deslocadas", "bacias area", "bacias", "mapa amostragem")
     }
 
 return(out)

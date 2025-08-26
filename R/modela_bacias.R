@@ -23,7 +23,7 @@
 #' @param bases_model Bases para a modelagem das bacias e drenagem pela
 #' função gera_bases_model
 #' @param ex_campo Dados de campo extraídos pela função extrai_dados_campo
-#' @param gera_est Objeto da saída da função gera_estacoes
+#' @param gera_est Objeto da saída da função modela_terreno
 #' @param fonte_shp Valor lógico se oas esstações forem shapefile
 #' @param arquivo_shp Caso for shape fornecer o caminho do arquivo
 #' @param wbt_wd diretório onde estão salvos os dados da modelagem do DEM

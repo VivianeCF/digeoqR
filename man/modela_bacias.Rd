@@ -34,7 +34,7 @@ modela_bacias(
 \item{bases_model}{Bases para a modelagem das bacias e drenagem pela
 função gera_bases_model}
 
-\item{gera_est}{Objeto da saída da função gera_estacoes}
+\item{gera_est}{Objeto da saída da função modela_terreno}
 
 \item{ex_campo}{Dados de campo extraídos pela função extrai_dados_campo}
 

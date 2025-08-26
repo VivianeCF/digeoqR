@@ -297,7 +297,7 @@ modela_terreno <-
                  delete_layer = TRUE)
     out[[5]] <- wbt_wd
     names(out) <- c("stream sthraler", "stream model",
-                    "mapa", "estacoes geradas")
+                    "mapa", "estacoes geradas", "diretorio")
  } else {
 
    names(out) <- c("stream sthraler", "stream model")

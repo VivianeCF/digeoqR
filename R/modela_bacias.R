@@ -23,7 +23,7 @@
 #' @param bases_model Bases para a modelagem das bacias e drenagem pela
 #' função gera_bases_model
 #' @param ex_campo Dados de campo extraídos pela função extrai_dados_campo
-#' @param gera_est Objeto da saída da função modela_terreno
+#' @param terreno Objeto da saída da função modela_terreno
 #' @param fonte_shp Valor lógico se oas esstações forem shapefile
 #' @param arquivo_shp Caso for shape fornecer o caminho do arquivo
 #' @param wbt_wd diretório onde estão salvos os dados da modelagem do DEM
@@ -37,7 +37,7 @@
 #' @examples
 #' # modelo_bacias()
 modela_bacias <- function(fase = 2,
-                          EPSG = 4326, dem, bases_model, gera_est,
+                          EPSG = 4326, dem, bases_model, terreno,
                           ex_campo, classe_am,
                           fonte_shp = FALSE, arquivo_shp,
                           bacia_minima = 4,
@@ -71,13 +71,13 @@ modela_bacias <- function(fase = 2,
   sf::write_sf(bases_model[["rios"]], paste0(wbt_wd,"rios.shp"))
 
     ## Lê stream order
-  out[[1]] <- gera_est[["stream sthraler"]]
+  out[[1]] <- terreno[["stream sthraler"]]
 
   ### GERA BACIAS A PARTIR DOS PONTOS ------------------------------
  ## Lê estaçoes da área do projeto
   if (fase == 1) {
-    wbt_wd <- gera_est[[5]]
-    sf::write_sf(gera_est[["estacoes geradas"]],
+    wbt_wd <- terreno[[5]]
+    sf::write_sf(terreno[["estacoes geradas"]],
                  paste0(wbt_wd,  "estacoes.shp"))
   } else{
     if (fonte_shp == FALSE) {

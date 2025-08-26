@@ -192,6 +192,14 @@ modela_bacias <- function(fase = 2,
                delete_layer = TRUE)
 
   out[[3]] <- bacias_area
+  # Lê pontos  planejados
+  pontos = sf::read_sf(paste0(wbt_wd, "snappoints.shp"))
+
+  # # Arruma a sequência do campo VALUE
+  pontos$VALUE <- seq(1:nrow(pontos))
+  # Filtra pelos pontos com bacias
+  pontos <- pontos %>% dplyr::arrange(VALUE)
+  out[[4]] <- pontos
 
   if (fase == 1) {
     # Filtra bacias pelas áreas min e max
@@ -199,30 +207,26 @@ modela_bacias <- function(fase = 2,
       bacias_area[bacias_area$Area_sqm <= bacia_maxima &
                     bacias_area$Area_sqm >= bacia_minima, ]
 
-    # Lê pontos  planejados
-    pontos = sf::read_sf(paste0(wbt_wd, "snappoints.shp"))
 
-    # # Arruma a sequência do campo VALUE
-    pontos$VALUE <- seq(1:nrow(pontos))
-    # Filtra pelos pontos com bacias
-    pontos <- pontos %>% dplyr::arrange(VALUE)
+
     bacias_area <- bacias_area %>% dplyr::arrange(VALUE)
     pontos <- pontos[pontos$VALUE %in% bacias_area$VALUE, ]
 
     # Arruma a sequência do campo VALUE
     pontos$VALUE <- seq(1:nrow(pontos))
+
     bacias_area$VALUE <- seq(1:nrow(bacias_area))
     sf::st_crs(bacias_area) <- EPSG
     sf::write_sf(bacias_area,
                  paste0(dir_out, "bacias_area_plan.shp"),
                  delete_layer = TRUE)
-    out[[5]] <- bacias_area
+    out[[6]] <- bacias_area
 
     sf::write_sf(pontos[, c("VALUE")],
                  paste0(dir_out,  "estacoes_plan.shp"),
                  delete_layer =
                    TRUE)
-    out[[4]] <- pontos[, c("VALUE")]
+    out[[5]] <- pontos[, c("VALUE")]
 
     sf::write_sf(pontos[, c("VALUE")],
                  paste0(wbt_wd, "estacoes_plan.shp"),
@@ -245,10 +249,9 @@ modela_bacias <- function(fase = 2,
     bacias <- sf::read_sf(paste0(wbt_wd, output_bacias))
     sf::st_crs(bacias) <- EPSG
     sf::write_sf(bacias, paste0(dir_out, "bacias_plan.shp"), delete_layer = TRUE)
-    out[[6]] <- bacias
+    out[[7]] <- bacias
   } else{
     # Lê pontos  deslocados
-    out[[4]] = sf::read_sf(paste0(wbt_wd, "snappoints.shp"))
 
     out[[5]] <- bacias_area
     output_bacias <- "bacias"
@@ -294,8 +297,8 @@ modela_bacias <- function(fase = 2,
   print(m)
   dev.off()
 if(fase == 1){
-  out[[7]] <- m
-  names(out) <- c("stream strahler","bacias iniciais", "bacias area iniciais",
+  out[[8]] <- m
+  names(out) <- c("stream strahler","bacias iniciais", "bacias area iniciais", "estacoes deslocadas",
                   "estacoes plan", "bacias area plan", "bacias plan", "mapa plan")
   }else{
     out[[7]] <- m

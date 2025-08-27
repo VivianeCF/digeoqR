@@ -17,7 +17,8 @@
 #' @examples
 gera_bases_model <- function(dir_in = "inputs/campo/",
                              limite = "carta_100M.shp",
-                             limite_srtm = "area_srtm.shp",rios = "rios_ibge.shp",
+                             limite_srtm = "area_srtm.shp",
+                             rios = "rios_ibge.shp",
                              massa_dagua = "massa_dagua.shp",
                              areas_excluidas = c("area_urbana.shp","pantanal.shp",
                                                       "area_protecao.shp", "terra_indigena")
@@ -39,7 +40,7 @@ gera_bases_model <- function(dir_in = "inputs/campo/",
 
   names(out) <-
     c("limite da área srtm", "limite da área folha",
-      "rios", "massa de água", "area excluidas")
+      "rios", "massa de água", "areas excluidas")
    sf::sf_use_s2(TRUE)
   return(out)
 }

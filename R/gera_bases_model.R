@@ -32,7 +32,7 @@ gera_bases_model <- function(dir_in = "inputs/campo/",
   out[[3]] <- sf::read_sf(paste0(dir_in, rios))
   out[[4]] <- sf::read_sf(paste0(dir_in, massa_dagua))
 
-  for(i in 1:length(area_dificil_acesso)){
+  for(i in 1:length(areas_excluidas)){
   lista_areas[[i]] <- sf::read_sf(paste0(dir_in, areas_excluidas[i]))
   }
 

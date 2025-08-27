@@ -10,11 +10,14 @@ gera_bases_model(
   limite_srtm = "area_srtm.shp",
   rios = "rios_ibge.shp",
   massa_dagua = "massa_dagua.shp",
+  modo_excluir = TRUE,
   areas_excluidas = c("area_urbana.shp", "pantanal.shp", "area_protecao.shp",
     "terra_indigena")
 )
 }
 \arguments{
+\item{modo_excluir}{TRUE para excluir areas}
+
 \item{areas_excluidas}{}
 }
 \description{

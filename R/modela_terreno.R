@@ -159,18 +159,14 @@ modela_terreno <-
     massa_dagua <- bases_model[["massa de água"]]
 
     ## Lê área urbana
-    area_urbana <- bases_model[["área urbana"]]
-
-
-    ## Lê área urbana
-    area_dificil_acesso <- bases_model[["area de dificil acesso"]]
+    areas_excluidas <- bases_model[["areas excluidas"]]
 
     # ## Lê área urbana
     # unidade_protecao_ambiental <- bases_model[["unidade de protecao ambiental"]]
 
     ## Cria area impeditiva
     # Cria uma lista com todas as geometrias
-    geometrias_para_unir <- list(massa_dagua, area_urbana, area_dificil_acesso)
+    geometrias_para_unir <- list(massa_dagua, areas_excluidas)
 
     # Aplica a união a todos os elementos da lista
     area_impeditiva <- do.call(sf::st_union, c(geometrias_para_unir, model = "open"))

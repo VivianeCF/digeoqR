@@ -8,14 +8,14 @@ gera_bases_model(
   dir_in = "inputs/campo/",
   limite = "carta_100M.shp",
   limite_srtm = "area_srtm.shp",
-  area_urbana = "area_urbana.shp",
   rios = "rios_ibge.shp",
   massa_dagua = "massa_dagua.shp",
-  areas_dificil_acesso = c("pantanal.shp", "area_protecao.shp", "terra_indigena")
+  areas_excluidas = c("area_urbana.shp", "pantanal.shp", "area_protecao.shp",
+    "terra_indigena")
 )
 }
 \arguments{
-\item{areas_dificil_acesso}{}
+\item{areas_excluidas}{}
 }
 \description{
 Converte as bases de entrada em um alista de dados para serem carregadas nas

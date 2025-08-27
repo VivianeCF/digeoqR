@@ -174,7 +174,7 @@ modela_terreno <-
     geometrias_para_unir <- list(massa_dagua, area_urbana, pantanal, terra_indigena)
 
     # Aplica a união a todos os elementos da lista
-    area_impeditiva <- do.call(sf::st_union, geometrias_para_unir, model = "open")
+    area_impeditiva <- do.call(sf::st_union, c(geometrias_para_unir, model = "open"))
 
     ## Encontra vértices das junções
 

@@ -168,7 +168,7 @@ modela_terreno <-
 
     ## Cria area impeditiva
     # Cria uma lista com todas as geometrias
-   if(modo_exluir == TRUE ){
+   if(modo_excluir == TRUE ){
      areas_excluidas <- bases_model[["areas excluidas"]]
      geometrias_para_unir <- list(massa_dagua, areas_excluidas)
      area_impeditiva <- do.call(sf::st_union, c(geometrias_para_unir, model = "open"))

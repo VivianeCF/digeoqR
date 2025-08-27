@@ -151,7 +151,8 @@ modela_terreno <-
                  delete_layer = TRUE)
     out[[2]] <- stream_model
  if(gera_estacoes == TRUE){
-    ## Gera ESTAÇÕES -----------------------------------------------------------
+   sf::sf_use_s2(FALSE)
+   ## Gera ESTAÇÕES -----------------------------------------------------------
     ## Lê limite da area do projeto
     area <- bases_model[["limite da área folha"]]
     ## Lê massa d'água
@@ -302,6 +303,7 @@ modela_terreno <-
     out[[5]] <- wbt_wd
     names(out) <- c("stream sthraler", "stream model",
                     "mapa", "estacoes geradas", "diretorio")
+    sf::sf_use_s2(TRUE)
  } else {
 
    names(out) <- c("stream sthraler", "stream model")

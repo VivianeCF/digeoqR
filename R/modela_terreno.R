@@ -11,6 +11,7 @@
 #'@param threshold Valor de corte da área das bacias modeladas
 #'@param min_length Comprimento mínimo do curso do rio
 #'@param bases_model Bases definidas na função gera_bases_model
+#'@param modo_excluir Valor lógico
 #'@param dist_buffer
 #'@param dir_out Diretório de saída
 #'@param wbt_wd
@@ -26,6 +27,7 @@
 modela_terreno <-
   function(dem, dir_out = "outputs/",
            bases_model,
+           modo_excluir = FALSE,
            EPSG = 4326,
            threshold = 250,
            min_length = "0.02",
@@ -159,17 +161,21 @@ modela_terreno <-
     massa_dagua <- bases_model[["massa de água"]]
 
     ## Lê área urbana
-    areas_excluidas <- bases_model[["areas excluidas"]]
+
 
     # ## Lê área urbana
     # unidade_protecao_ambiental <- bases_model[["unidade de protecao ambiental"]]
 
     ## Cria area impeditiva
     # Cria uma lista com todas as geometrias
-    geometrias_para_unir <- list(massa_dagua, areas_excluidas)
+   if(modo_exluir == TRUE ){
+     areas_excluidas <- bases_model[["areas excluidas"]]
+     geometrias_para_unir <- list(massa_dagua, areas_excluidas)
+     area_impeditiva <- do.call(sf::st_union, c(geometrias_para_unir, model = "open"))
+     }
 
     # Aplica a união a todos os elementos da lista
-    area_impeditiva <- do.call(sf::st_union, c(geometrias_para_unir, model = "open"))
+
 
     ## Encontra vértices das junções
 
@@ -238,6 +244,7 @@ modela_terreno <-
         })
       })
     pontos_area$id <- seq(1, nrow(pontos_area))
+if(modo_excluir == TRUE){    ## Remover pontos dentro de áreas urbanas
 
     ## Remover pontos dentro das áreas alagadas
     massa_dagua <- sf::st_transform(massa_dagua, EPSG)
@@ -247,20 +254,20 @@ modela_terreno <-
           sf::st_intersection(pontos_area, massa_dagua)
         })
       })
-    ## Remover pontos dentro de áreas urbanas
-    area_impeditiva <- sf::st_transform(area_impeditiva, EPSG)
+   area_impeditiva <- sf::st_transform(area_impeditiva, EPSG)
     pontos_area_remover2 <-
       suppressMessages({
         suppressWarnings({
           sf::st_intersection(pontos_area, area_impeditiva)
         })
       })
-
     if ((nrow(pontos_area_remover2) + nrow(pontos_area_remover1)) > 0) {
       pontos_remover <- dplyr::bind_rows(pontos_area_remover1, pontos_area_remover2)
       pontos_area <-
         pontos_area[!(pontos_area$id %in% pontos_remover$id),]
     }
+    }
+
 
     # Mapa
     m <- ggplot2::ggplot() +

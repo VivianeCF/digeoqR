@@ -8,6 +8,7 @@ modela_terreno(
   dem,
   dir_out = "outputs/",
   bases_model,
+  modo_excluir,
   EPSG = 4326,
   threshold = 250,
   min_length = "0.02",
@@ -22,6 +23,8 @@ modela_terreno(
 \item{dir_out}{Diretório de saída}
 
 \item{bases_model}{Bases definidas na função gera_bases_model}
+
+\item{modo_excluir}{Valor lógico}
 
 \item{EPSG}{Sistema de coordenadas}
 

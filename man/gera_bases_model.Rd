@@ -11,12 +11,11 @@ gera_bases_model(
   area_urbana = "area_urbana.shp",
   rios = "rios_ibge.shp",
   massa_dagua = "massa_dagua.shp",
-  pantanal = "pantanal.shp",
-  terra_indigena = "terra_indigena.shp"
+  areas_dificil_acesso = c("pantanal.shp", "area_protecao.shp", "terra_indigena")
 )
 }
 \arguments{
-\item{limite_srtm}{}
+\item{areas_dificil_acesso}{}
 }
 \description{
 Converte as bases de entrada em um alista de dados para serem carregadas nas

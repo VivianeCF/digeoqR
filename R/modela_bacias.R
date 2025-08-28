@@ -191,6 +191,9 @@ modela_bacias <- function(fase = 2,
                       "bacias_area", "_", abrev_classe[classe_am],".shp"),
                delete_layer = TRUE)
 
+
+  bacias_area <- bacias_area %>% dplyr::arrange(VALUE, Area_sqm)
+
   out[[3]] <- bacias_area
   # Lê pontos  planejados
   pontos = sf::read_sf(paste0(wbt_wd, "snappoints.shp"))
@@ -208,8 +211,6 @@ modela_bacias <- function(fase = 2,
                     bacias_area$Area_sqm >= bacia_minima, ]
 
 
-
-    bacias_area <- bacias_area %>% dplyr::arrange(VALUE)
     pontos <- pontos[pontos$VALUE %in% bacias_area$VALUE, ]
 
     # Arruma a sequência do campo VALUE

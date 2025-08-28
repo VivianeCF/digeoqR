@@ -8,7 +8,7 @@ modela_terreno(
   dem,
   dir_out = "outputs/",
   bases_model,
-  modo_excluir,
+  modo_excluir = FALSE,
   EPSG = 4326,
   threshold = 250,
   min_length = "0.02",

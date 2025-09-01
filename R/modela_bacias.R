@@ -10,8 +10,8 @@
 #' @param tipo Tipo de processamento do deslocamento 1: Deslocamento sem controle,
 #' 2: controlado pela ordem da drenagem e 3: sem deslocamento.
 #' Para o tipo 1 informar o snap_disp.
-#' Para o tipo 2 informar o snap_dist e o valoer lógico decrescente.
-#'
+#' Para o tipo 2 informar o snap_dist e o valor lógico decrescente.
+#' @param funcao_snap 1: wbt_jenson_snap_pour_points 2: wbt_snap_pour_points
 #' @param snap_dist Deslocamento máximo do ponto até a drenagem
 #' @param decrescente Logico TRUE para ordem decrecente e FALSE para ordem crescente.
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
@@ -41,7 +41,7 @@ modela_bacias <- function(fase = 2,
                           ex_campo, classe_am,
                           fonte_shp = FALSE, arquivo_shp,
                           bacia_minima = 4,
-                          bacia_maxima = 100, tipo = 1,
+                          bacia_maxima = 100, tipo = 1, funcao_snap = 1,
                           snap_dist = "0.02", decrescente = FALSE,
                           max_ordem = 3, dir_out = "outputs/", wbt_wd = "outputs/modelo/")
 {
@@ -96,11 +96,17 @@ modela_bacias <- function(fase = 2,
 
   output_snap =  "snappoints.shp"
   if(tipo == 1){
-  whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
+  if(funcao_snap == 1){whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
                                         "strahler_order.tif",
                                          output_snap,
                                          snap_dist,
-                                         wd = wbt_wd)
+                                         wd = wbt_wd)}else{
+                        whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
+                                                              "facc.tif",
+                                                               output_snap,
+                                                               snap_dist,
+                                                               wd = wbt_wd)
+                                         }
   }
 
   if(tipo == 2){
@@ -108,7 +114,7 @@ modela_bacias <- function(fase = 2,
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
                                 strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
                                 output_snap_path = paste0(wbt_wd, output_snap),
-                                snap_dist_max = snap_dist,
+                                snap_dist_max = snap_dist, funcao_snap = funcao_snap,
                                 wbt_wd=wbt_wd , decrescente = decrescente)
 
   }

@@ -98,13 +98,13 @@ modela_bacias <- function(fase = 2,
   if(tipo == 1){
   if(funcao_snap == 1){whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
                                         "strahler_order.tif",
-                                         output_snap,
-                                         snap_dist,
+                                         output = output_snap,
+                                         snap_dist = snap_dist,
                                          wd = wbt_wd)}else{
-                        whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
-                                                              "facc.tif",
-                                                               output_snap,
-                                                               snap_dist,
+                        whitebox::wbt_snap_pour_points("estacoes.shp",
+                                                               flow_accum = "facc.tif",
+                                                               output = output_snap,
+                                                               snap_dist = snap_dist,
                                                                wd = wbt_wd)
                                          }
   }
@@ -114,7 +114,7 @@ modela_bacias <- function(fase = 2,
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
                                 strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
                                 output_snap_path = paste0(wbt_wd, output_snap),
-                                snap_dist_max = snap_dist, funcao_snap = funcao_snap,
+                                snap_dist_max = snap_dist,
                                 wbt_wd=wbt_wd , decrescente = decrescente)
 
   }

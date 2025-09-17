@@ -94,10 +94,16 @@ modela_bacias <- function(fase = 2,
   ## Snap metodo Jenson
   stream <- "network_d8.tif"
 
+  # Stream order filtrado pela max ordem
+  r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
+  r <- r <= max_ordem
+  stars::write_stars(r, paste0(wbt_wd, "strahler_order_filtrado.tif"))
+  
   output_snap =  "snappoints.shp"
+  
   if(tipo == 1){
   if(funcao_snap == 1){whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
-                                        "strahler_order.tif",
+                                        "strahler_order_filtrado.tif",
                                          output = output_snap,
                                          snap_dist = snap_dist,
                                          wd = wbt_wd)}else{
@@ -112,7 +118,7 @@ modela_bacias <- function(fase = 2,
   if(tipo == 2){
   source("R/jenson_snap_priorizando_ordem.R")
   jenson_snap_priorizando_ordem(input_points_path =  paste0(wbt_wd,  "estacoes.shp"),
-                                strahler_raster_path = paste0(wbt_wd, "strahler_order.tif"),
+                                strahler_raster_path = paste0(wbt_wd, "strahler_order_filtrado.tif"),
                                 output_snap_path = paste0(wbt_wd, output_snap),
                                 snap_dist_max = snap_dist,
                                 wbt_wd=wbt_wd , decrescente = decrescente)

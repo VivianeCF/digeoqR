@@ -65,7 +65,7 @@ resgata_legenda_xml <-
       cols = cor,
       delim = ",",
       names = c("r", "g", "b", "a"),
-      too_few = "align_start"
+      too_few = "align_start", too_many = "debug"
     )
     df$r <- as.numeric(df$r)
     df$g <- as.numeric(df$g)

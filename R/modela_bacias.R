@@ -17,7 +17,7 @@
 #' @param max_ordem Máxima ordem do rio para a busca do snap point
 #' @param EPSG crs da camada
 #' @param classe_am Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-#'   corrente, 3 = rocha, 4 = solo
+#'   corrente
 #' @param dir_out Diretório de saída
 #' @param dem Modelo digital de terreno (ex. SRTM)
 #' @param bases_model Bases para a modelagem das bacias e drenagem pela
@@ -47,11 +47,8 @@ modela_bacias <- function(fase = 2,
 {
   ### GERA DRENAGENS--------------------------------------------------------------
   nm_classe <- c("Concentrado de bateia",
-                 "Sedimento de corrente",
-                 "Solo",
-                 "Rocha",
-                 "Água")
-  abrev_classe <- c("cb", "sc", "solo", "rocha", "agua" )
+                 "Sedimento de corrente", "Água")
+  abrev_classe <- c("cb", "sc", "agua" )
 
   out <- list()
   # wbt_wd <- tempfile()
@@ -98,9 +95,9 @@ modela_bacias <- function(fase = 2,
   r = stars::read_stars(paste0(wbt_wd, "strahler_order.tif"))
   r <- r <= max_ordem
   stars::write_stars(r, paste0(wbt_wd, "strahler_order_filtrado.tif"))
-  
+
   output_snap =  "snappoints.shp"
-  
+
   if(tipo == 1){
   if(funcao_snap == 1){whitebox::wbt_jenson_snap_pour_points("estacoes.shp",
                                         "strahler_order_filtrado.tif",

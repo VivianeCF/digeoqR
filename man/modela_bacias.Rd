@@ -40,7 +40,7 @@ função gera_bases_model}
 \item{ex_campo}{Dados de campo extraídos pela função extrai_dados_campo}
 
 \item{classe_am}{Classe da amostra: 1 = concentrado de bateia, 2 = sedimento de
-corrente, 3 = rocha, 4 = solo}
+corrente}
 
 \item{fonte_shp}{Valor lógico se oas esstações forem shapefile}
 
